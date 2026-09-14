@@ -8,8 +8,8 @@ REFRESH-INTERVAL;VALUE=DURATION:P1D
 X-PUBLISHED-TTL:P1D
 BEGIN:VEVENT
 UID:euse-75@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20260924
 DTEND;VALUE=DATE:20260925
 SUMMARY:Competitiveness Council · Brussels
@@ -20,24 +20,109 @@ CLASS:PUBLIC
 SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
+UID:euse-155@european-startup-events
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
+DTSTART;VALUE=DATE:20260924
+DTEND;VALUE=DATE:20260926
+SUMMARY:EU AgRI 2040 Conference · Brussels
+LOCATION:Charlemagne building\, Rue de la Loi 170\, 1000 Brussels\, Belgi
+ um
+URL:https://agriculture.ec.europa.eu/media/events/eu-agri-2040-conference
+ -2026-09-24_en
+DESCRIPTION:Commission conference on future R&I priorities and the Europea
+ n Competitiveness Fund\; includes startups and SMEs.
+TRANSP:TRANSPARENT
+CLASS:PUBLIC
+SEQUENCE:0
+END:VEVENT
+BEGIN:VEVENT
 UID:euse-76@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20260928
 DTEND;VALUE=DATE:20260929
 SUMMARY:⚠ TBC — European Parliament ITRE committee meeting · Brussels
 LOCATION:European Parliament\, Brussels\, Belgium
 URL:https://www.europarl.europa.eu/committees/en/itre/meetings
-DESCRIPTION:Status: TBC\nMeeting confirmed\; add/retain only when substan
- tive agenda is materially relevant to startups/tech/R&I.
+DESCRIPTION:Status: TBC\nMeeting confirmed\; add/retain only when substanti
+ ve agenda is materially relevant to startups/tech/R&I.
+TRANSP:TRANSPARENT
+CLASS:PUBLIC
+SEQUENCE:0
+END:VEVENT
+BEGIN:VEVENT
+UID:euse-156@european-startup-events
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
+DTSTART;VALUE=DATE:20260928
+DTEND;VALUE=DATE:20261002
+SUMMARY:Connecting Europe Days 2026 · Brussels
+LOCATION:SQUARE Brussels Convention Centre\, Mont des Arts/Kunstberg\, 10
+ 00 Brussels\, Belgium
+URL:https://transport.ec.europa.eu/news-events/main-events/connecting-eur
+ ope-days-2026_en
+DESCRIPTION:European Commission mobility flagship on competitiveness\, in
+ frastructure funding\, strategic autonomy\, digitalisation and innovation
+ .
+TRANSP:TRANSPARENT
+CLASS:PUBLIC
+SEQUENCE:0
+END:VEVENT
+BEGIN:VEVENT
+UID:euse-157@european-startup-events
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
+DTSTART;VALUE=DATE:20260930
+DTEND;VALUE=DATE:20261001
+SUMMARY:Edge Observatory workshop: Edge AI · Online
+LOCATION:Online
+URL:https://digital-strategy.ec.europa.eu/en/events/edge-observatory-onli
+ ne-workshop-edge-ai-unlocking-potential-distributed-intelligence-eu
+DESCRIPTION:DG CONNECT workshop on the EU edge-AI ecosystem\, scalable in
+ frastructure\, security and future deployment.
+TRANSP:TRANSPARENT
+CLASS:PUBLIC
+SEQUENCE:0
+END:VEVENT
+BEGIN:VEVENT
+UID:euse-158@european-startup-events
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
+DTSTART;VALUE=DATE:20261001
+DTEND;VALUE=DATE:20261002
+SUMMARY:Annual I3 Instrument Forum 2026 · Brussels
+LOCATION:DoubleTree by Hilton Brussels City\, Rue Gineste 3\, 1210 Brussel
+ s\, Belgium
+URL:https://interregional-innovation-investments.ec.europa.eu/i3-annual-f
+ orum-2026
+DESCRIPTION:Forum on interregional innovation investments\, scaling outco
+ mes across value chains and the post-2027 role of I3 in Cohesion Policy.
+TRANSP:TRANSPARENT
+CLASS:PUBLIC
+SEQUENCE:0
+END:VEVENT
+BEGIN:VEVENT
+UID:euse-159@european-startup-events
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
+DTSTART;VALUE=DATE:20261005
+DTEND;VALUE=DATE:20261006
+SUMMARY:EIC event for deep tech startups and scaleups · Bucharest
+LOCATION:Stup - Banca Transilvania\, Calea Șerban Vodă 206\, 040215 Bucure
+ ști\, Romania
+URL:https://eic.ec.europa.eu/events/eic-event-deep-tech-startups-and-scal
+ eups-bucharest-romania-2026-10-05_en
+DESCRIPTION:EIC funding\, Accelerator\, Pre-Accelerator\, equity instrumen
+ ts and investor support for deep-tech startups and scaleups.
 TRANSP:TRANSPARENT
 CLASS:PUBLIC
 SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-77@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261012
 DTEND;VALUE=DATE:20261015
 SUMMARY:European Week of Regions and Cities · Brussels
@@ -49,23 +134,27 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-78@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261012
 DTEND;VALUE=DATE:20261014
-SUMMARY:⚠ TBC — Informal meeting of telecommunications ministers
-LOCATION:Presidency-hosted location TBC
-URL:https://www.consilium.europa.eu/en/meetings/calendar/
-DESCRIPTION:Status: TBC\nExact location to be reconfirmed in weekly sweep
- .
+SUMMARY:⚠ CONFLICT — Informal meeting of telecommunications ministers · Ir
+ eland
+LOCATION:Dublin / Limerick\, Ireland
+URL:https://irish-presidency.consilium.europa.eu/en/events/informal-meeti
+ ng-of-telecommunications-ministers-tte-telecoms/
+DESCRIPTION:Status: CONFLICT\nOfficial sources conflict on location: Counc
+ il/Consilium lists Dublin\; the Irish Presidency event page lists Limeric
+ k. Agenda covers the Digital Networks Act\, subsea cable connectivity/res
+ ilience and digital consumer protection.
 TRANSP:TRANSPARENT
 CLASS:PUBLIC
 SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-79@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261014
 DTEND;VALUE=DATE:20261015
 SUMMARY:International AI Summit · Dublin
@@ -78,13 +167,14 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-80@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261014
 DTEND;VALUE=DATE:20261015
 SUMMARY:DG RTD workshop: Creating venture builder roles in universities a
  nd research organisations · Brussels + online
-LOCATION:Brussels + online\, Belgium / online
+LOCATION:Berlaymont Building\, Rue de la Loi 200\, 1049 Brussels\, Belgium
+  + online
 URL:https://research-and-innovation.ec.europa.eu/events/upcoming-events/
 DESCRIPTION:Linked to EU Startup & Scaleup Strategy / Lab to Unicorn.
 TRANSP:TRANSPARENT
@@ -92,9 +182,25 @@ CLASS:PUBLIC
 SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
+UID:euse-160@european-startup-events
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
+DTSTART;VALUE=DATE:20261014
+DTEND;VALUE=DATE:20261016
+SUMMARY:Horizon Europe Info Days — Cluster 4 · Online
+LOCATION:Online
+URL:https://research-and-innovation.ec.europa.eu/events/horizon-europe-in
+ fo-days_en
+DESCRIPTION:European Commission funding info days for Horizon Europe Clus
+ ter 4: Digital\, Industry and Space.
+TRANSP:TRANSPARENT
+CLASS:PUBLIC
+SEQUENCE:0
+END:VEVENT
+BEGIN:VEVENT
 UID:euse-81@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261015
 DTEND;VALUE=DATE:20261016
 SUMMARY:European Startup Village Forum · Brussels
@@ -107,8 +213,8 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-82@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261015
 DTEND;VALUE=DATE:20261017
 SUMMARY:European Council · Brussels
@@ -121,8 +227,8 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-83@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261020
 DTEND;VALUE=DATE:20261021
 SUMMARY:⚠ TBC — Apply AI Startup Award finalist pitching day
@@ -135,9 +241,61 @@ CLASS:PUBLIC
 SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
+UID:euse-161@european-startup-events
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
+DTSTART;VALUE=DATE:20261020
+DTEND;VALUE=DATE:20261022
+SUMMARY:Advanced Virtual Human Twins Platform Annual Event · Brussels + on
+ line
+LOCATION:Brussels + online\; hybrid venue TBC
+URL:https://digital-strategy.ec.europa.eu/en/events/advanced-virtual-huma
+ n-twins-vht-platform-annual-event
+DESCRIPTION:DG CONNECT stakeholder event shaping platform adoption\, inte
+ roperability\, trust\, requirements and IP management.
+TRANSP:TRANSPARENT
+CLASS:PUBLIC
+SEQUENCE:0
+END:VEVENT
+BEGIN:VEVENT
+UID:euse-162@european-startup-events
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
+DTSTART;VALUE=DATE:20261029
+DTEND;VALUE=DATE:20261030
+SUMMARY:EIC Info Day Sofia · Sofia
+LOCATION:Bulgarian Army Stadium\, Borisova Gradina\, bul. Dragan Tsankov 3
+ \, Sofia\, Bulgaria
+URL:https://eic.ec.europa.eu/events/eic-info-day-sofia-bulgaria-2026-10-2
+ 9_en
+DESCRIPTION:EIC Work Programme\, funding calls\, equity instruments\, tech
+ nology transfer and a Commissioner-level startup policy session.
+TRANSP:TRANSPARENT
+CLASS:PUBLIC
+SEQUENCE:0
+END:VEVENT
+BEGIN:VEVENT
+UID:euse-163@european-startup-events
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261105
+SUMMARY:SME & Clusters Assembly 2026 · Dublin
+LOCATION:The Convention Centre Dublin\, Spencer Dock\, North Wall Quay\, D
+ ublin 1 D01 T1W6\, Ireland
+URL:https://futurium.ec.europa.eu/en/promoting-enterprise/sme-clusters-as
+ sembly
+DESCRIPTION:European Commission and Irish Presidency flagship bringing po
+ licymakers\, entrepreneurs\, clusters and investors together on competiti
+ veness\, simplification\, innovation\, AI and resilient value chains.
+TRANSP:TRANSPARENT
+CLASS:PUBLIC
+SEQUENCE:0
+END:VEVENT
+BEGIN:VEVENT
 UID:euse-84@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261103
 DTEND;VALUE=DATE:20261104
 SUMMARY:EAIC Summit: Future of Funding in Europe · Brussels
@@ -149,8 +307,8 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-85@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261117
 DTEND;VALUE=DATE:20261118
 SUMMARY:European Apply AI Summit · Brussels
@@ -162,12 +320,12 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-86@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261201
 DTEND;VALUE=DATE:20261202
-SUMMARY:Transport\, Telecommunications and Energy Council: Telecommunicat
- ions · Brussels
+SUMMARY:Transport\, Telecommunications and Energy Council: Telecommunicati
+ ons · Brussels
 LOCATION:Brussels\, Belgium
 URL:https://www.consilium.europa.eu/en/meetings/calendar/
 DESCRIPTION:Weekly sweep should reconfirm location/agenda.
@@ -177,8 +335,8 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-87@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261203
 DTEND;VALUE=DATE:20261204
 SUMMARY:Competitiveness Council: Internal Market and Industry · Brussels
@@ -190,8 +348,8 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-88@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261204
 DTEND;VALUE=DATE:20261205
 SUMMARY:Competitiveness Council: Research and Space · Brussels
@@ -203,8 +361,8 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-89@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261210
 DTEND;VALUE=DATE:20261211
 SUMMARY:Simpl Annual Community Event · Brussels
@@ -217,23 +375,23 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-90@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261210
 DTEND;VALUE=DATE:20261211
 SUMMARY:⚠ TBC — Eurogroup
 LOCATION:European Union
 URL:https://www.consilium.europa.eu/en/meetings/calendar/
-DESCRIPTION:Status: TBC\nDate confirmed\; calendar relevance depends on a
- genda.
+DESCRIPTION:Status: TBC\nDate confirmed\; calendar relevance depends on ag
+ enda.
 TRANSP:TRANSPARENT
 CLASS:PUBLIC
 SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-91@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261211
 DTEND;VALUE=DATE:20261212
 SUMMARY:ECOFIN Council · Brussels
@@ -245,8 +403,8 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-92@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20261217
 DTEND;VALUE=DATE:20261219
 SUMMARY:European Council · Brussels
@@ -259,12 +417,13 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-124@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20270126
 DTEND;VALUE=DATE:20270128
 SUMMARY:European Space Conference · Brussels
-LOCATION:SQUARE Brussels Convention Centre\, Brussels\, Belgium
+LOCATION:SQUARE Brussels Convention Centre\, Mont des Arts/Kunstberg\, 10
+ 00 Brussels\, Belgium
 URL:https://spaceconference.eu/
 DESCRIPTION:High-level European space policy\, industry and investment co
  nference.
@@ -274,16 +433,15 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 UID:euse-144@european-startup-events
-DTSTAMP:20260912T103311Z
-LAST-MODIFIED:20260912T103311Z
+DTSTAMP:20260914T112300Z
+LAST-MODIFIED:20260914T112300Z
 DTSTART;VALUE=DATE:20270607
 DTEND;VALUE=DATE:20270608
 SUMMARY:SuperReturn Tech Sovereignty · Berlin
-LOCATION:Hotel Palace Berlin\, Budapester Str. 45\, 10787 Berlin\, German
- y
+LOCATION:Hotel Palace Berlin\, Budapester Str. 45\, 10787 Berlin\, Germany
 URL:https://informaconnect.com/superreturn-international/event-schedule/
-DESCRIPTION:Capital\, policy and technology event focused on European res
- ilience\, independence and strategic strength.
+DESCRIPTION:Capital\, policy and technology event focused on European resi
+ lience\, independence and strategic strength.
 TRANSP:TRANSPARENT
 CLASS:PUBLIC
 SEQUENCE:0
