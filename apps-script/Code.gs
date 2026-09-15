@@ -184,7 +184,8 @@ function buildPlan_(source, existing) {
 
 function validatePlanSafety_(plan, opts) {
   if (plan.summary.duplicateManaged > 0) throw new Error('Duplicate managed events detected. No writes performed.');
-  if (plan.summary.existingManaged === 0 && !opts.dryRun && !opts.force) throw new Error('Bootstrap safety halt. Run previewSync(), inspect counts, then run syncAllCalendarsForce() once.');
+  if (opts.dryRun) return;
+  if (plan.summary.existingManaged === 0 && !opts.force) throw new Error('Bootstrap safety halt. Run previewSync(), inspect counts, then run syncAllCalendarsForce() once.');
   if (opts.force || plan.summary.existingManaged === 0) return;
   const mutations = plan.summary.inserts + plan.summary.updates;
   const limit = Math.max(CONFIG.maxMutationAbsolute, Math.ceil(plan.summary.existingManaged * CONFIG.maxMutationRatio));
