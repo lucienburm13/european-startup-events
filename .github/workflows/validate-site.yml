@@ -1,0 +1,62 @@
+name: Validate website
+
+on:
+  push:
+    branches: [site-v0.1]
+    paths:
+      - 'site/**'
+      - 'scripts/**'
+      - 'apps-script/WebApi.gs'
+      - '.github/workflows/validate-site.yml'
+  pull_request:
+    paths:
+      - 'site/**'
+      - 'scripts/**'
+      - 'apps-script/WebApi.gs'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check site/app.js
+          node --check site/config.js
+
+      - name: Check Python syntax
+        run: python -m py_compile scripts/geocode_locations.py
+
+      - name: Validate derived JSON data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          events = json.loads(Path('site/public/events.json').read_text())
+          rows = events.get('events', [])
+          ids = [str(e.get('id','')) for e in rows]
+          assert rows, 'events snapshot is empty'
+          assert len(ids) == len(set(ids)), 'duplicate event IDs in snapshot'
+          assert all(e.get('start') for e in rows), 'published event without start date'
+
+          locations = json.loads(Path('site/public/locations.json').read_text())
+          assert isinstance(locations.get('locations', {}), dict), 'locations cache malformed'
+          print(f"events={len(rows)} locations={len(locations.get('locations', {}))}")
+          PY
+
+      - name: Validate static entrypoint
+        run: |
+          grep -q './config.js' site/index.html
+          grep -q './app.js' site/index.html
+          grep -q './styles.css' site/index.html
+
+      - name: Build hosting image
+        run: docker build -t european-startup-events-site site
