@@ -49,7 +49,34 @@
       const hit=state.locations[`${e.city||''}|${e.country||''}`];
       return hit ? {...e,lat:hit.lat,lng:hit.lng} : e;
     });
-    populateCountries(); applyFilters();
+    populateCountries(); applyUrlState(); applyFilters();
+  }
+
+  function applyUrlState(){
+    const p=new URLSearchParams(location.search);
+    const setIfOption=(selector,value)=>{ const el=$(selector); if(value && [...el.options].some(o=>o.value===value)) el.value=value; };
+    setIfOption('#filter-period',p.get('period'));
+    setIfOption('#filter-calendar',p.get('type'));
+    setIfOption('#filter-country',p.get('country'));
+    if(p.get('q')) $('#filter-search').value=p.get('q');
+    const view=p.get('view');
+    if(['list','calendar','map'].includes(view)){
+      state.view=view;
+      $('[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===view));
+      ['list','calendar','map'].forEach(v=>$(`#view-${v}`).hidden=v!==view);
+    }
+  }
+
+  function syncUrl(){
+    const p=new URLSearchParams();
+    const period=$('#filter-period').value, type=$('#filter-calendar').value, country=$('#filter-country').value, q=$('#filter-search').value.trim();
+    if(period!=='90') p.set('period',period);
+    if(type!=='All') p.set('type',type);
+    if(country!=='All') p.set('country',country);
+    if(q) p.set('q',q);
+    if(state.view!=='list') p.set('view',state.view);
+    const next=p.toString()?`${location.pathname}?${p.toString()}`:location.pathname;
+    history.replaceState(null,'',next);
   }
 
   function populateCountries(){
@@ -60,11 +87,14 @@
   }
 
   function periodMatch(e,period){
-    const d=parseYmd(e.start); if(!d) return false;
+    const start=parseYmd(e.start), end=parseYmd(e.end||e.start); if(!start||!end) return false;
     if(period==='all') return true;
-    if(period==='2026'||period==='2027') return d.getFullYear()===Number(period);
+    if(period==='2026'||period==='2027'){
+      const y=Number(period), from=new Date(y,0,1), to=new Date(y,11,31);
+      return end>=from && start<=to;
+    }
     const today=new Date(); today.setHours(0,0,0,0); const max=addDays(today,Number(period));
-    return d>=today && d<=max;
+    return end>=today && start<=max;
   }
 
   function applyFilters(){
@@ -72,6 +102,7 @@
     state.filtered=state.events.filter(e=>periodMatch(e,period) && (cal==='All'||e.calendar===cal) && (country==='All'||e.country===country) && (!q||[e.name,e.title,e.city,e.country,e.venue,e.notes,e.calendar,e.status].join(' ').toLowerCase().includes(q)));
     $('#result-count').textContent=`${state.filtered.length} event${state.filtered.length===1?'':'s'}`;
     $('#source-note').textContent=state.source==='live'?'live from master':'current master snapshot';
+    syncUrl();
     renderCurrent();
   }
 
@@ -154,7 +185,7 @@
 
   function setup(){
     ['#filter-period','#filter-calendar','#filter-country'].forEach(s=>$(s).addEventListener('change',applyFilters)); $('#filter-search').addEventListener('input',applyFilters);
-    $$('[data-view]').forEach(b=>b.onclick=()=>{ state.view=b.dataset.view; $$('[data-view]').forEach(x=>x.classList.toggle('active',x===b)); ['list','calendar','map'].forEach(v=>$(`#view-${v}`).hidden=v!==state.view); renderCurrent(); });
+    $('[data-view]').forEach(b=>b.onclick=()=>{ state.view=b.dataset.view; $('[data-view]').forEach(x=>x.classList.toggle('active',x===b)); ['list','calendar','map'].forEach(v=>$(`#view-${v}`).hidden=v!==state.view); syncUrl(); renderCurrent(); });
     $('#submit-top').onclick=openSubmit; $('#submit-card').onclick=openSubmit; $('#submission-url').addEventListener('keydown',e=>{if(e.key==='Enter')openSubmit();}); $('#submit-form').addEventListener('submit',submitEvent);
     setupModals(); calendarLinks(); renderStack(); loadEvents();
   }
