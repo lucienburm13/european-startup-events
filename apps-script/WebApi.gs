@@ -24,7 +24,7 @@ function doPost(e) {
     const id = Utilities.getUuid();
     sheet.appendRow([
       id, now, 'NEW', cleanText_(payload.url), cleanText_(payload.name), cleanText_(payload.dates),
-      cleanText_(payload.location), cleanText_(payload.notes), '', '', ''
+      cleanText_(payload.location), cleanText_(payload.email), cleanText_(payload.notes), '', '', ''
     ]);
     return jsonResponse_({ ok: true, submissionId: id });
   } catch (err) {
@@ -66,8 +66,8 @@ function ensureSubmissionsSheet_() {
   let sh = ss.getSheetByName('Submissions');
   if (sh) return sh;
   sh = ss.insertSheet('Submissions');
-  sh.getRange(1, 1, 1, 11).setValues([[
-    'Submission ID','Submitted at','Status','URL','Event name','Dates','Location','Submitter notes','Review notes','Decision','Master ID'
+  sh.getRange(1, 1, 1, 12).setValues([[
+    'Submission ID','Submitted at','Status','URL','Event name','Dates','Location','Submitter email','Submitter notes','Review notes','Decision','Master ID'
   ]]);
   sh.setFrozenRows(1);
   return sh;
