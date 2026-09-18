@@ -1,7 +1,7 @@
 {
   "source": "Open-Meteo Geocoding API (location data based on GeoNames)",
   "generatedFor": "European Startup Events",
-  "count": 56,
+  "count": 62,
   "locations": {
     "Amsterdam|Netherlands": {
       "city": "Amsterdam",
@@ -101,6 +101,15 @@
       "resolvedName": "Cambridge",
       "resolvedCountry": "United Kingdom",
       "timezone": "Europe/London"
+    },
+    "Cologne|Germany": {
+      "city": "Cologne",
+      "country": "Germany",
+      "lat": 50.93333,
+      "lng": 6.95,
+      "resolvedName": "Cologne",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
     },
     "Copenhagen|Denmark": {
       "city": "Copenhagen",
@@ -210,6 +219,15 @@
       "resolvedCountry": "United Kingdom",
       "timezone": "Europe/London"
     },
+    "Lisbon|Portugal": {
+      "city": "Lisbon",
+      "country": "Portugal",
+      "lat": 38.72509,
+      "lng": -9.1498,
+      "resolvedName": "Lisbon",
+      "resolvedCountry": "Portugal",
+      "timezone": "Europe/Lisbon"
+    },
     "London|United Kingdom": {
       "city": "London",
       "country": "United Kingdom",
@@ -218,6 +236,15 @@
       "resolvedName": "London",
       "resolvedCountry": "United Kingdom",
       "timezone": "Europe/London"
+    },
+    "Luxembourg|Luxembourg": {
+      "city": "Luxembourg",
+      "country": "Luxembourg",
+      "lat": 49.75,
+      "lng": 6.16667,
+      "resolvedName": "Luxembourg",
+      "resolvedCountry": "Luxembourg",
+      "timezone": "Europe/Luxembourg"
     },
     "Lviv|Ukraine": {
       "city": "Lviv",
@@ -318,6 +345,15 @@
       "resolvedCountry": "France",
       "timezone": "Europe/Paris"
     },
+    "Prague|Czechia": {
+      "city": "Prague",
+      "country": "Czechia",
+      "lat": 50.08804,
+      "lng": 14.42076,
+      "resolvedName": "Prague",
+      "resolvedCountry": "Czechia",
+      "timezone": "Europe/Prague"
+    },
     "Rennes|France": {
       "city": "Rennes",
       "country": "France",
@@ -407,6 +443,15 @@
       "resolvedName": "Turin",
       "resolvedCountry": "Italy",
       "timezone": "Europe/Rome"
+    },
+    "Utrecht|Netherlands": {
+      "city": "Utrecht",
+      "country": "Netherlands",
+      "lat": 52.09083,
+      "lng": 5.12222,
+      "resolvedName": "Utrecht",
+      "resolvedCountry": "The Netherlands",
+      "timezone": "Europe/Amsterdam"
     },
     "Valencia|Spain": {
       "city": "Valencia",
@@ -506,28 +551,16 @@
       "resolvedName": "Zurich",
       "resolvedCountry": "Switzerland",
       "timezone": "Europe/Zurich"
+    },
+    "Zürich|Switzerland": {
+      "city": "Zürich",
+      "country": "Switzerland",
+      "lat": 47.36667,
+      "lng": 8.55,
+      "resolvedName": "Zurich",
+      "resolvedCountry": "Switzerland",
+      "timezone": "Europe/Zurich"
     }
   },
-  "unresolved": [
-    {
-      "key": "Cologne|Germany",
-      "error": "<urlopen error _ssl.c:993: The handshake operation timed out>"
-    },
-    {
-      "key": "Lisbon|Portugal",
-      "error": "<urlopen error _ssl.c:993: The handshake operation timed out>"
-    },
-    {
-      "key": "Prague|Czechia",
-      "error": "<urlopen error _ssl.c:993: The handshake operation timed out>"
-    },
-    {
-      "key": "Utrecht|Netherlands",
-      "error": "<urlopen error _ssl.c:993: The handshake operation timed out>"
-    },
-    {
-      "key": "Zürich|Switzerland",
-      "error": "<urlopen error _ssl.c:993: The handshake operation timed out>"
-    }
-  ]
+  "unresolved": []
 }
