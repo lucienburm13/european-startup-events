@@ -31,7 +31,11 @@
 
   async function loadEvents(){
     let data;
-    if(cfg.eventsApiUrl){
+    if(window.EUSE_INLINE_EVENTS){
+      data=window.EUSE_INLINE_EVENTS;
+      state.source='snapshot';
+    }
+    if(!data && cfg.eventsApiUrl){
       try { data=await loadJsonp(cfg.eventsApiUrl); state.source='live'; }
       catch(err){ console.warn('Live feed unavailable; using snapshot.',err); }
     }
