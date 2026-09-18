@@ -22,7 +22,7 @@ window.EUSE_CONFIG = {
       { name: 'Hosting & compute', provider: 'Koyeb (planned)', country: 'France', flag: '🇫🇷', status: 'european' },
       { name: 'Data & storage', provider: 'Google Sheets', country: 'United States', flag: '🇺🇸', status: 'non-european' },
       { name: 'Software & runtime', provider: 'HTML / CSS / JavaScript', country: 'Open source / standards', flag: '🌐', status: 'open' },
-      { name: 'Functional services', provider: 'Tally + European map stack (planned)', country: 'Belgium / Europe', flag: '🇧🇪 🇪🇺', status: 'european' },
+      { name: 'Functional services', provider: 'Tally + OpenFreeMap (planned)', country: 'Belgium / Hungary', flag: '🇧🇪 🇭🇺', status: 'european' },
       { name: 'Analytics & observability', provider: 'Plausible (planned)', country: 'Estonia', flag: '🇪🇪', status: 'european' },
       { name: 'AI & automation', provider: 'OpenAI', country: 'United States', flag: '🇺🇸', status: 'non-european' }
     ]
