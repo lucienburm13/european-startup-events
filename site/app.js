@@ -1,6 +1,6 @@
 (() => {
   const cfg = window.EUSE_CONFIG || {};
-  const state = { events: [], filtered: [], view: 'list', calendarCursor: startOfMonth(new Date()), source: 'snapshot' };
+  const state = { events: [], filtered: [], locations: {}, view: 'list', calendarCursor: startOfMonth(new Date()), source: 'snapshot', map: null };
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => [...document.querySelectorAll(s)];
 
@@ -20,6 +20,14 @@
     }
     if(!data){ const r=await fetch('./public/events.json',{cache:'no-store'}); data=await r.json(); state.source='snapshot'; }
     state.events=(data.events||data).filter(e=>e.start).sort((a,b)=>a.start.localeCompare(b.start)||a.name.localeCompare(b.name));
+    try {
+      const lr=await fetch('./public/locations.json',{cache:'no-store'});
+      if(lr.ok){ const lj=await lr.json(); state.locations=lj.locations||{}; }
+    } catch(err){ console.info('Location cache not available yet.'); }
+    state.events=state.events.map(e=>{
+      const hit=state.locations[`${e.city||''}|${e.country||''}`];
+      return hit ? {...e,lat:hit.lat,lng:hit.lng} : e;
+    });
     populateCountries(); applyFilters();
   }
 
@@ -71,9 +79,22 @@
 
   function renderMap(){
     const el=$('#view-map');
+    if(state.map){ try{ state.map.remove(); }catch(_){} state.map=null; }
     const pins=state.filtered.filter(e=>Number.isFinite(Number(e.lat))&&Number.isFinite(Number(e.lng)));
-    if(!pins.length){ el.innerHTML=`<div class="map-shell"><div><p class="eyebrow">MAP VIEW</p><h2>Ready for coordinates.</h2><p>The map uses the same filters as List and Calendar. We will store latitude/longitude once in the master rather than geocoding visitors on every page load. No filtered events currently have coordinates in the master snapshot.</p><p><strong>${state.filtered.length}</strong> events are in the current selection.</p></div></div>`; return; }
-    el.innerHTML=`<div class="map-shell"><div><h2>${pins.length} mapped events</h2><p>Coordinate rendering is enabled once the map provider is connected.</p></div></div>`;
+    if(!pins.length){ el.innerHTML=`<div class="map-shell"><div><p class="eyebrow">MAP VIEW</p><h2>Coordinates are being enriched.</h2><p>The map uses the same filters as List and Calendar. Coordinates are cached once per city/country rather than geocoding every visitor.</p><p><strong>${state.filtered.length}</strong> events are in the current selection.</p></div></div>`; return; }
+    if(!window.maplibregl){ el.innerHTML='<div class="map-shell"><div><h2>Map library unavailable.</h2><p>The event list and calendar remain available.</p></div></div>'; return; }
+    el.innerHTML='<div id="event-map" class="event-map" aria-label="Map of filtered events"></div>';
+    state.map=new maplibregl.Map({container:'event-map',style:cfg.mapStyleUrl||'https://tiles.openfreemap.org/styles/liberty',center:[10,50],zoom:3});
+    state.map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-right');
+    const bounds=new maplibregl.LngLatBounds();
+    pins.forEach(e=>{
+      const lng=Number(e.lng), lat=Number(e.lat); bounds.extend([lng,lat]);
+      const link=e.source?`<p><a href="${esc(e.source)}" target="_blank" rel="noopener">Official source ↗</a></p>`:'';
+      const popup=new maplibregl.Popup({offset:18}).setHTML(`<strong>${esc(e.title||e.name)}</strong><p>${esc(fmtDate(e.start,e.end))} · ${esc([e.city,e.country].filter(Boolean).join(', '))}</p>${link}`);
+      new maplibregl.Marker({color:e.calendar==='Main'?'#111111':e.calendar==='Policy'?'#4d68a8':'#777777'}).setLngLat([lng,lat]).setPopup(popup).addTo(state.map);
+    });
+    if(pins.length===1) state.map.setCenter([Number(pins[0].lng),Number(pins[0].lat)]), state.map.setZoom(7);
+    else state.map.fitBounds(bounds,{padding:55,maxZoom:7,duration:0});
   }
 
   function calendarLinks(){
