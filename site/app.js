@@ -12,10 +12,27 @@
   function fmtDate(start,end){ const s=parseYmd(start), e=parseYmd(end||start); if(!s) return ''; const same=ymd(s)===ymd(e); const opt={day:'numeric',month:'short'}; if(same) return s.toLocaleDateString('en-GB',opt).toUpperCase(); if(s.getMonth()===e.getMonth()) return `${s.getDate()}–${e.getDate()} ${s.toLocaleDateString('en-GB',{month:'short'}).toUpperCase()}`; return `${s.toLocaleDateString('en-GB',opt).toUpperCase()} – ${e.toLocaleDateString('en-GB',opt).toUpperCase()}`; }
   function monthLabel(d){ return d.toLocaleDateString('en-GB',{month:'long',year:'numeric'}); }
 
+  function loadJsonp(url){
+    return new Promise((resolve,reject)=>{
+      const callback='__euse_jsonp_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+      const script=document.createElement('script');
+      const sep=url.includes('?')?'&':'?';
+      const timer=setTimeout(()=>cleanup(new Error('JSONP timeout')),12000);
+      function cleanup(err,data){
+        clearTimeout(timer); try{delete window[callback];}catch(_){window[callback]=undefined;}
+        script.remove(); err?reject(err):resolve(data);
+      }
+      window[callback]=(data)=>cleanup(null,data);
+      script.onerror=()=>cleanup(new Error('JSONP load failed'));
+      script.src=url+sep+'prefix='+encodeURIComponent(callback);
+      document.head.appendChild(script);
+    });
+  }
+
   async function loadEvents(){
     let data;
     if(cfg.eventsApiUrl){
-      try { const r=await fetch(cfg.eventsApiUrl,{cache:'no-store'}); if(!r.ok) throw new Error(`HTTP ${r.status}`); data=await r.json(); state.source='live'; }
+      try { data=await loadJsonp(cfg.eventsApiUrl); state.source='live'; }
       catch(err){ console.warn('Live feed unavailable; using snapshot.',err); }
     }
     if(!data){ const r=await fetch('./public/events.json',{cache:'no-store'}); data=await r.json(); state.source='snapshot'; }
