@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Europe's startup, tech and policy calendar.">
   <title>European Startup Events</title>
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css">\n  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
   <header class="site-header">
@@ -52,7 +52,7 @@
   <div class="modal-backdrop" id="modal-stack" hidden><div class="modal"><div class="modal-head"><h2 id="stack-title">European Stack Index</h2><button data-close>×</button></div><p>A simple, auditable measure: how many primary application layers are controlled by European providers. Open-source layers are shown separately.</p><div id="stack-table"></div><small>EuroStack-inspired, not an official EuroStack score. The methodology is open and versioned in the repository.</small></div></div>
   <div class="modal-backdrop" id="modal-submit" hidden><div class="modal"><div class="modal-head"><h2>Submit an event</h2><button data-close>×</button></div><p>One official event or programme link is enough. If you do not have one, add the basic details below. Submissions are reviewed before they enter the master calendar.</p><form id="submit-form" class="submit-form"><label>Event or programme URL<input id="submit-url-full" name="url" type="url" placeholder="https://…"></label><label>Event name (optional)<input name="name" placeholder="Event name"></label><label>Dates / timing (optional)<input name="dates" placeholder="e.g. 12–13 May 2027"></label><label>City / country (optional)<input name="location" placeholder="City, country"></label><label>Anything else we should know? (optional)<textarea name="notes" rows="3"></textarea></label><button class="solid-button" type="submit">Send for verification</button><div class="submit-status" id="submit-status"></div></form></div></div>
 
-  <script src="./config.js"></script>
+  <script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>\n  <script src="./config.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>
