@@ -6,10 +6,12 @@
 function doGet(e) {
   try {
     const action = (e && e.parameter && e.parameter.action) || 'events';
-    if (action !== 'events') return jsonResponse_({ ok: false, error: 'Unknown action' });
-    return jsonResponse_({ ok: true, generatedAt: new Date().toISOString(), events: websiteEvents_() });
+    const prefix = (e && e.parameter && e.parameter.prefix) || '';
+    if (action !== 'events') return jsonResponse_({ ok: false, error: 'Unknown action' }, prefix);
+    return jsonResponse_({ ok: true, generatedAt: new Date().toISOString(), events: websiteEvents_() }, prefix);
   } catch (err) {
-    return jsonResponse_({ ok: false, error: String(err && err.message ? err.message : err) });
+    const prefix = (e && e.parameter && e.parameter.prefix) || '';
+    return jsonResponse_({ ok: false, error: String(err && err.message ? err.message : err) }, prefix);
   }
 }
 
@@ -75,7 +77,16 @@ function cleanText_(value) {
   return String(value == null ? '' : value).trim().slice(0, 4000);
 }
 
-function jsonResponse_(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj))
+function jsonResponse_(obj, prefix) {
+  const json = JSON.stringify(obj);
+  if (prefix) {
+    if (!/^[A-Za-z_$][0-9A-Za-z_$.]*$/.test(prefix)) {
+      return ContentService.createTextOutput(JSON.stringify({ok:false,error:'Invalid callback'}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    return ContentService.createTextOutput(prefix + '(' + json + ')')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return ContentService.createTextOutput(json)
     .setMimeType(ContentService.MimeType.JSON);
 }
