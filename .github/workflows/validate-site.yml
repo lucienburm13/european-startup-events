@@ -8,11 +8,6 @@ on:
       - 'scripts/**'
       - 'apps-script/WebApi.gs'
       - '.github/workflows/validate-site.yml'
-  pull_request:
-    paths:
-      - 'site/**'
-      - 'scripts/**'
-      - 'apps-script/WebApi.gs'
 
 jobs:
   validate:
