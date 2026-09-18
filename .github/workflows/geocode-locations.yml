@@ -26,12 +26,12 @@ jobs:
         run: python scripts/geocode_locations.py
       - name: Commit cache if changed
         run: |
-          if git diff --quiet -- site/public/locations.json; then
+          git add site/public/locations.json
+          if git diff --cached --quiet; then
             echo "No location changes"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add site/public/locations.json
           git commit -m "Refresh derived location cache"
           git push origin HEAD:site-v0.1
