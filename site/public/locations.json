@@ -1,0 +1,533 @@
+{
+  "source": "Open-Meteo Geocoding API (location data based on GeoNames)",
+  "generatedFor": "European Startup Events",
+  "count": 56,
+  "locations": {
+    "Amsterdam|Netherlands": {
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "lat": 52.37403,
+      "lng": 4.88969,
+      "resolvedName": "Amsterdam",
+      "resolvedCountry": "The Netherlands",
+      "timezone": "Europe/Amsterdam"
+    },
+    "Barcelona|Spain": {
+      "city": "Barcelona",
+      "country": "Spain",
+      "lat": 41.38879,
+      "lng": 2.15899,
+      "resolvedName": "Barcelona",
+      "resolvedCountry": "Spain",
+      "timezone": "Europe/Madrid"
+    },
+    "Basel|Switzerland": {
+      "city": "Basel",
+      "country": "Switzerland",
+      "lat": 47.55839,
+      "lng": 7.57327,
+      "resolvedName": "Basel",
+      "resolvedCountry": "Switzerland",
+      "timezone": "Europe/Zurich"
+    },
+    "Berlin|Germany": {
+      "city": "Berlin",
+      "country": "Germany",
+      "lat": 52.52437,
+      "lng": 13.41053,
+      "resolvedName": "Berlin",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
+    },
+    "Bilbao|Spain": {
+      "city": "Bilbao",
+      "country": "Spain",
+      "lat": 43.26271,
+      "lng": -2.92528,
+      "resolvedName": "Bilbao",
+      "resolvedCountry": "Spain",
+      "timezone": "Europe/Madrid"
+    },
+    "Birmingham|United Kingdom": {
+      "city": "Birmingham",
+      "country": "United Kingdom",
+      "lat": 52.48142,
+      "lng": -1.89983,
+      "resolvedName": "Birmingham",
+      "resolvedCountry": "United Kingdom",
+      "timezone": "Europe/London"
+    },
+    "Bremen|Germany": {
+      "city": "Bremen",
+      "country": "Germany",
+      "lat": 53.07582,
+      "lng": 8.80717,
+      "resolvedName": "Bremen",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
+    },
+    "Brighton|United Kingdom": {
+      "city": "Brighton",
+      "country": "United Kingdom",
+      "lat": 50.82838,
+      "lng": -0.13947,
+      "resolvedName": "Brighton",
+      "resolvedCountry": "United Kingdom",
+      "timezone": "Europe/London"
+    },
+    "Brussels|Belgium": {
+      "city": "Brussels",
+      "country": "Belgium",
+      "lat": 50.85045,
+      "lng": 4.34878,
+      "resolvedName": "Brussels",
+      "resolvedCountry": "Belgium",
+      "timezone": "Europe/Brussels"
+    },
+    "Bucharest|Romania": {
+      "city": "Bucharest",
+      "country": "Romania",
+      "lat": 44.43225,
+      "lng": 26.10626,
+      "resolvedName": "Bucharest",
+      "resolvedCountry": "Romania",
+      "timezone": "Europe/Bucharest"
+    },
+    "Cambridge|United Kingdom": {
+      "city": "Cambridge",
+      "country": "United Kingdom",
+      "lat": 52.2,
+      "lng": 0.11667,
+      "resolvedName": "Cambridge",
+      "resolvedCountry": "United Kingdom",
+      "timezone": "Europe/London"
+    },
+    "Copenhagen|Denmark": {
+      "city": "Copenhagen",
+      "country": "Denmark",
+      "lat": 55.67594,
+      "lng": 12.56553,
+      "resolvedName": "Copenhagen",
+      "resolvedCountry": "Denmark",
+      "timezone": "Europe/Copenhagen"
+    },
+    "Dresden|Germany": {
+      "city": "Dresden",
+      "country": "Germany",
+      "lat": 51.05089,
+      "lng": 13.73832,
+      "resolvedName": "Dresden",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
+    },
+    "Dublin|Ireland": {
+      "city": "Dublin",
+      "country": "Ireland",
+      "lat": 53.33306,
+      "lng": -6.24889,
+      "resolvedName": "Dublin",
+      "resolvedCountry": "Ireland",
+      "timezone": "Europe/Dublin"
+    },
+    "Espoo|Finland": {
+      "city": "Espoo",
+      "country": "Finland",
+      "lat": 60.2052,
+      "lng": 24.6522,
+      "resolvedName": "Espoo",
+      "resolvedCountry": "Finland",
+      "timezone": "Europe/Helsinki"
+    },
+    "Galway|Ireland": {
+      "city": "Galway",
+      "country": "Ireland",
+      "lat": 53.27245,
+      "lng": -9.05095,
+      "resolvedName": "Galway",
+      "resolvedCountry": "Ireland",
+      "timezone": "Europe/Dublin"
+    },
+    "Gdańsk|Poland": {
+      "city": "Gdańsk",
+      "country": "Poland",
+      "lat": 54.35227,
+      "lng": 18.64912,
+      "resolvedName": "Gdansk",
+      "resolvedCountry": "Poland",
+      "timezone": "Europe/Warsaw"
+    },
+    "Ghent|Belgium": {
+      "city": "Ghent",
+      "country": "Belgium",
+      "lat": 51.05,
+      "lng": 3.71667,
+      "resolvedName": "Ghent",
+      "resolvedCountry": "Belgium",
+      "timezone": "Europe/Brussels"
+    },
+    "Groningen|Netherlands": {
+      "city": "Groningen",
+      "country": "Netherlands",
+      "lat": 53.21917,
+      "lng": 6.56667,
+      "resolvedName": "Groningen",
+      "resolvedCountry": "The Netherlands",
+      "timezone": "Europe/Amsterdam"
+    },
+    "Hannover|Germany": {
+      "city": "Hannover",
+      "country": "Germany",
+      "lat": 52.37052,
+      "lng": 9.73322,
+      "resolvedName": "Hanover",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
+    },
+    "Helsinki|Finland": {
+      "city": "Helsinki",
+      "country": "Finland",
+      "lat": 60.16952,
+      "lng": 24.93545,
+      "resolvedName": "Helsinki",
+      "resolvedCountry": "Finland",
+      "timezone": "Europe/Helsinki"
+    },
+    "Houten|Netherlands": {
+      "city": "Houten",
+      "country": "Netherlands",
+      "lat": 52.02833,
+      "lng": 5.16806,
+      "resolvedName": "Houten",
+      "resolvedCountry": "The Netherlands",
+      "timezone": "Europe/Amsterdam"
+    },
+    "Leeds|United Kingdom": {
+      "city": "Leeds",
+      "country": "United Kingdom",
+      "lat": 53.79648,
+      "lng": -1.54785,
+      "resolvedName": "Leeds",
+      "resolvedCountry": "United Kingdom",
+      "timezone": "Europe/London"
+    },
+    "London|United Kingdom": {
+      "city": "London",
+      "country": "United Kingdom",
+      "lat": 51.50853,
+      "lng": -0.12574,
+      "resolvedName": "London",
+      "resolvedCountry": "United Kingdom",
+      "timezone": "Europe/London"
+    },
+    "Lviv|Ukraine": {
+      "city": "Lviv",
+      "country": "Ukraine",
+      "lat": 49.83826,
+      "lng": 24.02324,
+      "resolvedName": "Lviv",
+      "resolvedCountry": "Ukraine",
+      "timezone": "Europe/Kyiv"
+    },
+    "Maastricht|Netherlands": {
+      "city": "Maastricht",
+      "country": "Netherlands",
+      "lat": 50.84833,
+      "lng": 5.68889,
+      "resolvedName": "Maastricht",
+      "resolvedCountry": "The Netherlands",
+      "timezone": "Europe/Amsterdam"
+    },
+    "Madrid|Spain": {
+      "city": "Madrid",
+      "country": "Spain",
+      "lat": 40.4165,
+      "lng": -3.70256,
+      "resolvedName": "Madrid",
+      "resolvedCountry": "Spain",
+      "timezone": "Europe/Madrid"
+    },
+    "Malmö|Sweden": {
+      "city": "Malmö",
+      "country": "Sweden",
+      "lat": 55.60587,
+      "lng": 13.00073,
+      "resolvedName": "Malmö",
+      "resolvedCountry": "Sweden",
+      "timezone": "Europe/Stockholm"
+    },
+    "Maribor|Slovenia": {
+      "city": "Maribor",
+      "country": "Slovenia",
+      "lat": 46.55583,
+      "lng": 15.64593,
+      "resolvedName": "Maribor",
+      "resolvedCountry": "Slovenia",
+      "timezone": "Europe/Ljubljana"
+    },
+    "Marseille|France": {
+      "city": "Marseille",
+      "country": "France",
+      "lat": 43.29695,
+      "lng": 5.38107,
+      "resolvedName": "Marseille",
+      "resolvedCountry": "France",
+      "timezone": "Europe/Paris"
+    },
+    "Milan|Italy": {
+      "city": "Milan",
+      "country": "Italy",
+      "lat": 45.46427,
+      "lng": 9.18951,
+      "resolvedName": "Milan",
+      "resolvedCountry": "Italy",
+      "timezone": "Europe/Rome"
+    },
+    "Munich|Germany": {
+      "city": "Munich",
+      "country": "Germany",
+      "lat": 48.13743,
+      "lng": 11.57549,
+      "resolvedName": "Munich",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
+    },
+    "Nuremberg|Germany": {
+      "city": "Nuremberg",
+      "country": "Germany",
+      "lat": 49.45421,
+      "lng": 11.07752,
+      "resolvedName": "Nuremberg",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
+    },
+    "Oslo|Norway": {
+      "city": "Oslo",
+      "country": "Norway",
+      "lat": 59.91273,
+      "lng": 10.74609,
+      "resolvedName": "Oslo",
+      "resolvedCountry": "Norway",
+      "timezone": "Europe/Oslo"
+    },
+    "Paris|France": {
+      "city": "Paris",
+      "country": "France",
+      "lat": 48.85341,
+      "lng": 2.3488,
+      "resolvedName": "Paris",
+      "resolvedCountry": "France",
+      "timezone": "Europe/Paris"
+    },
+    "Rennes|France": {
+      "city": "Rennes",
+      "country": "France",
+      "lat": 48.11109,
+      "lng": -1.67431,
+      "resolvedName": "Rennes",
+      "resolvedCountry": "France",
+      "timezone": "Europe/Paris"
+    },
+    "Reykjavík|Iceland": {
+      "city": "Reykjavík",
+      "country": "Iceland",
+      "lat": 64.13548,
+      "lng": -21.89541,
+      "resolvedName": "Reykjavik",
+      "resolvedCountry": "Iceland",
+      "timezone": "Atlantic/Reykjavik"
+    },
+    "Riga|Latvia": {
+      "city": "Riga",
+      "country": "Latvia",
+      "lat": 56.946,
+      "lng": 24.10589,
+      "resolvedName": "Riga",
+      "resolvedCountry": "Latvia",
+      "timezone": "Europe/Riga"
+    },
+    "Rotterdam|Netherlands": {
+      "city": "Rotterdam",
+      "country": "Netherlands",
+      "lat": 51.9225,
+      "lng": 4.47917,
+      "resolvedName": "Rotterdam",
+      "resolvedCountry": "The Netherlands",
+      "timezone": "Europe/Amsterdam"
+    },
+    "Salamanca|Spain": {
+      "city": "Salamanca",
+      "country": "Spain",
+      "lat": 40.96882,
+      "lng": -5.66388,
+      "resolvedName": "Salamanca",
+      "resolvedCountry": "Spain",
+      "timezone": "Europe/Madrid"
+    },
+    "Sofia|Bulgaria": {
+      "city": "Sofia",
+      "country": "Bulgaria",
+      "lat": 42.69751,
+      "lng": 23.32415,
+      "resolvedName": "Sofia",
+      "resolvedCountry": "Bulgaria",
+      "timezone": "Europe/Sofia"
+    },
+    "Stuttgart|Germany": {
+      "city": "Stuttgart",
+      "country": "Germany",
+      "lat": 48.78232,
+      "lng": 9.17702,
+      "resolvedName": "Stuttgart",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
+    },
+    "Tallinn|Estonia": {
+      "city": "Tallinn",
+      "country": "Estonia",
+      "lat": 59.43696,
+      "lng": 24.75353,
+      "resolvedName": "Tallinn",
+      "resolvedCountry": "Estonia",
+      "timezone": "Europe/Tallinn"
+    },
+    "Tartu|Estonia": {
+      "city": "Tartu",
+      "country": "Estonia",
+      "lat": 58.38062,
+      "lng": 26.72509,
+      "resolvedName": "Tartu",
+      "resolvedCountry": "Estonia",
+      "timezone": "Europe/Tallinn"
+    },
+    "Turin|Italy": {
+      "city": "Turin",
+      "country": "Italy",
+      "lat": 45.07049,
+      "lng": 7.68682,
+      "resolvedName": "Turin",
+      "resolvedCountry": "Italy",
+      "timezone": "Europe/Rome"
+    },
+    "Valencia|Spain": {
+      "city": "Valencia",
+      "country": "Spain",
+      "lat": 39.47391,
+      "lng": -0.37966,
+      "resolvedName": "Valencia",
+      "resolvedCountry": "Spain",
+      "timezone": "Europe/Madrid"
+    },
+    "Vallendar|Germany": {
+      "city": "Vallendar",
+      "country": "Germany",
+      "lat": 50.39586,
+      "lng": 7.62427,
+      "resolvedName": "Vallendar",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
+    },
+    "Valletta|Malta": {
+      "city": "Valletta",
+      "country": "Malta",
+      "lat": 35.89968,
+      "lng": 14.5148,
+      "resolvedName": "Valletta",
+      "resolvedCountry": "Malta",
+      "timezone": "Europe/Malta"
+    },
+    "Vienna|Austria": {
+      "city": "Vienna",
+      "country": "Austria",
+      "lat": 48.20849,
+      "lng": 16.37208,
+      "resolvedName": "Vienna",
+      "resolvedCountry": "Austria",
+      "timezone": "Europe/Vienna"
+    },
+    "Vilnius|Lithuania": {
+      "city": "Vilnius",
+      "country": "Lithuania",
+      "lat": 54.68916,
+      "lng": 25.2798,
+      "resolvedName": "Vilnius",
+      "resolvedCountry": "Lithuania",
+      "timezone": "Europe/Vilnius"
+    },
+    "Warsaw|Poland": {
+      "city": "Warsaw",
+      "country": "Poland",
+      "lat": 52.22977,
+      "lng": 21.01178,
+      "resolvedName": "Warsaw",
+      "resolvedCountry": "Poland",
+      "timezone": "Europe/Warsaw"
+    },
+    "Wiesbaden|Germany": {
+      "city": "Wiesbaden",
+      "country": "Germany",
+      "lat": 50.08601,
+      "lng": 8.24435,
+      "resolvedName": "Wiesbaden",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
+    },
+    "Winterthur|Switzerland": {
+      "city": "Winterthur",
+      "country": "Switzerland",
+      "lat": 47.50564,
+      "lng": 8.72413,
+      "resolvedName": "Winterthur",
+      "resolvedCountry": "Switzerland",
+      "timezone": "Europe/Zurich"
+    },
+    "Zaandam|Netherlands": {
+      "city": "Zaandam",
+      "country": "Netherlands",
+      "lat": 52.43854,
+      "lng": 4.82643,
+      "resolvedName": "Zaandam",
+      "resolvedCountry": "The Netherlands",
+      "timezone": "Europe/Amsterdam"
+    },
+    "Zadar|Croatia": {
+      "city": "Zadar",
+      "country": "Croatia",
+      "lat": 44.11578,
+      "lng": 15.22514,
+      "resolvedName": "Zadar",
+      "resolvedCountry": "Croatia",
+      "timezone": "Europe/Zagreb"
+    },
+    "Zurich|Switzerland": {
+      "city": "Zurich",
+      "country": "Switzerland",
+      "lat": 47.36667,
+      "lng": 8.55,
+      "resolvedName": "Zurich",
+      "resolvedCountry": "Switzerland",
+      "timezone": "Europe/Zurich"
+    }
+  },
+  "unresolved": [
+    {
+      "key": "Cologne|Germany",
+      "error": "<urlopen error _ssl.c:993: The handshake operation timed out>"
+    },
+    {
+      "key": "Lisbon|Portugal",
+      "error": "<urlopen error _ssl.c:993: The handshake operation timed out>"
+    },
+    {
+      "key": "Prague|Czechia",
+      "error": "<urlopen error _ssl.c:993: The handshake operation timed out>"
+    },
+    {
+      "key": "Utrecht|Netherlands",
+      "error": "<urlopen error _ssl.c:993: The handshake operation timed out>"
+    },
+    {
+      "key": "Zürich|Switzerland",
+      "error": "<urlopen error _ssl.c:993: The handshake operation timed out>"
+    }
+  ]
+}
