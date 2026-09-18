@@ -40,3 +40,34 @@ Edit `config.js`:
 ## Hosting
 
 The site is static and can be hosted on any static host. The intended European-first production choice is Koyeb or another suitable European provider; this is shown as **planned**, not active, until actually deployed.
+
+## Deploy on Koyeb
+
+This branch includes a small Docker/Caddy setup so the static site can be deployed directly from GitHub.
+
+Suggested settings:
+
+- repository: `lucienburm13/european-startup-events`
+- branch while testing: `site-v0.1`
+- work directory: `site`
+- builder: Dockerfile
+- exposed HTTP port: `8000`
+- health route: `/`
+
+After launch, point the intended custom subdomain to the Koyeb service.
+
+## Live master feed
+
+The site works immediately from `public/events.json`. For production, add `apps-script/WebApi.gs` to the existing calendar Apps Script project and deploy it as a public Web app.
+
+Set the resulting `/exec` URL as `eventsApiUrl` in `config.js`. The browser uses a read-only JSONP callback for the events feed; the static snapshot remains the fallback.
+
+## Event submissions
+
+Preferred production route: create the minimal Tally form described in `../docs/tally-event-submission-form.md` and connect it to the existing `Submissions` tab in the master spreadsheet. Then set `tallyFormUrl` in `config.js`.
+
+The website never writes submissions straight into `Events`.
+
+## Map
+
+The interactive map uses MapLibre with OpenFreeMap. `scripts/geocode_locations.py` builds a derived city-coordinate cache for map pins and deliberately skips ambiguous multi-city / online locations.
