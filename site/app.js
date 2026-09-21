@@ -69,7 +69,7 @@
   function syncUrl(){
     const p=new URLSearchParams();
     const period=$('#filter-period').value, type=$('#filter-calendar').value, country=$('#filter-country').value, q=$('#filter-search').value.trim();
-    if(period!=='90') p.set('period',period);
+    if(period!=='30') p.set('period',period);
     if(type!=='All') p.set('type',type);
     if(country!=='All') p.set('country',country);
     if(q) p.set('q',q);
@@ -125,13 +125,57 @@
     $('#custom-dates').hidden=!custom;
   }
 
+  function activeDateRange(){
+    const period=$('#filter-period').value;
+    const today=new Date(); today.setHours(0,0,0,0);
+    if(period==='30') return {from:today,to:addDays(today,30)};
+    if(period==='90') return {from:today,to:addDays(today,90)};
+    if(period==='thisYear') return {from:today,to:new Date(today.getFullYear(),11,31)};
+    if(period==='nextYear'){ const y=today.getFullYear()+1; return {from:new Date(y,0,1),to:new Date(y,11,31)}; }
+    if(period==='past90') return {from:addDays(today,-90),to:addDays(today,-1)};
+    if(period==='custom') return {from:$('#filter-from').value?parseYmd($('#filter-from').value):null,to:$('#filter-to').value?parseYmd($('#filter-to').value):null};
+    if(period==='upcoming'){
+      const ends=state.events.map(e=>parseYmd(e.end||e.start)).filter(Boolean).sort((a,b)=>a-b);
+      return {from:today,to:ends.length?ends[ends.length-1]:null};
+    }
+    return {from:null,to:null};
+  }
+
+  function shortDate(d,withYear=true){
+    if(!d) return '';
+    const opts={day:'numeric',month:'short'};
+    if(withYear) opts.year='numeric';
+    return d.toLocaleDateString('en-GB',opts);
+  }
+
+  function dateRangeLabel(){
+    const {from,to}=activeDateRange();
+    if(from && to){
+      const sameYear=from.getFullYear()===to.getFullYear();
+      return sameYear ? `${shortDate(from,false)}–${shortDate(to,true)}` : `${shortDate(from,true)}–${shortDate(to,true)}`;
+    }
+    if(from) return `From ${shortDate(from,true)}`;
+    if(to) return `Until ${shortDate(to,true)}`;
+    return 'Choose dates';
+  }
+
+  function useCurrentRangeAsCustom(){
+    const {from,to}=activeDateRange();
+    $('#filter-period').value='custom';
+    if(from) $('#filter-from').value=ymd(from);
+    if(to) $('#filter-to').value=ymd(to);
+    toggleCustomDates();
+    applyFilters();
+    $('#filter-from').focus();
+  }
+
   function countryMatch(e,country){ return country==='All' || countryTokens(e.country).includes(country); }
 
   function applyFilters(){
     const period=$('#filter-period').value, cal=$('#filter-calendar').value, country=$('#filter-country').value, q=$('#filter-search').value.trim().toLowerCase();
     state.filtered=state.events.filter(e=>periodMatch(e,period) && (cal==='All'||e.calendar===cal) && countryMatch(e,country) && (!q||[e.name,e.title,e.city,e.country,e.venue,e.notes,e.calendar,e.status].join(' ').toLowerCase().includes(q)));
     $('#result-count').textContent=`${state.filtered.length} event${state.filtered.length===1?'':'s'}`;
-    $('#source-note').textContent=state.source==='live'?'live from master':'current master snapshot';
+    $('#source-note').textContent=dateRangeLabel();
     const add=$('#add-selection');
     if(add) add.textContent=state.filtered.length===1?'Add this event to calendar':`Add ${state.filtered.length} events to calendar`;
     syncUrl(); renderCurrent(); renderMap(); renderSelectionCalendar();
@@ -322,6 +366,7 @@
     $('#filter-period').addEventListener('change',()=>{ toggleCustomDates(); applyFilters(); });
     ['#filter-from','#filter-to'].forEach(s=>$(s).addEventListener('change',applyFilters));
     $('#filter-search').addEventListener('input',applyFilters);
+    $('#source-note').addEventListener('click',useCurrentRangeAsCustom);
     $$('[data-view]').forEach(b=>b.onclick=()=>{ state.view=b.dataset.view; $$('[data-view]').forEach(x=>x.classList.toggle('active',x===b)); ['list','calendar'].forEach(v=>$(`#view-${v}`).hidden=v!==state.view); syncUrl(); renderCurrent(); });
     $('#toggle-map').onclick=()=>{ state.mapCollapsed=!state.mapCollapsed; $('#toggle-map').textContent=state.mapCollapsed?'Show map':'Hide map'; $('#toggle-map').setAttribute('aria-expanded',String(!state.mapCollapsed)); renderMap(); };
     $('#add-selection').onclick=()=>{ $('#modal-calendar-help').hidden=false; renderSelectionCalendar(); };
