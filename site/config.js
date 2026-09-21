@@ -8,17 +8,17 @@ window.EUSE_CONFIG = {
     Policy: { id: 'c_fe229d185c2798b6db19a30d8e60366ea24bd4fda9dbe1b8b9c6182ba9f84885@group.calendar.google.com' }
   },
   stack: {
-    version: '0.2',
-    state: 'planned',
-    layers: [
-      { name: 'Domain & DNS', provider: 'To be selected', country: '—', flag: '◻︎', status: 'pending' },
-      { name: 'Hosting & CDN', provider: 'deploybase · Scaleway · Bunny.net', country: 'Netherlands / France / Slovenia', flag: '🇳🇱 🇫🇷 🇸🇮', status: 'european' },
-      { name: 'Data & master', provider: 'Google Sheets', country: 'United States', flag: '🇺🇸', status: 'non-european' },
-      { name: 'Frontend runtime', provider: 'HTML / CSS / JavaScript', country: 'Open standards', flag: '🌐', status: 'open' },
-      { name: 'Maps', provider: 'MapLibre + OpenFreeMap', country: 'Open source', flag: '🌐', status: 'open' },
-      { name: 'Forms', provider: 'Tally (planned)', country: 'European Union', flag: '🇪🇺', status: 'european' },
-      { name: 'Analytics', provider: 'Plausible (planned)', country: 'Estonia', flag: '🇪🇪', status: 'european' },
-      { name: 'AI & automation', provider: 'OpenAI', country: 'United States', flag: '🇺🇸', status: 'non-european' }
+    version: '0.3',
+    runtime: [
+      { name: 'Hosting & delivery', provider: 'deploybase · Scaleway · Bunny.net', country: 'Netherlands / France / Slovenia', flag: '🇳🇱 🇫🇷 🇸🇮', status: 'european' },
+      { name: 'Frontend', provider: 'HTML / CSS / JavaScript', country: 'Open standards', flag: '🌐', status: 'open' },
+      { name: 'Maps', provider: 'MapLibre + OpenFreeMap', country: 'Open source', flag: '🌐', status: 'open' }
+    ],
+    operations: [
+      { name: 'Master data', provider: 'Google Sheets', country: 'United States', flag: '🇺🇸', status: 'non-european' },
+      { name: 'Submission form', provider: 'Tally', country: 'European Union', flag: '🇪🇺', status: 'planned' },
+      { name: 'Analytics', provider: 'Plausible', country: 'Estonia', flag: '🇪🇪', status: 'planned' },
+      { name: 'AI-assisted maintenance', provider: 'OpenAI', country: 'United States', flag: '🇺🇸', status: 'non-european' }
     ]
   }
 };
