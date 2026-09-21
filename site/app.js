@@ -258,8 +258,20 @@
       const filter=evt.target.closest('[data-map-location]'); if(filter){ evt.preventDefault(); $('#filter-search').value=filter.dataset.mapLocation; applyFilters(); document.querySelector('.results-head')?.scrollIntoView({behavior:'smooth',block:'start'}); }
     },{once:false});
     const groupList=[...groups.values()];
-    if(groupList.length===1){ state.map.setCenter([groupList[0].lng,groupList[0].lat]); state.map.setZoom(7); }
-    else state.map.fitBounds(bounds,{padding:55,maxZoom:7,duration:0});
+    const selectedCountry=$('#filter-country').value;
+    if(selectedCountry!=='All'){
+      if(groupList.length===1){
+        state.map.setCenter([groupList[0].lng,groupList[0].lat]);
+        state.map.setZoom(6);
+      } else {
+        state.map.fitBounds(bounds,{padding:55,maxZoom:6,duration:0});
+      }
+    } else {
+      // Keep a stable Europe overview when changing type, period or search.
+      // This avoids markers at the edge (for example Dublin) disappearing because
+      // the map keeps re-fitting itself to every filtered set.
+      state.map.fitBounds([[-12,34],[45,72]],{padding:35,maxZoom:4,duration:0});
+    }
   }
 
   function icsEscape(s=''){ return String(s).replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;'); }
