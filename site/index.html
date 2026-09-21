@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Europe's startup, tech and policy calendar.">
+  <meta name="description" content="Your European tech, business and policy calendar.">
   <title>European Startup Events</title>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
   <link rel="stylesheet" href="./styles.css">
@@ -12,46 +12,95 @@
   <header class="site-header">
     <a class="brand" href="#top">European Startup Events</a>
     <div class="header-actions">
-      <button class="text-button" data-open="stack">European stack <span id="stack-score-top">—</span></button>
-      <button class="outline-button" data-open="calendar-help">Add to calendar</button>
+      <button class="stack-label" data-open="stack"><span>🇪🇺 EU stack</span><strong id="stack-score-top">—</strong></button>
+      <button class="outline-button" data-open="calendar-help">Calendars</button>
       <button class="solid-button" id="submit-top">Submit an event</button>
     </div>
   </header>
 
   <main id="top">
     <section class="hero">
-      <p class="eyebrow">THE EVENTS THAT MATTER ACROSS EUROPE</p>
-      <h1>Europe’s startup, tech<br>and policy calendar.</h1>
+      <p class="eyebrow">ALL THE GO-TO STARTUP EVENTS IN EUROPE</p>
+      <h1>Your European Tech,<br>Business &amp; Policy Calendar.</h1>
       <p class="hero-copy">One maintained source for founders, investors, ecosystem builders and policymakers. Verified links, visible uncertainty, no pay-to-play rankings.</p>
+    </section>
+
+    <section class="map-panel" id="map-panel">
+      <div class="map-panel-head">
+        <div><p class="eyebrow">EXPLORE EUROPE</p><h2>Where it’s happening.</h2></div>
+        <button class="outline-button compact-button" id="toggle-map" aria-expanded="true">Hide map</button>
+      </div>
+      <div id="view-map"></div>
     </section>
 
     <section class="filters" aria-label="Event filters">
       <label><span>Period</span><select id="filter-period"><option value="30">Next 30 days</option><option value="90" selected>Next 90 days</option><option value="2026">2026</option><option value="2027">2027</option><option value="all">All dates</option></select></label>
-      <label><span>Type</span><select id="filter-calendar"><option value="All">All events</option><option>Main</option><option>Additional</option><option>Policy</option></select></label>
+      <label><span>Type</span><select id="filter-calendar"><option value="All">All events</option></select></label>
       <label><span>Country</span><select id="filter-country"><option value="All">All countries</option></select></label>
       <label class="search-label"><span>Search</span><input id="filter-search" placeholder="AI, Berlin, fintech…"></label>
     </section>
 
     <section class="results-head">
       <div><strong id="result-count">Loading…</strong><span class="source-note" id="source-note"></span></div>
-      <div class="view-tabs" role="tablist" aria-label="View"><button class="active" data-view="list">List</button><button data-view="calendar">Calendar</button><button data-view="map">Map</button></div>
+      <div class="results-actions">
+        <button class="outline-button compact-button" id="add-selection">Add selection</button>
+        <div class="view-tabs" role="tablist" aria-label="View"><button class="active" data-view="list">List</button><button data-view="calendar">Calendar</button></div>
+      </div>
     </section>
 
     <section id="view-list"></section>
     <section id="view-calendar" hidden></section>
-    <section id="view-map" hidden></section>
 
     <section class="submission" id="submit">
-      <div><p class="eyebrow">MISSING SOMETHING?</p><h2>Submit an event.</h2><p>The easiest route is one link to the official event page or programme. We verify the details before anything enters the public master list.</p></div>
-      <div class="submission-card"><label><span>Event or programme URL</span><input id="submission-url" placeholder="https://…"></label><button class="solid-button" id="submit-card">Submit event</button><small>No URL? The full form also accepts basic event details.</small></div>
+      <div><p class="eyebrow">MISSING SOMETHING?</p><h2>Submit an event.</h2><p>Start with the official event page. We check for duplicates and verify every submission before anything enters the public calendar.</p></div>
+      <div class="submission-card">
+        <label><span>Official event or programme URL</span><input id="submission-url" placeholder="https://…"></label>
+        <button class="solid-button" id="submit-card">Check &amp; submit</button>
+        <button class="link-button" id="submit-no-url">I don’t have an official URL</button>
+      </div>
     </section>
   </main>
 
-  <footer><div><strong>European Startup Events</strong><p>Built to make the European ecosystem easier to navigate.</p></div><button class="stack-badge" data-open="stack"><span id="stack-score-footer">—</span><small id="stack-summary">European stack</small></button></footer>
+  <footer><div><strong>European Startup Events</strong><p>Built to make the European ecosystem easier to navigate.</p></div><button class="stack-badge" data-open="stack"><span>🇪🇺</span><strong id="stack-score-footer">—</strong><small id="stack-summary">EU stack</small></button></footer>
 
-  <div class="modal-backdrop" id="modal-calendar-help" hidden><div class="modal"><div class="modal-head"><h2>Add to your calendar</h2><button data-close>×</button></div><p>Subscribe once. New events and future corrections flow through automatically.</p><div id="calendar-options"></div></div></div>
-  <div class="modal-backdrop" id="modal-stack" hidden><div class="modal"><div class="modal-head"><h2 id="stack-title">European Stack Index</h2><button data-close>×</button></div><p>A simple, auditable measure: how many primary application layers are controlled by European providers. Open-source layers are shown separately.</p><div id="stack-table"></div><small>EuroStack-inspired, not an official EuroStack score. The methodology is open and versioned in the repository.</small></div></div>
-  <div class="modal-backdrop" id="modal-submit" hidden><div class="modal"><div class="modal-head"><h2>Submit an event</h2><button data-close>×</button></div><p>One official event or programme link is enough. If you do not have one, add the basic details below. Submissions are reviewed before they enter the master calendar.</p><form id="submit-form" class="submit-form"><label>Event or programme URL<input id="submit-url-full" name="url" type="url" placeholder="https://…"></label><label>Event name (optional)<input name="name" placeholder="Event name"></label><label>Dates / timing (optional)<input name="dates" placeholder="e.g. 12–13 May 2027"></label><label>City / country (optional)<input name="location" placeholder="City, country"></label><label>Contact email (optional)<input name="email" type="email" placeholder="Only if we need clarification"></label><label>Anything else we should know? (optional)<textarea name="notes" rows="3"></textarea></label><button class="solid-button" type="submit">Send for verification</button><div class="submit-status" id="submit-status"></div></form></div></div>
+  <div class="modal-backdrop" id="modal-calendar-help" hidden>
+    <div class="modal">
+      <div class="modal-head"><h2>Add to your calendar</h2><button data-close>×</button></div>
+      <p>Your current filters can be downloaded as a one-time calendar file. Live subscriptions keep updating automatically.</p>
+      <div id="calendar-selection"></div>
+      <h3 class="modal-subhead">Live subscriptions</h3>
+      <div id="calendar-options"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-stack" hidden>
+    <div class="modal">
+      <div class="modal-head"><h2 id="stack-title">European Stack Index</h2><button data-close>×</button></div>
+      <p>Two simple scores: European-controlled layers, and European plus open-source layers. The underlying providers remain visible so the score is auditable.</p>
+      <div id="stack-table"></div>
+      <small>EuroStack-inspired, not an official EuroStack score. Planned services are labelled as such.</small>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-submit" hidden>
+    <div class="modal">
+      <div class="modal-head"><h2>Submit an event</h2><button data-close>×</button></div>
+      <p>Paste the official event page first. We check whether it is already listed before opening the full submission route.</p>
+      <form id="submit-form" class="submit-form">
+        <label>Official event or programme URL<input id="submit-url-full" name="url" type="url" placeholder="https://…"></label>
+        <div id="submit-details" hidden>
+          <label>Event name<input name="name" placeholder="Event name"></label>
+          <label>Dates / timing<input name="dates" placeholder="e.g. 12–13 May 2027"></label>
+          <label>City / country<input name="location" placeholder="City, country"></label>
+          <label>Contact email (optional)<input name="email" type="email" placeholder="Only if we need clarification"></label>
+          <label>Anything else we should know? (optional)<textarea name="notes" rows="3"></textarea></label>
+        </div>
+        <button class="solid-button" type="submit">Check &amp; continue</button>
+        <button class="link-button" type="button" id="no-url-full">I don’t have an official URL</button>
+        <div class="submit-status" id="submit-status"></div>
+      </form>
+    </div>
+  </div>
 
   <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
   <script src="./config.js"></script>
