@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Snapshot sync source: public read-only Apps Script feed.
 import json
 import os
 import re
