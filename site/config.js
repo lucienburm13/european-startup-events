@@ -1,6 +1,6 @@
 window.EUSE_CONFIG = {
   eventsApiUrl: '',
-  tallyFormUrl: '',
+  tallyFormUrl: 'https://tally.so/r/WO4VYQ',
   mapStyleUrl: 'https://tiles.openfreemap.org/styles/liberty',
   calendars: {
     Main: { id: 'c_18d218cb371b633929609184a8b57308cb51dd4b664f3bd5b5a282388328583d@group.calendar.google.com' },
@@ -13,7 +13,7 @@ window.EUSE_CONFIG = {
       { name: 'Hosting & delivery', provider: 'deploybase · Scaleway · Bunny.net', country: 'Netherlands / France / Slovenia', flag: '🇳🇱 🇫🇷 🇸🇮', status: 'european' },
       { name: 'Frontend', provider: 'HTML / CSS / JavaScript', country: 'Open standards', flag: '🌐', status: 'open' },
       { name: 'Maps', provider: 'MapLibre + OpenFreeMap', country: 'Open source', flag: '🌐', status: 'open' },
-      { name: 'Submission forms', provider: 'Tally', country: 'European Union', flag: '🇪🇺', status: 'planned' }
+      { name: 'Submission forms', provider: 'Tally', country: 'European Union', flag: '🇪🇺', status: 'european' }
     ],
     production: [
       { name: 'Master data', provider: 'Google Sheets', country: 'United States', flag: '🇺🇸', status: 'non-european' },
