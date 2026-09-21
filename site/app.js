@@ -277,9 +277,8 @@
     const active=layers.filter(x=>!['planned','pending'].includes(x.status));
     const eu=active.filter(x=>x.status==='european').length, open=active.filter(x=>x.status==='open').length;
     const euScore=active.length?Math.round(eu/active.length*100):0, openScore=active.length?Math.round(open/active.length*100):0;
-    $('#stack-score-top').textContent=`${euScore}% EU | ${openScore}% Open Source`;
-    $('#stack-score-footer').textContent=`${euScore}% EU | ${openScore}% Open Source`;
-    $('#stack-summary').textContent='active website stack';
+    $('#stack-eu-footer').textContent=`${euScore}%`;
+    $('#stack-open-footer').textContent=`${openScore}%`;
     $('#stack-title').textContent='European Stack Index';
     const layerRows=layers.map(l=>`<div class="stack-row"><div><strong>${esc(l.flag)} ${esc(l.name)}</strong><div>${esc(l.provider)}</div><div class="stack-meta">${esc(l.country)}</div></div><div class="stack-status">${esc(l.status.replace('-',' '))}</div></div>`).join('');
     const productionRows=production.map(l=>`<div class="stack-row"><div><strong>${esc(l.flag)} ${esc(l.name)}</strong><div>${esc(l.provider)}</div><div class="stack-meta">${esc(l.country)}</div></div><div class="stack-status">${esc(l.status.replace('-',' '))}</div></div>`).join('');
