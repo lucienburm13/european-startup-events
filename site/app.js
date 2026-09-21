@@ -97,9 +97,11 @@
 
   function periodMatch(e,period){
     const start=parseYmd(e.start), end=parseYmd(e.end||e.start); if(!start||!end) return false;
-    if(period==='all') return true;
-    if(period==='2026'||period==='2027'){ const y=Number(period), from=new Date(y,0,1), to=new Date(y,11,31); return end>=from && start<=to; }
-    const today=new Date(); today.setHours(0,0,0,0); const max=addDays(today,Number(period));
+    const today=new Date(); today.setHours(0,0,0,0);
+    if(period==='upcoming') return end>=today;
+    if(period==='thisYear'){ const to=new Date(today.getFullYear(),11,31); return end>=today && start<=to; }
+    if(period==='nextYear'){ const y=today.getFullYear()+1, from=new Date(y,0,1), to=new Date(y,11,31); return end>=from && start<=to; }
+    const max=addDays(today,Number(period));
     return end>=today && start<=max;
   }
 
@@ -110,6 +112,8 @@
     state.filtered=state.events.filter(e=>periodMatch(e,period) && (cal==='All'||e.calendar===cal) && countryMatch(e,country) && (!q||[e.name,e.title,e.city,e.country,e.venue,e.notes,e.calendar,e.status].join(' ').toLowerCase().includes(q)));
     $('#result-count').textContent=`${state.filtered.length} event${state.filtered.length===1?'':'s'}`;
     $('#source-note').textContent=state.source==='live'?'live from master':'current master snapshot';
+    const add=$('#add-selection');
+    if(add) add.textContent=state.filtered.length===1?'Add this event to calendar':`Add ${state.filtered.length} events to calendar`;
     syncUrl(); renderCurrent(); renderMap(); renderSelectionCalendar();
   }
 
@@ -120,9 +124,10 @@
     if(!state.filtered.length){ el.innerHTML='<div class="empty-state">No events match these filters.</div>'; return; }
     el.innerHTML=state.filtered.map(e=>`<article class="event-row" id="event-${esc(e.id)}">
       <div class="event-date">${esc(fmtDate(e.start,e.end))}<small>${esc(parseYmd(e.start)?.getFullYear()||'')}</small></div>
-      <div class="event-main"><h3>${esc(e.title||e.name)}</h3><p class="event-meta">${esc([e.venue,e.city,e.country].filter(Boolean).join(' · '))}</p>${e.notes?`<p class="event-notes">${esc(e.notes)}</p>`:''}<div class="event-links">${e.source?`<a href="${esc(e.source)}" target="_blank" rel="noopener">Official source ↗</a>`:''}<span>Verified ${esc(e.lastVerified||'—')}</span></div></div>
+      <div class="event-main"><h3>${esc(e.title||e.name)}</h3><p class="event-meta">${esc([e.venue,e.city,e.country].filter(Boolean).join(' · '))}</p>${e.notes?`<p class="event-notes">${esc(e.notes)}</p>`:''}<div class="event-links">${e.source?`<a href="${esc(e.source)}" target="_blank" rel="noopener">Official source ↗</a>`:''}<button class="inline-action" data-add-event="${esc(e.id)}">Add to calendar</button><span>Verified ${esc(e.lastVerified||'—')}</span></div></div>
       <div class="event-type"><span class="pill status-${esc(e.status)}">${esc(e.status)}</span><div class="event-calendar-name">${esc(e.calendar)}</div></div>
     </article>`).join('');
+    $$('[data-add-event]').forEach(b=>b.onclick=()=>openEventCalendar(b.dataset.addEvent));
   }
 
   function renderCalendar(){
@@ -132,8 +137,27 @@
     const byDay={};
     state.filtered.forEach(e=>{ const s=parseYmd(e.start), fin=parseYmd(e.end||e.start); if(!s||!fin) return; for(let d=new Date(s);d<=fin;d=addDays(d,1)){ const k=ymd(d); (byDay[k]??=[]).push(e); if((d-s)/86400000>14) break; } });
     const days=[]; for(let d=new Date(start);d<=end;d=addDays(d,1)) days.push(new Date(d));
-    el.innerHTML=`<div class="calendar-toolbar"><h2>${esc(monthLabel(cursor))}</h2><div><button class="mini-button" data-cal="prev">←</button><button class="mini-button" data-cal="today">Today</button><button class="mini-button" data-cal="next">→</button></div></div><div class="month-grid">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="weekday">${x}</div>`).join('')}${days.map(d=>{ const arr=byDay[ymd(d)]||[]; return `<div class="day-cell ${d.getMonth()!==cursor.getMonth()?'outside':''}"><div class="day-number">${d.getDate()}</div>${arr.slice(0,3).map(e=>`<a class="day-event ${esc(e.calendar)}" href="${e.source?esc(e.source):'#event-'+esc(e.id)}" ${e.source?'target="_blank" rel="noopener"':''}>${esc(e.name)}</a>`).join('')}${arr.length>3?`<div class="more-events">+${arr.length-3} more</div>`:''}</div>`; }).join('')}</div>`;
+    const monthEvents=state.filtered.filter(e=>{ const s=parseYmd(e.start), fin=parseYmd(e.end||e.start); const from=new Date(cursor.getFullYear(),cursor.getMonth(),1), to=new Date(cursor.getFullYear(),cursor.getMonth()+1,0); return s<=to && fin>=from; });
+    const initial=monthEvents[0]||state.filtered[0]||null;
+    el.innerHTML=`<div class="calendar-toolbar"><h2>${esc(monthLabel(cursor))}</h2><div><button class="mini-button" data-cal="prev">←</button><button class="mini-button" data-cal="today">Today</button><button class="mini-button" data-cal="next">→</button></div></div>
+      <div id="calendar-preview" class="calendar-preview">${calendarPreviewHtml(initial)}</div>
+      <div class="mobile-swipe-note">Swipe calendar horizontally →</div>
+      <div class="calendar-scroll"><div class="month-grid">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="weekday">${x}</div>`).join('')}${days.map(d=>{ const arr=byDay[ymd(d)]||[]; return `<div class="day-cell ${d.getMonth()!==cursor.getMonth()?'outside':''}"><div class="day-number">${d.getDate()}</div>${arr.slice(0,3).map(e=>`<button class="day-event ${esc(e.calendar)}" data-cal-event="${esc(e.id)}">${esc(e.name)}</button>`).join('')}${arr.length>3?`<div class="more-events">+${arr.length-3} more</div>`:''}</div>`; }).join('')}</div></div>`;
     $$('[data-cal]').forEach(b=>b.onclick=()=>{ if(b.dataset.cal==='prev') state.calendarCursor=new Date(cursor.getFullYear(),cursor.getMonth()-1,1); if(b.dataset.cal==='next') state.calendarCursor=new Date(cursor.getFullYear(),cursor.getMonth()+1,1); if(b.dataset.cal==='today') state.calendarCursor=startOfMonth(new Date()); renderCalendar(); });
+    $$('[data-cal-event]').forEach(b=>{
+      const show=()=>{ const e=state.events.find(x=>String(x.id)===String(b.dataset.calEvent)); $('#calendar-preview').innerHTML=calendarPreviewHtml(e); bindCalendarPreview(); };
+      b.addEventListener('mouseenter',show); b.addEventListener('focus',show); b.addEventListener('click',show);
+    });
+    bindCalendarPreview();
+  }
+
+  function calendarPreviewHtml(e){
+    if(!e) return '<span>Hover or tap an event to see details.</span>';
+    return `<div><strong>${esc(e.title||e.name)}</strong><span>${esc(fmtDate(e.start,e.end))} · ${esc([e.city,e.country].filter(Boolean).join(', '))}</span></div><div class="preview-actions">${e.source?`<a href="${esc(e.source)}" target="_blank" rel="noopener">Official source ↗</a>`:''}<button class="inline-action" data-preview-add="${esc(e.id)}">Add to calendar</button></div>`;
+  }
+
+  function bindCalendarPreview(){
+    const b=$('[data-preview-add]'); if(b) b.onclick=()=>openEventCalendar(b.dataset.previewAdd);
   }
 
   function renderMap(){
@@ -151,15 +175,24 @@
     state.map=new maplibregl.Map({container:'event-map',style:cfg.mapStyleUrl||'https://tiles.openfreemap.org/styles/liberty',center:[10,50],zoom:3});
     state.map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-right');
     const bounds=new maplibregl.LngLatBounds();
+    let activePopup=null;
     groups.forEach(group=>{
       bounds.extend([group.lng,group.lat]);
       group.events.sort((a,b)=>a.start.localeCompare(b.start)||a.name.localeCompare(b.name));
       const sample=group.events[0], location=[sample.city,sample.country].filter(Boolean).join(', ');
-      const items=group.events.slice(0,12).map(e=>{ const title=esc(e.title||e.name), date=esc(fmtDate(e.start,e.end)); return e.source?`<li><a href="${esc(e.source)}" target="_blank" rel="noopener"><strong>${title}</strong></a><span>${date} · ${esc(e.calendar)}</span></li>`:`<li><strong>${title}</strong><span>${date} · ${esc(e.calendar)}</span></li>`; }).join('');
-      const popup=new maplibregl.Popup({offset:18,maxWidth:'360px'}).setHTML(`<div class="map-popup"><strong>${esc(location||'Mapped location')}</strong><ul>${items}</ul></div>`);
+      const items=group.events.slice(0,12).map(e=>{ const title=esc(e.title||e.name), date=esc(fmtDate(e.start,e.end)); return `<li><strong>${title}</strong><span>${date} · ${esc(e.calendar)}</span><button class="popup-action" data-popup-add="${esc(e.id)}">Add to calendar</button></li>`; }).join('');
+      const showLabel=group.events.length===1?'Show this event':`Show these ${group.events.length} events`;
+      const popup=new maplibregl.Popup({offset:18,maxWidth:'380px',closeButton:true}).setLngLat([group.lng,group.lat]).setHTML(`<div class="map-popup"><strong>${esc(location||'Mapped location')}</strong><ul>${items}</ul><button class="outline-button compact-button popup-filter" data-map-location="${esc(sample.city||sample.country||'')}">${showLabel}</button></div>`);
       const marker=document.createElement('button'); marker.className='map-count-marker'; marker.type='button'; marker.textContent=String(group.events.length); marker.setAttribute('aria-label',`${group.events.length} events in ${location}`);
-      new maplibregl.Marker({element:marker}).setLngLat([group.lng,group.lat]).setPopup(popup).addTo(state.map);
+      const mapMarker=new maplibregl.Marker({element:marker}).setLngLat([group.lng,group.lat]).addTo(state.map);
+      const open=()=>{ if(activePopup&&activePopup!==popup) activePopup.remove(); popup.addTo(state.map); activePopup=popup; };
+      marker.addEventListener('mouseenter',open); marker.addEventListener('focus',open); marker.addEventListener('click',open);
+      mapMarker.setPopup(popup);
     });
+    el.addEventListener('click',evt=>{
+      const add=evt.target.closest('[data-popup-add]'); if(add){ evt.preventDefault(); openEventCalendar(add.dataset.popupAdd); return; }
+      const filter=evt.target.closest('[data-map-location]'); if(filter){ evt.preventDefault(); $('#filter-search').value=filter.dataset.mapLocation; applyFilters(); document.querySelector('.results-head')?.scrollIntoView({behavior:'smooth',block:'start'}); }
+    },{once:false});
     const groupList=[...groups.values()];
     if(groupList.length===1){ state.map.setCenter([groupList[0].lng,groupList[0].lat]); state.map.setZoom(7); }
     else state.map.fitBounds(bounds,{padding:55,maxZoom:7,duration:0});
@@ -167,10 +200,10 @@
 
   function icsEscape(s=''){ return String(s).replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;'); }
   function icsDate(s){ return String(s||'').replace(/-/g,''); }
-  function buildSelectionIcs(){
+  function buildIcs(events,name='European Startup Events'){
     const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
-    const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//European Startup Events//Filtered Export//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:European Startup Events — current selection'];
-    state.filtered.forEach(e=>{
+    const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//European Startup Events//Export//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH',`X-WR-CALNAME:${icsEscape(name)}`];
+    events.forEach(e=>{
       const endExclusive=ymd(addDays(parseYmd(e.end||e.start),1));
       lines.push('BEGIN:VEVENT',`UID:euse-${e.id}@european-startup-events`,`DTSTAMP:${stamp}`,`DTSTART;VALUE=DATE:${icsDate(e.start)}`,`DTEND;VALUE=DATE:${icsDate(endExclusive)}`,`SUMMARY:${icsEscape(e.title||e.name)}`);
       const loc=[e.venue,e.city,e.country].filter(Boolean).join(', '); if(loc) lines.push(`LOCATION:${icsEscape(loc)}`);
@@ -180,16 +213,37 @@
     lines.push('END:VCALENDAR');
     return lines.join('\r\n');
   }
-  function downloadSelectionIcs(){
-    if(!state.filtered.length) return;
-    const blob=new Blob([buildSelectionIcs()],{type:'text/calendar;charset=utf-8'});
+
+  function downloadIcs(events,filename,name){
+    if(!events.length) return;
+    const blob=new Blob([buildIcs(events,name)],{type:'text/calendar;charset=utf-8'});
     const url=URL.createObjectURL(blob), a=document.createElement('a');
-    a.href=url; a.download='european-startup-events-selection.ics'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+    a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+
+  function googleEventUrl(e){
+    const start=icsDate(e.start), end=icsDate(ymd(addDays(parseYmd(e.end||e.start),1)));
+    const p=new URLSearchParams({action:'TEMPLATE',text:e.title||e.name,dates:`${start}/${end}`,details:e.source?`Official source: ${e.source}`:'',location:[e.venue,e.city,e.country].filter(Boolean).join(', ')});
+    return 'https://calendar.google.com/calendar/render?'+p.toString();
+  }
+
+  function openEventCalendar(id){
+    const e=state.events.find(x=>String(x.id)===String(id)); if(!e) return;
+    $('#event-calendar-title').textContent=e.title||e.name;
+    $('#event-calendar-meta').textContent=`${fmtDate(e.start,e.end)} · ${[e.city,e.country].filter(Boolean).join(', ')}`;
+    $('#event-google-link').href=googleEventUrl(e);
+    $('#event-ics-download').onclick=()=>downloadIcs([e],`european-startup-event-${e.id}.ics`,e.name);
+    $('#modal-event-calendar').hidden=false;
+  }
+
+  function downloadSelectionIcs(){
+    downloadIcs(state.filtered,'european-startup-events-selection.ics','European Startup Events — current selection');
   }
 
   function renderSelectionCalendar(){
     const box=$('#calendar-selection'); if(!box) return;
-    box.innerHTML=`<div class="calendar-option selection-option"><div><strong>Current selection</strong><div class="stack-meta">${state.filtered.length} event${state.filtered.length===1?'':'s'} · one-time snapshot using the filters on this page.</div></div><button class="solid-button compact-button" id="download-selection">Download .ics</button></div>`;
+    const n=state.filtered.length;
+    box.innerHTML=`<div class="calendar-option selection-option"><div><strong>Add ${n} event${n===1?'':'s'} to your calendar</strong><div class="stack-meta">One-time .ics export of exactly the events matching the filters on this page.</div></div><button class="solid-button compact-button" id="download-selection">Download .ics</button></div>`;
     $('#download-selection').onclick=downloadSelectionIcs;
   }
 
@@ -199,13 +253,16 @@
   }
 
   function renderStack(){
-    const stack=cfg.stack||{layers:[]}, layers=stack.layers||[], eu=layers.filter(x=>x.status==='european').length, open=layers.filter(x=>x.status==='open').length;
-    const euScore=layers.length?Math.round(eu/layers.length*100):0, euOpenScore=layers.length?Math.round((eu+open)/layers.length*100):0;
-    $('#stack-score-top').textContent=`${euScore}% · +open ${euOpenScore}%`;
-    $('#stack-score-footer').textContent=`${euScore}% / ${euOpenScore}%`;
-    $('#stack-summary').textContent='EU / EU+open';
+    const stack=cfg.stack||{}, runtime=stack.runtime||[], operations=stack.operations||[];
+    const eu=runtime.filter(x=>x.status==='european').length, open=runtime.filter(x=>x.status==='open').length;
+    const euScore=runtime.length?Math.round(eu/runtime.length*100):0, euOpenScore=runtime.length?Math.round((eu+open)/runtime.length*100):0;
+    $('#stack-score-top').textContent=`EU+open ${euOpenScore}%`;
+    $('#stack-score-footer').textContent=`${euOpenScore}%`;
+    $('#stack-summary').textContent=`EU+open · ${euScore}% EU-controlled`;
     $('#stack-title').textContent='European Stack Index';
-    $('#stack-table').innerHTML=`<div class="stack-score-grid"><div><strong>${euScore}%</strong><span>European</span></div><div><strong>${euOpenScore}%</strong><span>European + open</span></div></div>${layers.map(l=>`<div class="stack-row"><div><strong>${esc(l.flag)} ${esc(l.name)}</strong><div>${esc(l.provider)}</div><div class="stack-meta">${esc(l.country)}</div></div><div class="stack-status">${esc(l.status.replace('-',' '))}</div></div>`).join('')}`;
+    const runtimeRows=runtime.map(l=>`<div class="stack-row"><div><strong>${esc(l.flag)} ${esc(l.name)}</strong><div>${esc(l.provider)}</div><div class="stack-meta">${esc(l.country)}</div></div><div class="stack-status">${esc(l.status.replace('-',' '))}</div></div>`).join('');
+    const opsRows=operations.map(l=>`<div class="stack-row"><div><strong>${esc(l.flag)} ${esc(l.name)}</strong><div>${esc(l.provider)}</div><div class="stack-meta">${esc(l.country)}</div></div><div class="stack-status">${esc(l.status.replace('-',' '))}</div></div>`).join('');
+    $('#stack-table').innerHTML=`<div class="stack-score-grid"><div><strong>${euOpenScore}%</strong><span>European + open runtime</span></div><div><strong>${euScore}%</strong><span>European-controlled runtime</span></div></div><p class="stack-note">The score covers technology that serves the live site. Operational tools are shown separately and do not change the runtime score.</p><h3 class="modal-subhead">Scored runtime</h3>${runtimeRows}<h3 class="modal-subhead">Operations · not scored</h3>${opsRows}`;
   }
 
   function setupModals(){
@@ -250,5 +307,6 @@
     $('#submission-url').addEventListener('keydown',e=>{if(e.key==='Enter')openSubmit(false);}); $('#submit-form').addEventListener('submit',submitEvent);
     setupModals(); calendarLinks(); renderStack(); loadEvents();
   }
+
   document.addEventListener('DOMContentLoaded',setup);
 })();
