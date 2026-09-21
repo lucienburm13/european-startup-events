@@ -43,6 +43,8 @@ The site is static and can be hosted on any static host. The intended European-f
 
 ## Deploy on Koyeb
 
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=git&builder=dockerfile&repository=github.com/lucienburm13/european-startup-events&branch=site-v0.1&workdir=site&name=european-startup-events&ports=8000%3Bhttp%3B%2F)
+
 This branch includes a small Docker/Caddy setup so the static site can be deployed directly from GitHub.
 
 Suggested settings:
