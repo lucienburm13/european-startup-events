@@ -65,3 +65,27 @@ Recommended internal columns:
 - `Master ID`
 
 New submissions start as `NEW`. No submission is ever written directly to `Events`.
+
+
+## Human review and publication
+
+The `Submissions` tab is the review inbox. Google Sheets conditional notifications alert the human reviewer when column A receives a new Submission ID.
+
+AI review is intentionally not autonomous. When asked, ChatGPT reviews all still-unreviewed submissions, researches the submitted URL, checks the `Events` tab for duplicates/series matches, and fills the review/proposed-publication fields.
+
+The human reviewer then sets `Decision` to:
+- `APPROVE` — publish the reviewed proposal to `Events`
+- `REJECT` — do not publish
+- `HOLD` — keep pending
+
+Additional proposed-publication fields:
+- `Proposed start date`
+- `Proposed end date`
+- `Proposed venue`
+- `Proposed status`
+- `Proposed calendar title`
+- `Proposed notes`
+- `Proposed official source`
+- `Proposed full address`
+
+An installable Apps Script on-edit trigger handles only a human edit of `Decision` to `APPROVE`. It validates required fields, blocks likely duplicates, assigns the next numeric Master ID, appends the event to `Events`, and writes the new Master ID back to the submission. It never auto-approves or changes the human decision.
