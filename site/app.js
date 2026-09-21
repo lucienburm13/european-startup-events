@@ -361,6 +361,7 @@
     if(!cfg.tallyFormUrl){ $('#submit-status').textContent='Duplicate check passed. The submission endpoint is not connected yet; Tally is the next connection step.'; return; }
     const u=new URL(cfg.tallyFormUrl);
     if(data.url) u.searchParams.set('url',data.url);
+    u.searchParams.set('source','website');
     window.open(u.toString(),'_blank','noopener');
   }
 
