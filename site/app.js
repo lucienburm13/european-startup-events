@@ -276,14 +276,14 @@
     const stack=cfg.stack||{}, layers=stack.layers||[], production=stack.production||[];
     const active=layers.filter(x=>!['planned','pending'].includes(x.status));
     const eu=active.filter(x=>x.status==='european').length, open=active.filter(x=>x.status==='open').length;
-    const euScore=active.length?Math.round(eu/active.length*100):0, euOpenScore=active.length?Math.round((eu+open)/active.length*100):0;
-    $('#stack-score-top').textContent=`EU+open ${euOpenScore}%`;
-    $('#stack-score-footer').textContent=`${euOpenScore}%`;
-    $('#stack-summary').textContent=`EU+open · ${euScore}% EU-controlled`;
+    const euScore=active.length?Math.round(eu/active.length*100):0, openScore=active.length?Math.round(open/active.length*100):0;
+    $('#stack-score-top').textContent=`${euScore}% EU | ${openScore}% Open Source`;
+    $('#stack-score-footer').textContent=`${euScore}% EU | ${openScore}% Open Source`;
+    $('#stack-summary').textContent='active website stack';
     $('#stack-title').textContent='European Stack Index';
     const layerRows=layers.map(l=>`<div class="stack-row"><div><strong>${esc(l.flag)} ${esc(l.name)}</strong><div>${esc(l.provider)}</div><div class="stack-meta">${esc(l.country)}</div></div><div class="stack-status">${esc(l.status.replace('-',' '))}</div></div>`).join('');
     const productionRows=production.map(l=>`<div class="stack-row"><div><strong>${esc(l.flag)} ${esc(l.name)}</strong><div>${esc(l.provider)}</div><div class="stack-meta">${esc(l.country)}</div></div><div class="stack-status">${esc(l.status.replace('-',' '))}</div></div>`).join('');
-    $('#stack-table').innerHTML=`<div class="stack-score-grid"><div><strong>${euOpenScore}%</strong><span>European + open</span></div><div><strong>${euScore}%</strong><span>European-controlled</span></div></div><p class="stack-note">Score = active website stack only. Planned layers do not count yet.</p><h3 class="modal-subhead">Website stack</h3>${layerRows}<h3 class="modal-subhead">Production &amp; maintenance · not scored</h3>${productionRows}`;
+    $('#stack-table').innerHTML=`<div class="stack-score-grid"><div><strong>${euScore}%</strong><span>EU stack</span></div><div><strong>${openScore}%</strong><span>Open Source</span></div></div><p class="stack-note">Share of the active website stack. Planned layers do not count yet.</p><h3 class="modal-subhead">Website stack</h3>${layerRows}<h3 class="modal-subhead">Production &amp; maintenance · not scored</h3>${productionRows}`;
   }
 
   function setupModals(){
