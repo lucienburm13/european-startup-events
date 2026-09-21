@@ -19,7 +19,7 @@ Implemented in v0.1:
 - period, category, country and search filters
 - List view
 - dependency-free Calendar view
-- Map view prepared for master `Latitude` / `Longitude`
+- Map view with cached city coordinates; overlapping events are grouped per location
 - Google Calendar + public iCal subscription links
 - event submission modal/API contract
 - European Stack Index badge and methodology
@@ -58,7 +58,7 @@ After launch, point the intended custom subdomain to the Koyeb service.
 
 ## Live master feed
 
-The site works immediately from `public/events.json`. For production, add `apps-script/WebApi.gs` to the existing calendar Apps Script project and deploy it as a public Web app.
+The site works immediately from `public/events.json`. The current snapshot contains 156 published events and matches the master Sheet. For production, add `apps-script/WebApi.gs` to the existing calendar Apps Script project and deploy it as a public Web app.
 
 Set the resulting `/exec` URL as `eventsApiUrl` in `config.js`. The browser uses a read-only JSONP callback for the events feed; the static snapshot remains the fallback.
 
@@ -71,3 +71,14 @@ The website never writes submissions straight into `Events`.
 ## Map
 
 The interactive map uses MapLibre with OpenFreeMap. `scripts/geocode_locations.py` builds a derived city-coordinate cache for map pins and deliberately skips ambiguous multi-city / online locations.
+
+## Remaining production connections
+
+The site code on `site-v0.1` is preview-ready. Production still needs four account-level connections that are intentionally not hard-coded into the repository:
+
+1. deploy the Apps Script Web API and set `eventsApiUrl`;
+2. create/connect the Tally submission form and set `tallyFormUrl` (or use the Apps Script submission endpoint);
+3. deploy the static Docker site on Koyeb and attach the chosen domain/DNS;
+4. enable Plausible only after the production domain exists.
+
+Keep `main` untouched until the preview has been checked.
