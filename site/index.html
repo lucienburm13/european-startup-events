@@ -13,7 +13,7 @@
     <a class="brand" href="#top">European Startup Events</a>
     <div class="header-actions">
       <button class="stack-label" data-open="stack"><span>🇪🇺 EU stack</span><strong id="stack-score-top">—</strong></button>
-      <button class="outline-button" data-open="calendar-help">Calendars</button>
+      <button class="outline-button" data-open="calendar-help">Subscribe to calendars</button>
       <button class="solid-button" id="submit-top">Submit an event</button>
     </div>
   </header>
@@ -21,8 +21,8 @@
   <main id="top">
     <section class="hero">
       <p class="eyebrow">ALL THE GO-TO STARTUP EVENTS IN EUROPE</p>
-      <h1>Your European Tech,<br>Business &amp; Policy Calendar.</h1>
-      <p class="hero-copy">One maintained source for founders, investors, ecosystem builders and policymakers. Verified links, visible uncertainty, no pay-to-play rankings.</p>
+      <h1>European Tech,<br>Business &amp; Policy Calendar.</h1>
+      <p class="hero-copy">One curated source for founders, investors, ecosystem builders and policymakers. Verified links, visible uncertainty, no pay-to-play rankings.</p>
     </section>
 
     <section class="map-panel" id="map-panel">
@@ -34,7 +34,7 @@
     </section>
 
     <section class="filters" aria-label="Event filters">
-      <label><span>Period</span><select id="filter-period"><option value="30">Next 30 days</option><option value="90" selected>Next 90 days</option><option value="2026">2026</option><option value="2027">2027</option><option value="all">All dates</option></select></label>
+      <label><span>Period</span><select id="filter-period"><option value="30">Next 30 days</option><option value="90" selected>Next 90 days</option><option value="thisYear">Rest of this year</option><option value="nextYear">Next year</option><option value="upcoming">All upcoming</option></select></label>
       <label><span>Type</span><select id="filter-calendar"><option value="All">All events</option></select></label>
       <label><span>Country</span><select id="filter-country"><option value="All">All countries</option></select></label>
       <label class="search-label"><span>Search</span><input id="filter-search" placeholder="AI, Berlin, fintech…"></label>
@@ -43,7 +43,7 @@
     <section class="results-head">
       <div><strong id="result-count">Loading…</strong><span class="source-note" id="source-note"></span></div>
       <div class="results-actions">
-        <button class="outline-button compact-button" id="add-selection">Add selection</button>
+        <button class="outline-button compact-button" id="add-selection">Add events to calendar</button>
         <div class="view-tabs" role="tablist" aria-label="View"><button class="active" data-view="list">List</button><button data-view="calendar">Calendar</button></div>
       </div>
     </section>
@@ -79,6 +79,14 @@
       <p>Two simple scores: European-controlled layers, and European plus open-source layers. The underlying providers remain visible so the score is auditable.</p>
       <div id="stack-table"></div>
       <small>EuroStack-inspired, not an official EuroStack score. Planned services are labelled as such.</small>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-event-calendar" hidden>
+    <div class="modal small-modal">
+      <div class="modal-head"><h2 id="event-calendar-title">Add event to calendar</h2><button data-close>×</button></div>
+      <p id="event-calendar-meta"></p>
+      <div class="event-calendar-actions"><a class="solid-button" id="event-google-link" target="_blank" rel="noopener">Google Calendar</a><button class="outline-button" id="event-ics-download">Download .ics</button></div>
     </div>
   </div>
 
