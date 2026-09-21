@@ -62,7 +62,7 @@
     const view=p.get('view');
     if(['list','calendar','map'].includes(view)){
       state.view=view;
-      $('[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===view));
+      $$('[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===view));
       ['list','calendar','map'].forEach(v=>$(`#view-${v}`).hidden=v!==view);
     }
   }
@@ -220,7 +220,7 @@
 
   function setup(){
     ['#filter-period','#filter-calendar','#filter-country'].forEach(s=>$(s).addEventListener('change',applyFilters)); $('#filter-search').addEventListener('input',applyFilters);
-    $('[data-view]').forEach(b=>b.onclick=()=>{ state.view=b.dataset.view; $('[data-view]').forEach(x=>x.classList.toggle('active',x===b)); ['list','calendar','map'].forEach(v=>$(`#view-${v}`).hidden=v!==state.view); syncUrl(); renderCurrent(); });
+    $$('[data-view]').forEach(b=>b.onclick=()=>{ state.view=b.dataset.view; $$('[data-view]').forEach(x=>x.classList.toggle('active',x===b)); ['list','calendar','map'].forEach(v=>$(`#view-${v}`).hidden=v!==state.view); syncUrl(); renderCurrent(); });
     $('#submit-top').onclick=openSubmit; $('#submit-card').onclick=openSubmit; $('#submission-url').addEventListener('keydown',e=>{if(e.key==='Enter')openSubmit();}); $('#submit-form').addEventListener('submit',submitEvent);
     setupModals(); calendarLinks(); renderStack(); loadEvents();
   }
