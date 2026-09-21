@@ -132,21 +132,56 @@
   function renderMap(){
     const el=$('#view-map');
     if(state.map){ try{ state.map.remove(); }catch(_){} state.map=null; }
-    const pins=state.filtered.filter(e=>Number.isFinite(Number(e.lat))&&Number.isFinite(Number(e.lng)));
-    if(!pins.length){ el.innerHTML=`<div class="map-shell"><div><p class="eyebrow">MAP VIEW</p><h2>Coordinates are being enriched.</h2><p>The map uses the same filters as List and Calendar. Coordinates are cached once per city/country rather than geocoding every visitor.</p><p><strong>${state.filtered.length}</strong> events are in the current selection.</p></div></div>`; return; }
-    if(!window.maplibregl){ el.innerHTML='<div class="map-shell"><div><h2>Map library unavailable.</h2><p>The event list and calendar remain available.</p></div></div>'; return; }
-    el.innerHTML='<div id="event-map" class="event-map" aria-label="Map of filtered events"></div>';
+    const mappable=state.filtered.filter(e=>Number.isFinite(Number(e.lat))&&Number.isFinite(Number(e.lng)));
+    if(!mappable.length){
+      el.innerHTML=`<div class="map-shell"><div><p class="eyebrow">MAP VIEW</p><h2>Coordinates are being enriched.</h2><p>The map uses the same filters as List and Calendar. Coordinates are cached once per city/country rather than geocoding every visitor.</p><p><strong>${state.filtered.length}</strong> events are in the current selection.</p></div></div>`;
+      return;
+    }
+    if(!window.maplibregl){
+      el.innerHTML='<div class="map-shell"><div><h2>Map library unavailable.</h2><p>The event list and calendar remain available.</p></div></div>';
+      return;
+    }
+
+    const groups=new Map();
+    mappable.forEach(e=>{
+      const lat=Number(e.lat), lng=Number(e.lng);
+      const key=`${lat.toFixed(5)}|${lng.toFixed(5)}`;
+      if(!groups.has(key)) groups.set(key,{lat,lng,events:[]});
+      groups.get(key).events.push(e);
+    });
+
+    const missing=state.filtered.length-mappable.length;
+    el.innerHTML=`<div class="map-meta"><span><strong>${mappable.length}</strong> event${mappable.length===1?'':'s'} across <strong>${groups.size}</strong> mapped location${groups.size===1?'':'s'}.</span>${missing?`<span>${missing} not mapped yet.</span>`:''}</div><div id="event-map" class="event-map" aria-label="Map of filtered events"></div>`;
     state.map=new maplibregl.Map({container:'event-map',style:cfg.mapStyleUrl||'https://tiles.openfreemap.org/styles/liberty',center:[10,50],zoom:3});
     state.map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-right');
+
     const bounds=new maplibregl.LngLatBounds();
-    pins.forEach(e=>{
-      const lng=Number(e.lng), lat=Number(e.lat); bounds.extend([lng,lat]);
-      const link=e.source?`<p><a href="${esc(e.source)}" target="_blank" rel="noopener">Official source ↗</a></p>`:'';
-      const popup=new maplibregl.Popup({offset:18}).setHTML(`<strong>${esc(e.title||e.name)}</strong><p>${esc(fmtDate(e.start,e.end))} · ${esc([e.city,e.country].filter(Boolean).join(', '))}</p>${link}`);
-      new maplibregl.Marker({color:e.calendar==='Main'?'#111111':e.calendar==='Policy'?'#4d68a8':'#777777'}).setLngLat([lng,lat]).setPopup(popup).addTo(state.map);
+    groups.forEach(group=>{
+      bounds.extend([group.lng,group.lat]);
+      group.events.sort((a,b)=>a.start.localeCompare(b.start)||a.name.localeCompare(b.name));
+      const sample=group.events[0];
+      const location=[sample.city,sample.country].filter(Boolean).join(', ');
+      const items=group.events.slice(0,12).map(e=>{
+        const title=esc(e.title||e.name);
+        const date=esc(fmtDate(e.start,e.end));
+        return e.source
+          ? `<li><a href="${esc(e.source)}" target="_blank" rel="noopener"><strong>${title}</strong></a><span>${date} · ${esc(e.calendar)}</span></li>`
+          : `<li><strong>${title}</strong><span>${date} · ${esc(e.calendar)}</span></li>`;
+      }).join('');
+      const more=group.events.length>12?`<p>+${group.events.length-12} more event${group.events.length-12===1?'':'s'} at this location</p>`:'';
+      const popup=new maplibregl.Popup({offset:18,maxWidth:'360px'}).setHTML(`<div class="map-popup"><strong>${esc(location||'Mapped location')}</strong><ul>${items}</ul>${more}</div>`);
+      const primary=group.events.some(e=>e.calendar==='Main')?'Main':group.events.some(e=>e.calendar==='Policy')?'Policy':'Additional';
+      const color=primary==='Main'?'#111111':primary==='Policy'?'#4d68a8':'#777777';
+      new maplibregl.Marker({color}).setLngLat([group.lng,group.lat]).setPopup(popup).addTo(state.map);
     });
-    if(pins.length===1) state.map.setCenter([Number(pins[0].lng),Number(pins[0].lat)]), state.map.setZoom(7);
-    else state.map.fitBounds(bounds,{padding:55,maxZoom:7,duration:0});
+
+    const groupList=[...groups.values()];
+    if(groupList.length===1){
+      state.map.setCenter([groupList[0].lng,groupList[0].lat]);
+      state.map.setZoom(7);
+    } else {
+      state.map.fitBounds(bounds,{padding:55,maxZoom:7,duration:0});
+    }
   }
 
   function calendarLinks(){
