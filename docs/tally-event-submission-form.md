@@ -10,12 +10,18 @@ Paste the official public event page or programme URL.
 
 Submissions are reviewed before publication. We only add events that are sufficiently relevant to the European startup, tech, business or policy ecosystem.
 
-## Field
+## Form structure
 
-1. **Official event or programme URL** — URL — required
-   - Help text: “An official public URL is required before we can review an event.”
+The website already collects the official URL and performs the first duplicate check. The Tally form should therefore be almost invisible:
 
-No other fields are required in the public form. Event name, dates, location and organiser information are derived during review from the official source.
+1. **Hidden field `url`** — populated from the website query parameter `?url=...`
+2. **Hidden field `source`** — value `website`
+3. Short confirmation text: “Submit this event for review?”
+4. Submit button
+
+No second URL entry and no other public fields. Event name, dates, location and organiser information are derived during review from the official source.
+
+The website passes the URL into Tally using its existing `tallyFormUrl` integration. Tally hidden fields accept URL parameters, so the visitor does not need to paste anything twice.
 
 ## Editorial review
 
@@ -40,6 +46,22 @@ Thanks. We’ll check the event for relevance, verify the official source and ch
 
 Connect the form to the existing spreadsheet **European Startup & Tech Events — Master 2026–2027** and the existing tab **Submissions**.
 
-The submitted URL is written to the queue. Internal columns `Status`, `Review notes`, `Decision` and `Master ID` remain controlled by the review process. New submissions should start as `NEW`.
+The submitted URL is written to the queue in real time. Internal review columns remain controlled by the review process.
 
-No submission is ever written directly to `Events`.
+Recommended internal columns:
+- `Status` — NEW / REVIEWED / DECIDED
+- `Suggested decision` — ACCEPT / REVIEW / REJECT
+- `Suggested calendar` — Main / Additional / Policy / Hosted
+- `Hosted by` — Startup / Scaleup / Investor / Corporate / Ecosystem
+- `Confidence` — High / Medium / Low
+- `AI review reason`
+- `Suggested event name`
+- `Suggested dates`
+- `Suggested city`
+- `Suggested country`
+- `Suggested organiser`
+- `Duplicate / series match`
+- `Human decision`
+- `Master ID`
+
+New submissions start as `NEW`. No submission is ever written directly to `Events`.
