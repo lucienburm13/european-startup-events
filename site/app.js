@@ -347,7 +347,15 @@
     $$('.modal-backdrop').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.hidden=true;}));
   }
 
+  function resetSubmitModal(){
+    $('#submit-intro').hidden=false;
+    $('#submit-form').hidden=false;
+    $('#tally-submit-wrap').hidden=true;
+    $('#tally-submit-frame').removeAttribute('src');
+  }
+
   function openSubmit(){
+    resetSubmitModal();
     $('#modal-submit').hidden=false;
     const u=$('#submission-url').value.trim(); if(u) $('#submit-url-full').value=u;
     $('#submit-status').textContent='';
@@ -358,11 +366,18 @@
     return state.events.find(e=>normalizeUrl(e.source)===n) || null;
   }
   function continueToTally(data){
-    if(!cfg.tallyFormUrl){ $('#submit-status').textContent='Duplicate check passed. The submission endpoint is not connected yet; Tally is the next connection step.'; return; }
+    if(!cfg.tallyFormUrl){ $('#submit-status').textContent='Duplicate check passed. The submission endpoint is not connected yet.'; return; }
     const u=new URL(cfg.tallyFormUrl);
+    u.pathname=u.pathname.replace(/^\/r\//,'/embed/');
     if(data.url) u.searchParams.set('url',data.url);
     u.searchParams.set('source','website');
-    window.open(u.toString(),'_blank','noopener');
+    u.searchParams.set('hideTitle','1');
+    u.searchParams.set('alignLeft','1');
+    u.searchParams.set('transparentBackground','1');
+    $('#submit-intro').hidden=true;
+    $('#submit-form').hidden=true;
+    $('#tally-submit-frame').src=u.toString();
+    $('#tally-submit-wrap').hidden=false;
   }
 
   function submitEvent(ev){
