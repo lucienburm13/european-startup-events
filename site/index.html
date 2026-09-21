@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Your European tech, business and policy calendar.">
+  <meta name="description" content="European tech, business and policy calendar.">
   <title>European Startup Events</title>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
   <link rel="stylesheet" href="./styles.css">
@@ -34,10 +34,14 @@
     </section>
 
     <section class="filters" aria-label="Event filters">
-      <label><span>Period</span><select id="filter-period"><option value="30">Next 30 days</option><option value="90" selected>Next 90 days</option><option value="thisYear">Rest of this year</option><option value="nextYear">Next year</option><option value="upcoming">All upcoming</option></select></label>
+      <label><span>Period</span><select id="filter-period"><option value="30">Next 30 days</option><option value="90" selected>Next 90 days</option><option value="thisYear">Rest of year</option><option value="nextYear">Next year</option><option value="past90">Past 90 days</option><option value="upcoming">All upcoming</option><option value="custom">Custom dates…</option></select></label>
       <label><span>Type</span><select id="filter-calendar"><option value="All">All events</option></select></label>
       <label><span>Country</span><select id="filter-country"><option value="All">All countries</option></select></label>
       <label class="search-label"><span>Search</span><input id="filter-search" placeholder="AI, Berlin, fintech…"></label>
+    <div class="custom-dates" id="custom-dates" hidden>
+        <label><span>From</span><input id="filter-from" type="date"></label>
+        <label><span>To</span><input id="filter-to" type="date"></label>
+      </div>
     </section>
 
     <section class="results-head">
@@ -54,9 +58,9 @@
     <section class="submission" id="submit">
       <div><p class="eyebrow">MISSING SOMETHING?</p><h2>Submit an event.</h2><p>Start with the official event page. We check for duplicates and verify every submission before anything enters the public calendar.</p></div>
       <div class="submission-card">
-        <label><span>Official event or programme URL</span><input id="submission-url" placeholder="https://…"></label>
+        <label><span>Official event or programme URL</span><input id="submission-url" type="url" placeholder="https://…"></label>
         <button class="solid-button" id="submit-card">Check &amp; submit</button>
-        <button class="link-button" id="submit-no-url">I don’t have an official URL</button>
+        <small>An official public URL is required before we can publish an event.</small>
       </div>
     </section>
   </main>
@@ -76,9 +80,9 @@
   <div class="modal-backdrop" id="modal-stack" hidden>
     <div class="modal">
       <div class="modal-head"><h2 id="stack-title">European Stack Index</h2><button data-close>×</button></div>
-      <p>Two simple scores: European-controlled layers, and European plus open-source layers. The underlying providers remain visible so the score is auditable.</p>
+      <p>A simple view of how European and open the website stack is. Production and maintenance tools are shown separately.</p>
       <div id="stack-table"></div>
-      <small>EuroStack-inspired, not an official EuroStack score. Planned services are labelled as such.</small>
+      <small>EuroStack-inspired, not an official EuroStack score. This looks at the application layer, not chips or underlying physical infrastructure.</small>
     </div>
   </div>
 
@@ -93,18 +97,10 @@
   <div class="modal-backdrop" id="modal-submit" hidden>
     <div class="modal">
       <div class="modal-head"><h2>Submit an event</h2><button data-close>×</button></div>
-      <p>Paste the official event page first. We check whether it is already listed before opening the full submission route.</p>
+      <p>Paste the official public event page. We check for duplicates before accepting it for review.</p>
       <form id="submit-form" class="submit-form">
-        <label>Official event or programme URL<input id="submit-url-full" name="url" type="url" placeholder="https://…"></label>
-        <div id="submit-details" hidden>
-          <label>Event name<input name="name" placeholder="Event name"></label>
-          <label>Dates / timing<input name="dates" placeholder="e.g. 12–13 May 2027"></label>
-          <label>City / country<input name="location" placeholder="City, country"></label>
-          <label>Contact email (optional)<input name="email" type="email" placeholder="Only if we need clarification"></label>
-          <label>Anything else we should know? (optional)<textarea name="notes" rows="3"></textarea></label>
-        </div>
-        <button class="solid-button" type="submit">Check &amp; continue</button>
-        <button class="link-button" type="button" id="no-url-full">I don’t have an official URL</button>
+        <label>Official event or programme URL<input id="submit-url-full" name="url" type="url" required placeholder="https://…"></label>
+        <button class="solid-button" type="submit">Check &amp; submit</button>
         <div class="submit-status" id="submit-status"></div>
       </form>
     </div>
