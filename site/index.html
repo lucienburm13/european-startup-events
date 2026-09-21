@@ -12,7 +12,6 @@
   <header class="site-header">
     <a class="brand" href="#top">European Startup Events</a>
     <div class="header-actions">
-      <button class="stack-label" data-open="stack"><span>🇪🇺 EU stack</span><strong id="stack-score-top">—</strong></button>
       <button class="outline-button" data-open="calendar-help">Subscribe to calendars</button>
       <button class="solid-button" id="submit-top">Submit an event</button>
     </div>
@@ -65,7 +64,13 @@
     </section>
   </main>
 
-  <footer><div><strong>European Startup Events</strong><p>Built to make the European ecosystem easier to navigate.</p></div><button class="stack-badge" data-open="stack"><span>🇪🇺</span><strong id="stack-score-footer">—</strong><small id="stack-summary">EU stack</small></button></footer>
+  <footer>
+    <div><strong>European Startup Events</strong><p>Built to make the European ecosystem easier to navigate.</p></div>
+    <button class="stack-badge" data-open="stack" aria-label="Open European Stack Index">
+      <span class="stack-badge-title">🇪🇺 EU stack</span>
+      <span class="stack-badge-metrics"><strong id="stack-eu-footer">—</strong><span>EU</span><strong id="stack-open-footer">—</strong><span>Open Source</span></span>
+    </button>
+  </footer>
 
   <div class="modal-backdrop" id="modal-calendar-help" hidden>
     <div class="modal">
