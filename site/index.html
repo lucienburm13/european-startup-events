@@ -33,7 +33,7 @@
     </section>
 
     <section class="filters" aria-label="Event filters">
-      <label><span>Period</span><select id="filter-period"><option value="30">Next 30 days</option><option value="90" selected>Next 90 days</option><option value="thisYear">Rest of year</option><option value="nextYear">Next year</option><option value="past90">Past 90 days</option><option value="upcoming">All upcoming</option><option value="custom">Custom dates…</option></select></label>
+      <label><span>Period</span><select id="filter-period"><option value="30" selected>Next 30 days</option><option value="90">Next 90 days</option><option value="thisYear">Rest of year</option><option value="nextYear">Next year</option><option value="past90">Past 90 days</option><option value="upcoming">All upcoming</option><option value="custom">Custom dates…</option></select></label>
       <label><span>Type</span><select id="filter-calendar"><option value="All">All events</option></select></label>
       <label><span>Country</span><select id="filter-country"><option value="All">All countries</option></select></label>
       <label class="search-label"><span>Search</span><input id="filter-search" placeholder="AI, Berlin, fintech…"></label>
@@ -44,7 +44,7 @@
     </section>
 
     <section class="results-head">
-      <div><strong id="result-count">Loading…</strong><span class="source-note" id="source-note"></span></div>
+      <div><strong id="result-count">Loading…</strong><button class="source-note source-date-button" id="source-note" type="button" title="Change date range"></button></div>
       <div class="results-actions">
         <button class="outline-button compact-button" id="add-selection">Add events to calendar</button>
         <div class="view-tabs" role="tablist" aria-label="View"><button class="active" data-view="list">List</button><button data-view="calendar">Calendar</button></div>
