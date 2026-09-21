@@ -15,3 +15,10 @@
 .stack-badge{display:grid;grid-template-columns:1fr;gap:5px;align-items:start;justify-items:start;border:1px solid var(--ink);background:#fff;border-radius:14px;padding:11px 14px;min-width:210px;text-align:left}.stack-badge-title{font-size:12px;font-weight:800;letter-spacing:.01em}.stack-badge-metrics{display:grid;grid-template-columns:auto auto auto auto;gap:4px 7px;align-items:baseline}.stack-badge-metrics strong{font-size:17px;line-height:1}.stack-badge-metrics span{font-size:11px;color:var(--muted)}@media(max-width:800px){.stack-badge{width:max-content;max-width:100%;min-width:0}}
 /* clickable active date range */
 .source-date-button{border:0;background:transparent;padding:0;margin-left:8px;color:var(--muted);font-size:12px;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;cursor:pointer}.source-date-button:hover{color:var(--ink)}
+
+
+.tally-submit-wrap{width:100%;min-height:520px}
+.tally-submit-frame{display:block;width:100%;min-height:520px;border:0;background:transparent}
+@media(max-width:620px){
+  .tally-submit-wrap,.tally-submit-frame{min-height:600px}
+}
