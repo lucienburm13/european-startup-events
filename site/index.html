@@ -102,12 +102,15 @@
   <div class="modal-backdrop" id="modal-submit" hidden>
     <div class="modal">
       <div class="modal-head"><h2>Submit an event</h2><button data-close>×</button></div>
-      <p>Paste the official public event page. We check for duplicates first; every submission is then reviewed for relevance and fit.</p>
+      <p id="submit-intro">Paste the official public event page. We check for duplicates first; every submission is then reviewed for relevance and fit.</p>
       <form id="submit-form" class="submit-form">
         <label>Official event or programme URL<input id="submit-url-full" name="url" type="url" required placeholder="https://…"></label>
         <button class="solid-button" type="submit">Check &amp; submit</button>
         <div class="submit-status" id="submit-status"></div>
       </form>
+      <div id="tally-submit-wrap" class="tally-submit-wrap" hidden>
+        <iframe id="tally-submit-frame" class="tally-submit-frame" title="Submit event for review" loading="lazy"></iframe>
+      </div>
     </div>
   </div>
 
