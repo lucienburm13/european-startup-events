@@ -5,7 +5,7 @@ on:
   schedule:
     - cron: '17 * * * *'
   push:
-    branches: [site-v0.1]
+    branches: [site-v0.1, main]
     paths:
       - 'scripts/sync_events.py'
       - '.github/workflows/sync-events.yml'
@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: site-v0.1
+          ref: ${{ github.event_name == 'schedule' && github.event.repository.default_branch || github.ref_name }}
 
       - uses: actions/setup-python@v5
         with:
@@ -65,6 +65,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Sync website snapshot from master"
-          git fetch origin site-v0.1
-          git rebase origin/site-v0.1
-          git push origin HEAD:site-v0.1
+          TARGET_BRANCH="${{ github.event_name == 'schedule' && github.event.repository.default_branch || github.ref_name }}"
+          git fetch origin "$TARGET_BRANCH"
+          git rebase "origin/$TARGET_BRANCH"
+          git push origin "HEAD:$TARGET_BRANCH"
