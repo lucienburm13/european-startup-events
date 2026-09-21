@@ -55,6 +55,9 @@
     setIfOption('#filter-calendar',p.get('type'));
     setIfOption('#filter-country',p.get('country'));
     if(p.get('q')) $('#filter-search').value=p.get('q');
+    if(p.get('from')) $('#filter-from').value=p.get('from');
+    if(p.get('to')) $('#filter-to').value=p.get('to');
+    toggleCustomDates();
     const view=p.get('view');
     if(['list','calendar'].includes(view)){
       state.view=view;
@@ -70,6 +73,10 @@
     if(type!=='All') p.set('type',type);
     if(country!=='All') p.set('country',country);
     if(q) p.set('q',q);
+    if(period==='custom'){
+      if($('#filter-from').value) p.set('from',$('#filter-from').value);
+      if($('#filter-to').value) p.set('to',$('#filter-to').value);
+    }
     if(state.view!=='list') p.set('view',state.view);
     const next=p.toString()?`${location.pathname}?${p.toString()}`:location.pathname;
     history.replaceState(null,'',next);
@@ -101,8 +108,21 @@
     if(period==='upcoming') return end>=today;
     if(period==='thisYear'){ const to=new Date(today.getFullYear(),11,31); return end>=today && start<=to; }
     if(period==='nextYear'){ const y=today.getFullYear()+1, from=new Date(y,0,1), to=new Date(y,11,31); return end>=from && start<=to; }
+    if(period==='past90'){ const from=addDays(today,-90), to=addDays(today,-1); return end>=from && start<=to; }
+    if(period==='custom'){
+      const from=$('#filter-from').value?parseYmd($('#filter-from').value):null;
+      const to=$('#filter-to').value?parseYmd($('#filter-to').value):null;
+      if(from && end<from) return false;
+      if(to && start>to) return false;
+      return Boolean(from||to);
+    }
     const max=addDays(today,Number(period));
     return end>=today && start<=max;
+  }
+
+  function toggleCustomDates(){
+    const custom=$('#filter-period').value==='custom';
+    $('#custom-dates').hidden=!custom;
   }
 
   function countryMatch(e,country){ return country==='All' || countryTokens(e.country).includes(country); }
@@ -253,16 +273,17 @@
   }
 
   function renderStack(){
-    const stack=cfg.stack||{}, runtime=stack.runtime||[], operations=stack.operations||[];
-    const eu=runtime.filter(x=>x.status==='european').length, open=runtime.filter(x=>x.status==='open').length;
-    const euScore=runtime.length?Math.round(eu/runtime.length*100):0, euOpenScore=runtime.length?Math.round((eu+open)/runtime.length*100):0;
+    const stack=cfg.stack||{}, layers=stack.layers||[], production=stack.production||[];
+    const active=layers.filter(x=>!['planned','pending'].includes(x.status));
+    const eu=active.filter(x=>x.status==='european').length, open=active.filter(x=>x.status==='open').length;
+    const euScore=active.length?Math.round(eu/active.length*100):0, euOpenScore=active.length?Math.round((eu+open)/active.length*100):0;
     $('#stack-score-top').textContent=`EU+open ${euOpenScore}%`;
     $('#stack-score-footer').textContent=`${euOpenScore}%`;
     $('#stack-summary').textContent=`EU+open · ${euScore}% EU-controlled`;
     $('#stack-title').textContent='European Stack Index';
-    const runtimeRows=runtime.map(l=>`<div class="stack-row"><div><strong>${esc(l.flag)} ${esc(l.name)}</strong><div>${esc(l.provider)}</div><div class="stack-meta">${esc(l.country)}</div></div><div class="stack-status">${esc(l.status.replace('-',' '))}</div></div>`).join('');
-    const opsRows=operations.map(l=>`<div class="stack-row"><div><strong>${esc(l.flag)} ${esc(l.name)}</strong><div>${esc(l.provider)}</div><div class="stack-meta">${esc(l.country)}</div></div><div class="stack-status">${esc(l.status.replace('-',' '))}</div></div>`).join('');
-    $('#stack-table').innerHTML=`<div class="stack-score-grid"><div><strong>${euOpenScore}%</strong><span>European + open runtime</span></div><div><strong>${euScore}%</strong><span>European-controlled runtime</span></div></div><p class="stack-note">The score covers technology that serves the live site. Operational tools are shown separately and do not change the runtime score.</p><h3 class="modal-subhead">Scored runtime</h3>${runtimeRows}<h3 class="modal-subhead">Operations · not scored</h3>${opsRows}`;
+    const layerRows=layers.map(l=>`<div class="stack-row"><div><strong>${esc(l.flag)} ${esc(l.name)}</strong><div>${esc(l.provider)}</div><div class="stack-meta">${esc(l.country)}</div></div><div class="stack-status">${esc(l.status.replace('-',' '))}</div></div>`).join('');
+    const productionRows=production.map(l=>`<div class="stack-row"><div><strong>${esc(l.flag)} ${esc(l.name)}</strong><div>${esc(l.provider)}</div><div class="stack-meta">${esc(l.country)}</div></div><div class="stack-status">${esc(l.status.replace('-',' '))}</div></div>`).join('');
+    $('#stack-table').innerHTML=`<div class="stack-score-grid"><div><strong>${euOpenScore}%</strong><span>European + open</span></div><div><strong>${euScore}%</strong><span>European-controlled</span></div></div><p class="stack-note">Score = active website stack only. Planned layers do not count yet.</p><h3 class="modal-subhead">Website stack</h3>${layerRows}<h3 class="modal-subhead">Production &amp; maintenance · not scored</h3>${productionRows}`;
   }
 
   function setupModals(){
@@ -271,40 +292,43 @@
     $$('.modal-backdrop').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.hidden=true;}));
   }
 
-  function showSubmitDetails(show=true){ $('#submit-details').hidden=!show; $('#no-url-full').hidden=show; }
-  function openSubmit(forceDetails=false){
+  function openSubmit(){
     $('#modal-submit').hidden=false;
     const u=$('#submission-url').value.trim(); if(u) $('#submit-url-full').value=u;
-    showSubmitDetails(forceDetails || !u);
     $('#submit-status').textContent='';
   }
+
   function findDuplicate(url){
     const n=normalizeUrl(url); if(!n) return null;
     return state.events.find(e=>normalizeUrl(e.source)===n) || null;
   }
   function continueToTally(data){
-    if(!cfg.tallyFormUrl){ $('#submit-status').textContent='The submission form is not connected yet. Duplicate checking is working; the Tally connection is the next step.'; showSubmitDetails(true); return; }
-    const u=new URL(cfg.tallyFormUrl); Object.entries(data).forEach(([k,v])=>{ if(v) u.searchParams.set(k,v); }); window.open(u.toString(),'_blank','noopener');
+    if(!cfg.tallyFormUrl){ $('#submit-status').textContent='Duplicate check passed. The submission endpoint is not connected yet; Tally is the next connection step.'; return; }
+    const u=new URL(cfg.tallyFormUrl);
+    if(data.url) u.searchParams.set('url',data.url);
+    window.open(u.toString(),'_blank','noopener');
   }
+
   function submitEvent(ev){
-    ev.preventDefault(); const data=Object.fromEntries(new FormData(ev.currentTarget).entries()), status=$('#submit-status'), url=String(data.url||'').trim();
-    if(url){
-      const duplicate=findDuplicate(url);
-      if(duplicate){ status.innerHTML=`Already listed: <a href="${esc(duplicate.source||'#')}" target="_blank" rel="noopener"><strong>${esc(duplicate.title||duplicate.name)}</strong></a> · ${esc(fmtDate(duplicate.start,duplicate.end))}.`; return; }
-      continueToTally(data); return;
-    }
-    showSubmitDetails(true);
-    if(!String(data.name||'').trim()){ status.textContent='No problem. Add at least the event name, then continue.'; return; }
-    continueToTally(data);
+    ev.preventDefault();
+    const data=Object.fromEntries(new FormData(ev.currentTarget).entries()), status=$('#submit-status'), url=String(data.url||'').trim();
+    if(!url){ status.textContent='Please add the official public event URL.'; return; }
+    const duplicate=findDuplicate(url);
+    if(duplicate){ status.innerHTML=`Already listed: <a href="${esc(duplicate.source||'#')}" target="_blank" rel="noopener"><strong>${esc(duplicate.title||duplicate.name)}</strong></a> · ${esc(fmtDate(duplicate.start,duplicate.end))}.`; return; }
+    continueToTally({url});
   }
 
   function setup(){
-    ['#filter-period','#filter-calendar','#filter-country'].forEach(s=>$(s).addEventListener('change',applyFilters)); $('#filter-search').addEventListener('input',applyFilters);
+    ['#filter-calendar','#filter-country'].forEach(s=>$(s).addEventListener('change',applyFilters));
+    $('#filter-period').addEventListener('change',()=>{ toggleCustomDates(); applyFilters(); });
+    ['#filter-from','#filter-to'].forEach(s=>$(s).addEventListener('change',applyFilters));
+    $('#filter-search').addEventListener('input',applyFilters);
     $$('[data-view]').forEach(b=>b.onclick=()=>{ state.view=b.dataset.view; $$('[data-view]').forEach(x=>x.classList.toggle('active',x===b)); ['list','calendar'].forEach(v=>$(`#view-${v}`).hidden=v!==state.view); syncUrl(); renderCurrent(); });
     $('#toggle-map').onclick=()=>{ state.mapCollapsed=!state.mapCollapsed; $('#toggle-map').textContent=state.mapCollapsed?'Show map':'Hide map'; $('#toggle-map').setAttribute('aria-expanded',String(!state.mapCollapsed)); renderMap(); };
     $('#add-selection').onclick=()=>{ $('#modal-calendar-help').hidden=false; renderSelectionCalendar(); };
-    $('#submit-top').onclick=()=>openSubmit(false); $('#submit-card').onclick=()=>openSubmit(false); $('#submit-no-url').onclick=()=>openSubmit(true); $('#no-url-full').onclick=()=>showSubmitDetails(true);
-    $('#submission-url').addEventListener('keydown',e=>{if(e.key==='Enter')openSubmit(false);}); $('#submit-form').addEventListener('submit',submitEvent);
+    $('#submit-top').onclick=openSubmit; $('#submit-card').onclick=openSubmit;
+    $('#submission-url').addEventListener('keydown',e=>{if(e.key==='Enter')openSubmit();});
+    $('#submit-form').addEventListener('submit',submitEvent);
     setupModals(); calendarLinks(); renderStack(); loadEvents();
   }
 
