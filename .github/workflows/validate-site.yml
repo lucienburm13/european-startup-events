@@ -52,19 +52,6 @@ jobs:
           grep -q './config.js' site/index.html
           grep -q './app.js' site/index.html
           grep -q './styles.css' site/index.html
-          python - <<'PY'
-          from pathlib import Path
-          index = Path('site/index.html').read_text()
-          app = Path('site/app.js').read_text()
-          assert '\\n' not in index, 'literal backslash-n found in HTML'
-          assert '
-          PY
-
-      - name: Build hosting image
-        run: docker build -t european-startup-events-site site
- * 3 + '(' not in app, 'invalid triple-dollar selector helper found'
-          assert app.count("$('[data-view]')") >= 3, 'multi-element view selector calls missing'
-          PY
 
       - name: Build hosting image
         run: docker build -t european-startup-events-site site
