@@ -55,11 +55,11 @@
     <section id="view-calendar" hidden></section>
 
     <section class="submission" id="submit">
-      <div><p class="eyebrow">MISSING SOMETHING?</p><h2>Submit an event.</h2><p>Start with the official event page. We check for duplicates and verify every submission before anything enters the public calendar.</p></div>
+      <div><p class="eyebrow">MISSING SOMETHING?</p><h2>Submit an event.</h2><p>Start with the official event page. We check for duplicates, relevance and fit before anything enters the public calendar.</p></div>
       <div class="submission-card">
         <label><span>Official event or programme URL</span><input id="submission-url" type="url" placeholder="https://…"></label>
         <button class="solid-button" id="submit-card">Check &amp; submit</button>
-        <small>An official public URL is required before we can publish an event.</small>
+        <small>An official public URL is required. Submission does not guarantee publication.</small>
       </div>
     </section>
   </main>
@@ -102,7 +102,7 @@
   <div class="modal-backdrop" id="modal-submit" hidden>
     <div class="modal">
       <div class="modal-head"><h2>Submit an event</h2><button data-close>×</button></div>
-      <p>Paste the official public event page. We check for duplicates before accepting it for review.</p>
+      <p>Paste the official public event page. We check for duplicates first; every submission is then reviewed for relevance and fit.</p>
       <form id="submit-form" class="submit-form">
         <label>Official event or programme URL<input id="submit-url-full" name="url" type="url" required placeholder="https://…"></label>
         <button class="solid-button" type="submit">Check &amp; submit</button>
