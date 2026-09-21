@@ -8,15 +8,16 @@ window.EUSE_CONFIG = {
     Policy: { id: 'c_fe229d185c2798b6db19a30d8e60366ea24bd4fda9dbe1b8b9c6182ba9f84885@group.calendar.google.com' }
   },
   stack: {
-    version: '0.3',
-    runtime: [
+    version: '0.4',
+    layers: [
       { name: 'Hosting & delivery', provider: 'deploybase · Scaleway · Bunny.net', country: 'Netherlands / France / Slovenia', flag: '🇳🇱 🇫🇷 🇸🇮', status: 'european' },
       { name: 'Frontend', provider: 'HTML / CSS / JavaScript', country: 'Open standards', flag: '🌐', status: 'open' },
-      { name: 'Maps', provider: 'MapLibre + OpenFreeMap', country: 'Open source', flag: '🌐', status: 'open' }
+      { name: 'Maps', provider: 'MapLibre + OpenFreeMap', country: 'Open source', flag: '🌐', status: 'open' },
+      { name: 'Submission forms', provider: 'Tally', country: 'European Union', flag: '🇪🇺', status: 'planned' }
     ],
-    operations: [
+    production: [
       { name: 'Master data', provider: 'Google Sheets', country: 'United States', flag: '🇺🇸', status: 'non-european' },
-      { name: 'Submission form', provider: 'Tally', country: 'European Union', flag: '🇪🇺', status: 'planned' },
+      { name: 'Source control', provider: 'GitHub', country: 'United States', flag: '🇺🇸', status: 'non-european' },
       { name: 'Analytics', provider: 'Plausible', country: 'Estonia', flag: '🇪🇪', status: 'planned' },
       { name: 'AI-assisted maintenance', provider: 'OpenAI', country: 'United States', flag: '🇺🇸', status: 'non-european' }
     ]
