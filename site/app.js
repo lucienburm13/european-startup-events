@@ -14,6 +14,19 @@
   function countryTokens(value){ return String(value||'').split(/\s*\/\s*|\s*;\s*/).map(x=>x.trim()).filter(x=>x && !/^(online|hybrid)$/i.test(x)); }
   function normalizeUrl(value){ try{ const u=new URL(String(value||'').trim()); return (u.hostname.replace(/^www\./,'')+u.pathname.replace(/\/+$/,'')).toLowerCase(); }catch(_){ return String(value||'').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/[?#].*$/,'').replace(/\/+$/,''); } }
 
+  function eventFormat(e){
+    const city=String(e.city||'').toLowerCase();
+    const country=String(e.country||'').toLowerCase();
+    const venue=String(e.venue||'').toLowerCase();
+    const text=[city,country,venue,String(e.title||'').toLowerCase(),String(e.notes||'').toLowerCase()].join(' ');
+    const hasOnline=/\bonline\b|\bvirtual\b|\bwebinar\b/.test(text);
+    const pureOnline=/^online$/.test(city.trim()) || /^online$/.test(venue.trim()) ||
+      ((country.includes('online')) && !city.replace(/online|\+|\/|,|;|\s/gi,'').trim());
+    if(pureOnline) return 'Online';
+    if(hasOnline) return 'Hybrid';
+    return 'In-person';
+  }
+
   function loadJsonp(url){
     return new Promise((resolve,reject)=>{
       const callback='__euse_jsonp_'+Date.now()+'_'+Math.random().toString(36).slice(2);
@@ -57,6 +70,7 @@
     const setIfOption=(selector,value)=>{ const el=$(selector); if(value && [...el.options].some(o=>o.value===value)) el.value=value; };
     setIfOption('#filter-period',p.get('period'));
     setIfOption('#filter-calendar',p.get('type'));
+    setIfOption('#filter-format',p.get('format'));
     setIfOption('#filter-country',p.get('country'));
     if(p.get('q')) $('#filter-search').value=p.get('q');
     if(p.get('from')) $('#filter-from').value=p.get('from');
@@ -74,9 +88,10 @@
 
   function syncUrl(){
     const p=new URLSearchParams();
-    const period=$('#filter-period').value, type=$('#filter-calendar').value, country=$('#filter-country').value, city=$('#filter-city').value, q=$('#filter-search').value.trim();
+    const period=$('#filter-period').value, type=$('#filter-calendar').value, format=$('#filter-format').value, country=$('#filter-country').value, city=$('#filter-city').value, q=$('#filter-search').value.trim();
     if(period!=='30') p.set('period',period);
     if(type!=='All') p.set('type',type);
+    if(format!=='All') p.set('format',format);
     if(country!=='All') p.set('country',country);
     if(city!=='All') p.set('city',city);
     if(q) p.set('q',q);
@@ -114,11 +129,13 @@
   function cityBaseEvents(){
     const period=$('#filter-period').value;
     const cal=$('#filter-calendar').value;
+    const format=$('#filter-format').value;
     const country=$('#filter-country').value;
     const q=$('#filter-search').value.trim().toLowerCase();
     return state.events.filter(e=>
       periodMatch(e,period) &&
       (cal==='All'||e.calendar===cal) &&
+      (format==='All'||eventFormat(e)===format) &&
       countryMatch(e,country) &&
       (!q||[e.name,e.title,e.city,e.country,e.venue,e.notes,e.calendar,e.status].join(' ').toLowerCase().includes(q))
     );
@@ -235,8 +252,8 @@
 
   function applyFilters(){
     populateCities();
-    const period=$('#filter-period').value, cal=$('#filter-calendar').value, country=$('#filter-country').value, city=$('#filter-city').value, q=$('#filter-search').value.trim().toLowerCase();
-    state.filtered=state.events.filter(e=>periodMatch(e,period) && (cal==='All'||e.calendar===cal) && countryMatch(e,country) && cityMatch(e,city) && (!q||[e.name,e.title,e.city,e.country,e.venue,e.notes,e.calendar,e.status].join(' ').toLowerCase().includes(q)));
+    const period=$('#filter-period').value, cal=$('#filter-calendar').value, format=$('#filter-format').value, country=$('#filter-country').value, city=$('#filter-city').value, q=$('#filter-search').value.trim().toLowerCase();
+    state.filtered=state.events.filter(e=>periodMatch(e,period) && (cal==='All'||e.calendar===cal) && (format==='All'||eventFormat(e)===format) && countryMatch(e,country) && cityMatch(e,city) && (!q||[e.name,e.title,e.city,e.country,e.venue,e.notes,e.calendar,e.status,eventFormat(e)].join(' ').toLowerCase().includes(q)));
     $('#result-count').textContent=`${state.filtered.length} event${state.filtered.length===1?'':'s'}`;
     $('#source-note').textContent=dateRangeLabel();
     const add=$('#add-selection');
@@ -348,11 +365,6 @@
         if(activePopup&&activePopup!==popup) activePopup.remove();
         popup.addTo(state.map);
         activePopup=popup;
-        requestAnimationFrame(()=>{
-          const mapHeight=state.map?.getContainer()?.clientHeight||500;
-          const list=popup.getElement()?.querySelector('.map-popup-list');
-          if(list) list.style.maxHeight=`${Math.max(120,Math.min(300,mapHeight-175))}px`;
-        });
       };
       marker.addEventListener('mouseenter',open); marker.addEventListener('focus',open); marker.addEventListener('click',open);
       mapMarker.setPopup(popup);
@@ -511,7 +523,7 @@
   }
 
   function setup(){
-    ['#filter-calendar','#filter-country','#filter-city'].forEach(s=>$(s).addEventListener('change',applyFilters));
+    ['#filter-calendar','#filter-format','#filter-country','#filter-city'].forEach(s=>$(s).addEventListener('change',applyFilters));
     $('#filter-period').addEventListener('change',()=>{ toggleCustomDates(); applyFilters(); });
     ['#filter-from','#filter-to'].forEach(s=>$(s).addEventListener('change',applyFilters));
     $('#filter-search').addEventListener('input',applyFilters);
