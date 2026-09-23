@@ -216,9 +216,9 @@
       "country": "Luxembourg",
       "memberType": "Full",
       "url": "https://www.pulse.lu/",
-      "logo": "https://cdn.prod.website-files.com/66f2760c285e839111b37ed0/68acdae6d9b9320e0b28a9f6_News%2041.png",
+      "logo": "./public/org-logos/pulse-luxembourg-startup-association.png",
       "logoOriginal": "https://www.pulse.lu/web/image/18797-a64091c9/chamber-of-commerce-luxembourg-logo.png",
-      "logoSource": "PULSE board announcement press image",
+      "logoSource": "https://cdn.prod.website-files.com/66f2760c285e839111b37ed0/68acdae6d9b9320e0b28a9f6_News%2041.png",
       "logoScale": 1
     },
     {
