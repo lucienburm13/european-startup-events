@@ -156,7 +156,7 @@
     const selected=$('#filter-city').value;
     el.hidden=false;
     el.innerHTML=`<span>Hubs</span>${available.map(({city,count})=>`<button type="button" class="hub-chip ${selected===city?'active':''}" data-hub-city="${esc(city)}">${esc(city)} <small>${count}</small></button>`).join('')}`;
-    $('[data-hub-city]').forEach(b=>b.onclick=()=>{
+    $$('[data-hub-city]').forEach(b=>b.onclick=()=>{
       $('#filter-city').value=b.dataset.hubCity;
       applyFilters();
     });
