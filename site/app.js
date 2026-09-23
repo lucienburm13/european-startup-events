@@ -469,18 +469,17 @@
 
   function openEventCalendar(id){
     const e=state.events.find(x=>String(x.id)===String(id)); if(!e) return;
-    $('#event-calendar-title').textContent=e.title||e.name;
-    $('#event-calendar-meta').textContent=`${fmtDate(e.start,e.end)} · ${[e.venue,e.city,e.country].filter(Boolean).join(' · ')}`;
-    $('#event-calendar-badges').innerHTML=`<span class="pill status-${esc(e.status)}">${esc(e.status)}</span><span class="detail-chip">${esc(e.calendar)}</span><span class="detail-chip">${esc(eventFormat(e))}</span>`;
-    $('#event-calendar-notes').textContent=e.notes||'';
-    $('#event-calendar-notes').hidden=!e.notes;
-    const source=$('#event-source-link');
-    source.hidden=!e.source;
-    if(e.source) source.href=e.source;
-    $('#event-verified').textContent=e.lastVerified?`Verified ${e.lastVerified}`:'';
-    $('#event-google-link').href=googleEventUrl(e);
-    $('#event-ics-download').onclick=()=>downloadIcs([e],`european-startup-event-${e.id}.ics`,e.name);
-    $('#modal-event-calendar').hidden=false;
+    const modal=$('#modal-event-calendar'); if(!modal) return;
+    modal.hidden=false;
+
+    const title=$('#event-calendar-title'); if(title) title.textContent=e.title||e.name;
+    const meta=$('#event-calendar-meta'); if(meta) meta.textContent=`${fmtDate(e.start,e.end)} · ${[e.venue,e.city,e.country].filter(Boolean).join(' · ')}`;
+    const badges=$('#event-calendar-badges'); if(badges) badges.innerHTML=`<span class="pill status-${esc(e.status)}">${esc(e.status)}</span><span class="detail-chip">${esc(e.calendar)}</span><span class="detail-chip">${esc(eventFormat(e))}</span>`;
+    const notes=$('#event-calendar-notes'); if(notes){ notes.textContent=e.notes||''; notes.hidden=!e.notes; }
+    const source=$('#event-source-link'); if(source){ source.hidden=!e.source; if(e.source) source.href=e.source; }
+    const verified=$('#event-verified'); if(verified) verified.textContent=e.lastVerified?`Verified ${e.lastVerified}`:'';
+    const google=$('#event-google-link'); if(google) google.href=googleEventUrl(e);
+    const ics=$('#event-ics-download'); if(ics) ics.onclick=()=>downloadIcs([e],`european-startup-event-${e.id}.ics`,e.name);
   }
 
   function downloadSelectionIcs(){
@@ -569,6 +568,10 @@
     $$('[data-view]').forEach(b=>b.onclick=()=>{ state.view=b.dataset.view; $$('[data-view]').forEach(x=>x.classList.toggle('active',x===b)); ['list','calendar'].forEach(v=>$(`#view-${v}`).hidden=v!==state.view); syncUrl(); renderCurrent(); });
     $('#toggle-map').onclick=()=>{ state.mapCollapsed=!state.mapCollapsed; $('#toggle-map').textContent=state.mapCollapsed?'Show map':'Hide map'; $('#toggle-map').setAttribute('aria-expanded',String(!state.mapCollapsed)); renderMap(); };
     $('#add-selection').onclick=()=>{ $('#modal-calendar-help').hidden=false; renderSelectionCalendar(); };
+    $('#view-calendar').addEventListener('click',evt=>{
+      const eventButton=evt.target.closest('[data-cal-event]');
+      if(eventButton){ evt.preventDefault(); openEventCalendar(eventButton.dataset.calEvent); }
+    });
     $('#submit-top').onclick=openSubmit; $('#submit-card').onclick=openSubmit;
     $('#submission-url').addEventListener('keydown',e=>{if(e.key==='Enter')openSubmit();});
     $('#submit-form').addEventListener('submit',submitEvent);
