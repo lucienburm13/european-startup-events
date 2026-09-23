@@ -347,29 +347,29 @@
     const groups=new Map();
     mappable.forEach(e=>{ const lat=Number(e.lat), lng=Number(e.lng), key=`${lat.toFixed(5)}|${lng.toFixed(5)}`; if(!groups.has(key)) groups.set(key,{lat,lng,events:[]}); groups.get(key).events.push(e); });
     const missing=state.filtered.length-mappable.length;
-    el.innerHTML=`<div class="map-meta"><span><strong>${mappable.length}</strong> mapped event${mappable.length===1?'':'s'} at <strong>${groups.size}</strong> location${groups.size===1?'':'s'}.</span>${missing?`<span>${missing} event${missing===1?' is':'s are'} not mapped yet.</span>`:''}</div><div id="event-map" class="event-map" aria-label="Map of filtered events"></div>`;
+    el.innerHTML=`<div class="map-meta"><span><strong>${mappable.length}</strong> mapped event${mappable.length===1?'':'s'} at <strong>${groups.size}</strong> location${groups.size===1?'':'s'}.</span>${missing?`<span>${missing} event${missing===1?' is':'s are'} not mapped yet.</span>`:''}</div><div class="event-map-wrap"><div id="event-map" class="event-map" aria-label="Map of filtered events"></div><aside id="map-popup-panel" class="map-popup-panel" hidden aria-live="polite"></aside></div>`;
     state.map=new maplibregl.Map({container:'event-map',style:cfg.mapStyleUrl||'https://tiles.openfreemap.org/styles/liberty',center:[10,50],zoom:3});
     state.map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-right');
     const bounds=new maplibregl.LngLatBounds();
-    let activePopup=null;
     groups.forEach(group=>{
       bounds.extend([group.lng,group.lat]);
       group.events.sort((a,b)=>a.start.localeCompare(b.start)||a.name.localeCompare(b.name));
       const sample=group.events[0], location=[sample.city,sample.country].filter(Boolean).join(', ');
       const items=group.events.map(e=>{ const title=esc(e.title||e.name), date=esc(fmtDate(e.start,e.end)); return `<li><strong>${title}</strong><span>${date} · ${esc(e.calendar)}</span><button class="popup-action" data-popup-add="${esc(e.id)}">Add to calendar</button></li>`; }).join('');
       const showLabel=group.events.length===1?'Show this event':`Show these ${group.events.length} events`;
-      const popup=new maplibregl.Popup({offset:18,maxWidth:'380px',closeButton:true}).setLngLat([group.lng,group.lat]).setHTML(`<div class="map-popup"><strong>${esc(location||'Mapped location')}</strong><ul class="map-popup-list">${items}</ul><button class="outline-button compact-button popup-filter" data-map-city="${esc(sample.city||'')}" data-map-country="${esc(sample.country||'')}">${showLabel}</button></div>`);
+      const panelHtml=`<div class="map-popup-panel-head"><strong>${esc(location||'Mapped location')}</strong><button type="button" class="map-popup-close" data-map-popup-close aria-label="Close">×</button></div><ul class="map-popup-list">${items}</ul><button class="outline-button compact-button popup-filter" data-map-city="${esc(sample.city||'')}" data-map-country="${esc(sample.country||'')}">${showLabel}</button>`;
       const marker=document.createElement('button'); marker.className='map-count-marker'; marker.type='button'; marker.textContent=String(group.events.length); marker.setAttribute('aria-label',`${group.events.length} events in ${location}`);
-      const mapMarker=new maplibregl.Marker({element:marker}).setLngLat([group.lng,group.lat]).addTo(state.map);
+      new maplibregl.Marker({element:marker}).setLngLat([group.lng,group.lat]).addTo(state.map);
       const open=()=>{
-        if(activePopup&&activePopup!==popup) activePopup.remove();
-        popup.addTo(state.map);
-        activePopup=popup;
+        const panel=$('#map-popup-panel');
+        if(!panel) return;
+        panel.innerHTML=panelHtml;
+        panel.hidden=false;
       };
       marker.addEventListener('mouseenter',open); marker.addEventListener('focus',open); marker.addEventListener('click',open);
-      mapMarker.setPopup(popup);
     });
     el.addEventListener('click',evt=>{
+      const close=evt.target.closest('[data-map-popup-close]'); if(close){ evt.preventDefault(); const panel=$('#map-popup-panel'); if(panel) panel.hidden=true; return; }
       const add=evt.target.closest('[data-popup-add]'); if(add){ evt.preventDefault(); openEventCalendar(add.dataset.popupAdd); return; }
       const filter=evt.target.closest('[data-map-city]'); if(filter){
         evt.preventDefault();
