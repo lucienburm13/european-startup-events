@@ -1,8 +1,9 @@
 (() => {
   const cfg = window.EUSE_CONFIG || {};
-  const state = { events: [], filtered: [], locations: {}, organizations: [], view: 'list', calendarCursor: startOfMonth(new Date()), source: 'snapshot', map: null, mapCollapsed: false };
+  const state = { events: [], filtered: [], locations: {}, organizations: [], view: 'list', calendarCursor: startOfMonth(new Date()), source: 'snapshot', map: null, mapCollapsed: false, listPage: 1 };
   const $ = (s) => document.querySelector(s);
-  const $$ = (s) => [...document.querySelectorAll(s)];
+  const $ = (s) => [...document.querySelectorAll(s)];
+  const LIST_PAGE_SIZE = 25;
 
   function parseYmd(s){ if(!s) return null; const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
   function ymd(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
@@ -75,6 +76,7 @@
     if(p.get('q')) $('#filter-search').value=p.get('q');
     if(p.get('from')) $('#filter-from').value=p.get('from');
     if(p.get('to')) $('#filter-to').value=p.get('to');
+    const page=Number(p.get('page')); if(Number.isInteger(page)&&page>0) state.listPage=page;
     toggleCustomDates();
     populateCities();
     setIfOption('#filter-city',p.get('city'));
@@ -100,6 +102,7 @@
       if($('#filter-to').value) p.set('to',$('#filter-to').value);
     }
     if(state.view!=='list') p.set('view',state.view);
+    if(state.view==='list' && state.listPage>1) p.set('page',String(state.listPage));
     const next=p.toString()?`${location.pathname}?${p.toString()}`:location.pathname;
     history.replaceState(null,'',next);
   }
@@ -175,6 +178,7 @@
     el.innerHTML=`<span>Hubs</span>${available.map(({city,count})=>`<button type="button" class="hub-chip ${selected===city?'active':''}" data-hub-city="${esc(city)}">${esc(city)} <small>${count}</small></button>`).join('')}`;
     $$('[data-hub-city]').forEach(b=>b.onclick=()=>{
       $('#filter-city').value=b.dataset.hubCity;
+      state.listPage=1;
       applyFilters();
     });
   }
@@ -254,6 +258,8 @@
     populateCities();
     const period=$('#filter-period').value, cal=$('#filter-calendar').value, format=$('#filter-format').value, country=$('#filter-country').value, city=$('#filter-city').value, q=$('#filter-search').value.trim().toLowerCase();
     state.filtered=state.events.filter(e=>periodMatch(e,period) && (cal==='All'||e.calendar===cal) && (format==='All'||eventFormat(e)===format) && countryMatch(e,country) && cityMatch(e,city) && (!q||[e.name,e.title,e.city,e.country,e.venue,e.notes,e.calendar,e.status,eventFormat(e)].join(' ').toLowerCase().includes(q)));
+    const maxPage=Math.max(1,Math.ceil(state.filtered.length/LIST_PAGE_SIZE));
+    state.listPage=Math.min(Math.max(1,state.listPage),maxPage);
     $('#result-count').textContent=`${state.filtered.length} event${state.filtered.length===1?'':'s'}`;
     $('#source-note').textContent=dateRangeLabel();
     const add=$('#add-selection');
@@ -298,12 +304,34 @@
   function renderList(){
     const el=$('#view-list');
     if(!state.filtered.length){ el.innerHTML='<div class="empty-state">No events match these filters.</div>'; return; }
-    el.innerHTML=state.filtered.map(e=>`<article class="event-row" id="event-${esc(e.id)}">
+
+    const total=state.filtered.length;
+    const pages=Math.max(1,Math.ceil(total/LIST_PAGE_SIZE));
+    state.listPage=Math.min(Math.max(1,state.listPage),pages);
+    const from=(state.listPage-1)*LIST_PAGE_SIZE;
+    const pageEvents=state.filtered.slice(from,from+LIST_PAGE_SIZE);
+
+    const rows=pageEvents.map(e=>`<article class="event-row" id="event-${esc(e.id)}">
       <div class="event-date">${esc(fmtDate(e.start,e.end))}<small>${esc(parseYmd(e.start)?.getFullYear()||'')}</small></div>
       <div class="event-main"><h3>${esc(e.title||e.name)}</h3><p class="event-meta">${esc([e.venue,e.city,e.country].filter(Boolean).join(' · '))}</p>${e.notes?`<p class="event-notes">${esc(e.notes)}</p>`:''}<div class="event-links">${e.source?`<a href="${esc(e.source)}" target="_blank" rel="noopener">Official source ↗</a>`:''}<button class="inline-action" data-add-event="${esc(e.id)}">Add to calendar</button><span>Verified ${esc(e.lastVerified||'—')}</span></div></div>
-      <div class="event-type"><span class="pill status-${esc(e.status)}">${esc(e.status)}</span><div class="event-calendar-name">${esc(e.calendar)}</div></div>
+      <div class="event-type"><span class="pill status-${esc(e.status)}">${esc(e.status)}</span><div class="event-calendar-name">${esc(e.calendar)} · ${esc(eventFormat(e))}</div></div>
     </article>`).join('');
+
+    const pagination=pages>1 ? `<nav class="list-pagination" aria-label="Event pages">
+      <button class="outline-button compact-button" data-page="prev" ${state.listPage===1?'disabled':''}>← Previous</button>
+      <span>${from+1}–${Math.min(from+LIST_PAGE_SIZE,total)} of ${total}</span>
+      <button class="outline-button compact-button" data-page="next" ${state.listPage===pages?'disabled':''}>Next →</button>
+    </nav>` : '';
+
+    el.innerHTML=rows+pagination;
     $$('[data-add-event]').forEach(b=>b.onclick=()=>openEventCalendar(b.dataset.addEvent));
+    $$('[data-page]').forEach(b=>b.onclick=()=>{
+      if(b.dataset.page==='prev' && state.listPage>1) state.listPage--;
+      if(b.dataset.page==='next' && state.listPage<pages) state.listPage++;
+      syncUrl();
+      renderList();
+      document.querySelector('.results-head')?.scrollIntoView({behavior:'smooth',block:'start'});
+    });
   }
 
   function renderCalendar(){
@@ -320,9 +348,11 @@
       <div class="mobile-swipe-note">Swipe calendar horizontally →</div>
       <div class="calendar-scroll"><div class="month-grid">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="weekday">${x}</div>`).join('')}${days.map(d=>{ const arr=byDay[ymd(d)]||[]; return `<div class="day-cell ${d.getMonth()!==cursor.getMonth()?'outside':''}"><div class="day-number">${d.getDate()}</div>${arr.slice(0,3).map(e=>`<button class="day-event ${esc(e.calendar)}" data-cal-event="${esc(e.id)}">${esc(e.name)}</button>`).join('')}${arr.length>3?`<div class="more-events">+${arr.length-3} more</div>`:''}</div>`; }).join('')}</div></div>`;
     $$('[data-cal]').forEach(b=>b.onclick=()=>{ if(b.dataset.cal==='prev') state.calendarCursor=new Date(cursor.getFullYear(),cursor.getMonth()-1,1); if(b.dataset.cal==='next') state.calendarCursor=new Date(cursor.getFullYear(),cursor.getMonth()+1,1); if(b.dataset.cal==='today') state.calendarCursor=startOfMonth(new Date()); renderCalendar(); });
-    $$('[data-cal-event]').forEach(b=>{
+    $('[data-cal-event]').forEach(b=>{
       const show=()=>{ const e=state.events.find(x=>String(x.id)===String(b.dataset.calEvent)); $('#calendar-preview').innerHTML=calendarPreviewHtml(e); bindCalendarPreview(); };
-      b.addEventListener('mouseenter',show); b.addEventListener('focus',show); b.addEventListener('click',show);
+      b.addEventListener('mouseenter',show);
+      b.addEventListener('focus',show);
+      b.addEventListener('click',()=>openEventCalendar(b.dataset.calEvent));
     });
     bindCalendarPreview();
   }
@@ -378,6 +408,7 @@
         if(country && [...$('#filter-country').options].some(o=>o.value===country)) $('#filter-country').value=country;
         populateCities();
         if(city && [...$('#filter-city').options].some(o=>o.value===city)) $('#filter-city').value=city;
+        state.listPage=1;
         applyFilters();
         document.querySelector('.results-head')?.scrollIntoView({behavior:'smooth',block:'start'});
       }
@@ -439,7 +470,14 @@
   function openEventCalendar(id){
     const e=state.events.find(x=>String(x.id)===String(id)); if(!e) return;
     $('#event-calendar-title').textContent=e.title||e.name;
-    $('#event-calendar-meta').textContent=`${fmtDate(e.start,e.end)} · ${[e.city,e.country].filter(Boolean).join(', ')}`;
+    $('#event-calendar-meta').textContent=`${fmtDate(e.start,e.end)} · ${[e.venue,e.city,e.country].filter(Boolean).join(' · ')}`;
+    $('#event-calendar-badges').innerHTML=`<span class="pill status-${esc(e.status)}">${esc(e.status)}</span><span class="detail-chip">${esc(e.calendar)}</span><span class="detail-chip">${esc(eventFormat(e))}</span>`;
+    $('#event-calendar-notes').textContent=e.notes||'';
+    $('#event-calendar-notes').hidden=!e.notes;
+    const source=$('#event-source-link');
+    source.hidden=!e.source;
+    if(e.source) source.href=e.source;
+    $('#event-verified').textContent=e.lastVerified?`Verified ${e.lastVerified}`:'';
     $('#event-google-link').href=googleEventUrl(e);
     $('#event-ics-download').onclick=()=>downloadIcs([e],`european-startup-event-${e.id}.ics`,e.name);
     $('#modal-event-calendar').hidden=false;
@@ -523,10 +561,10 @@
   }
 
   function setup(){
-    ['#filter-calendar','#filter-format','#filter-country','#filter-city'].forEach(s=>$(s).addEventListener('change',applyFilters));
-    $('#filter-period').addEventListener('change',()=>{ toggleCustomDates(); applyFilters(); });
-    ['#filter-from','#filter-to'].forEach(s=>$(s).addEventListener('change',applyFilters));
-    $('#filter-search').addEventListener('input',applyFilters);
+    ['#filter-calendar','#filter-format','#filter-country','#filter-city'].forEach(s=>$(s).addEventListener('change',()=>{ state.listPage=1; applyFilters(); }));
+    $('#filter-period').addEventListener('change',()=>{ state.listPage=1; toggleCustomDates(); applyFilters(); });
+    ['#filter-from','#filter-to'].forEach(s=>$(s).addEventListener('change',()=>{ state.listPage=1; applyFilters(); }));
+    $('#filter-search').addEventListener('input',()=>{ state.listPage=1; applyFilters(); });
     $('#source-note').addEventListener('click',useCurrentRangeAsCustom);
     $$('[data-view]').forEach(b=>b.onclick=()=>{ state.view=b.dataset.view; $$('[data-view]').forEach(x=>x.classList.toggle('active',x===b)); ['list','calendar'].forEach(v=>$(`#view-${v}`).hidden=v!==state.view); syncUrl(); renderCurrent(); });
     $('#toggle-map').onclick=()=>{ state.mapCollapsed=!state.mapCollapsed; $('#toggle-map').textContent=state.mapCollapsed?'Show map':'Hide map'; $('#toggle-map').setAttribute('aria-expanded',String(!state.mapCollapsed)); renderMap(); };
