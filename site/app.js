@@ -2,7 +2,7 @@
   const cfg = window.EUSE_CONFIG || {};
   const state = { events: [], filtered: [], locations: {}, organizations: [], view: 'list', calendarCursor: startOfMonth(new Date()), source: 'snapshot', map: null, mapCollapsed: false, listPage: 1 };
   const $ = (s) => document.querySelector(s);
-  const $ = (s) => [...document.querySelectorAll(s)];
+  const $$ = (s) => [...document.querySelectorAll(s)];
   const LIST_PAGE_SIZE = 25;
 
   function parseYmd(s){ if(!s) return null; const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
