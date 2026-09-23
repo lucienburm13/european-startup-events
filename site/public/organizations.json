@@ -53,8 +53,8 @@
       "country": "Czechia",
       "memberType": "Full",
       "url": "https://czechfounders.org/",
-      "logo": "./public/org-logos/czech-founders.jpg",
-      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/Czech-Founders.jpeg",
+      "logo": "./public/org-logos/czech-founders.png",
+      "logoSource": "https://czechfounders.org/wp-content/uploads/2026/04/LogoADDSENBlack-scaled.png",
       "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/Czech-Founders.jpeg"
     },
     {
@@ -336,8 +336,8 @@
       "country": "Germany",
       "memberType": "Associate",
       "url": "https://www.start2.group/",
-      "logo": "./public/org-logos/start2-group-gmbh.jpg",
-      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/Start2-Logo.jpg",
+      "logo": "./public/org-logos/start2-group-gmbh.svg",
+      "logoSource": "https://cdn.prod.website-files.com/67e16029dde90e88d267d976/67ffb3f8284df2718c43f723_start2group-logo-black.svg",
       "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/Start2-Logo.jpg"
     }
   ],
