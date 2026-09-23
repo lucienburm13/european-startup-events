@@ -158,7 +158,8 @@
       "memberType": "Full",
       "url": "https://www.italiantechalliance.com/",
       "logo": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/italian-tech-alliance.jpeg",
-      "logoSource": "European Startup Network member directory"
+      "logoSource": "European Startup Network member directory",
+      "logoScale": 1.35
     },
     {
       "name": "Roma Startup",
@@ -196,7 +197,8 @@
       "memberType": "Full",
       "url": "https://www.dutchstartupassociation.nl/",
       "logo": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/04/Dutch-ass-logo.jpg",
-      "logoSource": "European Startup Network member directory"
+      "logoSource": "European Startup Network member directory",
+      "logoScale": 1.55
     },
     {
       "name": "Foundation Supporting #OMGKRK",
@@ -212,7 +214,8 @@
       "memberType": "Full",
       "url": "https://351startups.com/",
       "logo": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/351-Portuguese-Startup-Association-1.png",
-      "logoSource": "European Startup Network member directory"
+      "logoSource": "European Startup Network member directory",
+      "logoScale": 1.55
     },
     {
       "name": "Startup Portugal",
