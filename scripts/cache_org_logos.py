@@ -48,6 +48,12 @@ FALLBACK_OVERRIDES = {
 }
 
 
+SPECIAL_CROPS = {
+    # The available PULSE press image contains a board photo and partner strip.
+    # Keep only the clean association wordmark area.
+    "PULSE - Luxembourg Startup Association": (0.12, 0.53, 0.88, 0.80),
+}
+
 DISCOVER_ON_OFFICIAL_SITE = {
     "Startup Cyprus",
 }
@@ -215,6 +221,19 @@ def main():
                     except Exception:
                         pass
                 filename = slugify(name) + "." + ext
+                if name in SPECIAL_CROPS and ext != "svg":
+                    try:
+                        im = Image.open(BytesIO(body)).convert("RGBA")
+                        x1,y1,x2,y2 = SPECIAL_CROPS[name]
+                        box=(int(im.width*x1),int(im.height*y1),int(im.width*x2),int(im.height*y2))
+                        im=im.crop(box)
+                        out=BytesIO()
+                        im.save(out, format="PNG")
+                        body=out.getvalue()
+                        ext="png"
+                        filename=slugify(name)+".png"
+                    except Exception:
+                        pass
                 (OUT_DIR / filename).write_bytes(body)
                 saved = "./public/org-logos/" + filename
                 source = final_url
