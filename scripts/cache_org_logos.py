@@ -42,6 +42,9 @@ FORCE_SOURCES = {
 }
 
 FALLBACK_OVERRIDES = {
+    "Start2 Group GmbH": [
+        "https://media.licdn.com/dms/image/v2/D4D05AQFnDXla3tdQhQ/feedshare-thumbnail_720_1280/feedshare-thumbnail_720_1280/0/1706689992914?e=2147483647&t=XAiU03X-Ds50BN_iNZPSR5pfJw_LZLdwfDFJFObO1H8&v=beta"
+    ],
     "Roma Startup": [
         "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=90,width=1000,height=1000/event-covers/99/ac747dfb-8c66-45ac-aadd-c22379c9ed11"
     ],
@@ -56,8 +59,11 @@ SPECIAL_CROPS = {
 
 DISCOVER_ON_OFFICIAL_SITE = {
     "Startup Cyprus",
+    "Czech Founders",
+    "Roma Startup",
+    "Start2 Group GmbH",
 }
-FORCE_REFRESH = {"Startup Cyprus"}
+FORCE_REFRESH = {"Startup Cyprus", "Czech Founders", "Roma Startup", "Start2 Group GmbH"}
 
 def slugify(s):
     s = s.lower()
