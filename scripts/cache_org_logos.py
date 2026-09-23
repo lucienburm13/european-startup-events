@@ -21,6 +21,9 @@ session.headers.update({
 # Better/current sources for logos that were too small or were not present in the
 # old AfS/ESN member directories. Official-site discovery is tried before fallback.
 FORCE_SOURCES = {
+    "Czech Founders": [
+        "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/Czech-Founders.jpeg"
+    ],
     "Dutch Startup Association": [
         "https://d21buns5ku92am.cloudfront.net/69190/logo/retina-1606397307.png"
     ],
@@ -63,7 +66,7 @@ DISCOVER_ON_OFFICIAL_SITE = {
     "Roma Startup",
     "Start2 Group GmbH",
 }
-FORCE_REFRESH = {"Startup Cyprus", "Czech Founders", "Roma Startup", "Start2 Group GmbH"}
+FORCE_REFRESH = {"Startup Cyprus", "Roma Startup", "Start2 Group GmbH"}
 
 def slugify(s):
     s = s.lower()
