@@ -101,10 +101,16 @@
   </div>
 
   <div class="modal-backdrop" id="modal-event-calendar" hidden>
-    <div class="modal small-modal">
-      <div class="modal-head"><h2 id="event-calendar-title">Add event to calendar</h2><button data-close>×</button></div>
-      <p id="event-calendar-meta"></p>
-      <div class="event-calendar-actions"><a class="solid-button" id="event-google-link" target="_blank" rel="noopener">Google Calendar</a><button class="outline-button" id="event-ics-download">Download .ics</button></div>
+    <div class="modal event-detail-modal">
+      <div class="modal-head"><h2 id="event-calendar-title">Event details</h2><button data-close>×</button></div>
+      <p class="event-detail-meta" id="event-calendar-meta"></p>
+      <div class="event-detail-badges" id="event-calendar-badges"></div>
+      <p class="event-detail-notes" id="event-calendar-notes" hidden></p>
+      <div class="event-detail-links">
+        <a id="event-source-link" target="_blank" rel="noopener">Official source ↗</a>
+        <span id="event-verified"></span>
+      </div>
+      <div class="event-calendar-actions"><a class="solid-button" id="event-google-link" target="_blank" rel="noopener">Add to Google Calendar</a><button class="outline-button" id="event-ics-download">Download .ics</button></div>
     </div>
   </div>
 
