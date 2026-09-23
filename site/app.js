@@ -306,8 +306,7 @@
       const name=esc(o.name||'Startup organisation');
       const countryLabel=esc(o.country||'');
       const href=esc(o.url||'#');
-      const logoScale=Number(o.logoScale)||1;
-      const logo=o.logo ? `<img class="org-logo" style="--org-logo-scale:${logoScale}" src="${esc(o.logo)}" alt="${name} logo" loading="lazy">` : '';
+      const logo=o.logo ? `<img class="org-logo" src="${esc(o.logo)}" alt="${name} logo" loading="lazy">` : '';
       return `<a class="org-card" href="${href}" target="_blank" rel="noopener">
         <span class="org-logo-wrap">${logo || `<span class="org-wordmark">${name}</span>`}</span>
         <span class="org-meta"><strong>${name}</strong><small>${countryLabel}</small></span>
