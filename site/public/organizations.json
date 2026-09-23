@@ -181,7 +181,7 @@
       "url": "https://www.italiantechalliance.com/",
       "logo": "./public/org-logos/italian-tech-alliance.png",
       "logoSource": "https://static.wixstatic.com/media/ffd03c_ab2150e8783c47d7b3ca561974169370~mv2.png",
-      "logoScale": 1.35,
+      "logoScale": 1.25,
       "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/italian-tech-alliance.jpeg"
     },
     {
@@ -228,7 +228,7 @@
       "url": "https://www.dutchstartupassociation.nl/",
       "logo": "./public/org-logos/dutch-startup-association.png",
       "logoSource": "https://d21buns5ku92am.cloudfront.net/69190/logo/retina-1606397307.png",
-      "logoScale": 1.55,
+      "logoScale": 1.22,
       "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/04/Dutch-ass-logo.jpg"
     },
     {
@@ -247,7 +247,7 @@
       "url": "https://351startups.com/",
       "logo": "./public/org-logos/351-portuguese-startup-association.png",
       "logoSource": "https://res.cloudinary.com/startup-grind/image/upload/c_fill,dpr_2,f_auto,g_center,q_auto:good/v1/gcs/platform-data-startupgrind/events/351_UB1mbWa.png",
-      "logoScale": 1.55,
+      "logoScale": 1.35,
       "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/351-Portuguese-Startup-Association-1.png"
     },
     {
