@@ -1,6 +1,6 @@
 (() => {
   const cfg = window.EUSE_CONFIG || {};
-  const state = { events: [], filtered: [], locations: {}, view: 'list', calendarCursor: startOfMonth(new Date()), source: 'snapshot', map: null, mapCollapsed: false };
+  const state = { events: [], filtered: [], locations: {}, organizations: [], view: 'list', calendarCursor: startOfMonth(new Date()), source: 'snapshot', map: null, mapCollapsed: false };
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => [...document.querySelectorAll(s)];
 
@@ -41,6 +41,10 @@
       const lr=await fetch('./public/locations.json',{cache:'no-store'});
       if(lr.ok){ const lj=await lr.json(); state.locations=lj.locations||{}; }
     } catch(err){ console.info('Location cache not available yet.'); }
+    try {
+      const or=await fetch('./public/organizations.json',{cache:'no-store'});
+      if(or.ok){ const oj=await or.json(); state.organizations=oj.organizations||[]; }
+    } catch(err){ console.info('Startup organisation dataset not available yet.'); }
     state.events=state.events.map(e=>{
       const hit=state.locations[`${e.city||''}|${e.country||''}`];
       return hit ? {...e,lat:hit.lat,lng:hit.lng} : e;
@@ -237,7 +241,39 @@
     $('#source-note').textContent=dateRangeLabel();
     const add=$('#add-selection');
     if(add) add.textContent=state.filtered.length===1?'Add this event to calendar':`Add ${state.filtered.length} events to calendar`;
-    syncUrl(); renderCurrent(); renderMap(); renderSelectionCalendar();
+    syncUrl(); renderCurrent(); renderMap(); renderSelectionCalendar(); renderOrganizations();
+  }
+
+  function renderOrganizations(){
+    const section=$('#support-orgs'), grid=$('#org-grid'), copy=$('#org-copy');
+    if(!section || !grid) return;
+    if(!state.organizations.length){ section.hidden=true; return; }
+
+    const country=$('#filter-country').value;
+    const visible=(country==='All'
+      ? state.organizations
+      : state.organizations.filter(o=>String(o.country||'').trim()===country)
+    ).slice().sort((a,b)=>
+      String(a.country||'').localeCompare(String(b.country||'')) ||
+      String(a.name||'').localeCompare(String(b.name||''))
+    );
+
+    if(!visible.length){ section.hidden=true; return; }
+    section.hidden=false;
+    copy.textContent=country==='All'
+      ? 'Please support your startup organisation:'
+      : `Please support your startup organisation in ${country}:`;
+
+    grid.innerHTML=visible.map(o=>{
+      const name=esc(o.name||'Startup organisation');
+      const countryLabel=esc(o.country||'');
+      const href=esc(o.url||'#');
+      const logo=o.logo ? `<img class="org-logo" src="${esc(o.logo)}" alt="${name} logo" loading="lazy">` : '';
+      return `<a class="org-card" href="${href}" target="_blank" rel="noopener">
+        <span class="org-logo-wrap">${logo || `<span class="org-wordmark">${name}</span>`}</span>
+        <span class="org-meta"><strong>${name}</strong><small>${countryLabel}</small></span>
+      </a>`;
+    }).join('');
   }
 
   function renderCurrent(){ if(state.view==='list') renderList(); if(state.view==='calendar') renderCalendar(); }
@@ -308,7 +344,16 @@
       const popup=new maplibregl.Popup({offset:18,maxWidth:'380px',closeButton:true}).setLngLat([group.lng,group.lat]).setHTML(`<div class="map-popup"><strong>${esc(location||'Mapped location')}</strong><ul class="map-popup-list">${items}</ul><button class="outline-button compact-button popup-filter" data-map-city="${esc(sample.city||'')}" data-map-country="${esc(sample.country||'')}">${showLabel}</button></div>`);
       const marker=document.createElement('button'); marker.className='map-count-marker'; marker.type='button'; marker.textContent=String(group.events.length); marker.setAttribute('aria-label',`${group.events.length} events in ${location}`);
       const mapMarker=new maplibregl.Marker({element:marker}).setLngLat([group.lng,group.lat]).addTo(state.map);
-      const open=()=>{ if(activePopup&&activePopup!==popup) activePopup.remove(); popup.addTo(state.map); activePopup=popup; };
+      const open=()=>{
+        if(activePopup&&activePopup!==popup) activePopup.remove();
+        popup.addTo(state.map);
+        activePopup=popup;
+        requestAnimationFrame(()=>{
+          const mapHeight=state.map?.getContainer()?.clientHeight||500;
+          const list=popup.getElement()?.querySelector('.map-popup-list');
+          if(list) list.style.maxHeight=`${Math.max(120,Math.min(300,mapHeight-175))}px`;
+        });
+      };
       marker.addEventListener('mouseenter',open); marker.addEventListener('focus',open); marker.addEventListener('click',open);
       mapMarker.setPopup(popup);
     });
