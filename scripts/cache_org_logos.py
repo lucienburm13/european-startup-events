@@ -20,7 +20,7 @@ session.headers.update({
 
 # Better/current sources for logos that were too small or were not present in the
 # old AfS/ESN member directories. Official-site discovery is tried before fallback.
-FALLBACK_OVERRIDES = {
+FORCE_SOURCES = {
     "Dutch Startup Association": [
         "https://d21buns5ku92am.cloudfront.net/69190/logo/retina-1606397307.png"
     ],
@@ -28,32 +28,28 @@ FALLBACK_OVERRIDES = {
         "https://res.cloudinary.com/startup-grind/image/upload/c_fill,dpr_2,f_auto,g_center,q_auto:good/v1/gcs/platform-data-startupgrind/events/351_UB1mbWa.png"
     ],
     "Italian Tech Alliance": [
-        "https://static.wixstatic.com/media/ffd03c_7b7b6559b2e44d3390c559e334d083cb~mv2.jpeg/v1/fill/w_1920,h_1080,al_c/ffd03c_7b7b6559b2e44d3390c559e334d083cb~mv2.jpeg"
+        "https://static.wixstatic.com/media/ffd03c_ab2150e8783c47d7b3ca561974169370~mv2.png"
     ],
     "Finnish Startup Community": [
-        "https://media.licdn.com/dms/image/sync/v2/D4D27AQEpliWa_AD5Ig/articleshare-shrink_800/articleshare-shrink_800/0/1741437759252?e=2147483647&t=3_DiR8LxwlSw69B5oRWwh0wUTcz2IG27C6Kfy6uhwMI&v=beta"
-    ],
-    "Roma Startup": [
-        "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=90,width=1000,height=1000/event-covers/99/ac747dfb-8c66-45ac-aadd-c22379c9ed11"
+        "https://startupyhteiso.com/wp-content/uploads/fsc-logo-w.svg"
     ],
     "PULSE - Luxembourg Startup Association": [
         "https://cdn.prod.website-files.com/66f2760c285e839111b37ed0/68acdae6d9b9320e0b28a9f6_News%2041.png"
     ],
     "Startup Portugal": [
-        "https://images.squarespace-cdn.com/content/v1/689b57bf3648515a7496d9e9/c7224310-75cc-4a53-a47d-9d8e8b08aacb/FE-23-startup-portugal-1024x768.png"
+        "https://startupportugal.com/wp-content/themes/start-up-portugal/dist/assets/logo.svg"
     ],
 }
 
+FALLBACK_OVERRIDES = {
+    "Roma Startup": [
+        "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=90,width=1000,height=1000/event-covers/99/ac747dfb-8c66-45ac-aadd-c22379c9ed11"
+    ],
+}
+
+
 DISCOVER_ON_OFFICIAL_SITE = {
     "Startup Cyprus",
-    "Estonian Founders Society",
-    "Finnish Startup Community",
-    "Roma Startup",
-    "PULSE - Luxembourg Startup Association",
-    "Startup Portugal",
-    "Italian Tech Alliance",
-    "Dutch Startup Association",
-    "351 Portuguese Startup Association",
 }
 
 def slugify(s):
@@ -112,8 +108,16 @@ def image_score(tag, abs_url, org_name):
     if "logo" in attrs: score += 80
     if "brand" in attrs: score += 30
     if "header" in attrs or "navbar" in attrs or "nav-" in attrs: score += 20
-    tokens = [t for t in re.findall(r"[a-z0-9]+", org_name.lower()) if len(t)>3 and t not in {"startup","association","community","society"}]
-    score += 12 * sum(t in attrs for t in tokens)
+    tokens = [t for t in re.findall(r"[a-z0-9]+", org_name.lower()) if len(t)>3 and t not in {"association","community","society"}]
+    score += 16 * sum(t in attrs for t in tokens)
+    parent = tag.parent
+    for _ in range(4):
+        if parent is None: break
+        parent_attrs = " ".join([parent.name or "", parent.get("id",""), " ".join(parent.get("class",[]))]).lower()
+        if "header" in parent_attrs or "nav" in parent_attrs:
+            score += 80
+            break
+        parent = parent.parent
     if any(x in attrs for x in ["partner","member-logo","sponsor","avatar","person","team","event"]): score -= 50
     if any(x in abs_url.lower() for x in [".svg",".png",".webp",".jpg",".jpeg"]): score += 8
     return score
@@ -140,13 +144,7 @@ def discover_official_logo(org):
             score = image_score(tag, abs_url, org["name"])
             if score > 15:
                 candidates.append((score, abs_url))
-        # Header/nav inline SVG is often the cleanest current wordmark.
         inline_svg = None
-        for parent in soup.find_all(["header","nav"]):
-            svg = parent.find("svg")
-            if svg and len(str(svg)) > 250:
-                inline_svg = str(svg)
-                break
         candidates.sort(reverse=True)
         return [u for _,u in candidates[:10]], inline_svg
     except Exception:
@@ -165,11 +163,12 @@ def main():
     for org in data["organizations"]:
         name = org["name"]
         old_logo = org.get("logo")
-        # Already local and present: keep it.
-        if old_logo and old_logo.startswith("./public/org-logos/") and (ROOT / "site" / old_logo[2:]).exists():
+        force_sources = FORCE_SOURCES.get(name, [])
+        # Already local and present: keep it unless this organisation has a forced better source.
+        if not force_sources and old_logo and old_logo.startswith("./public/org-logos/") and (ROOT / "site" / old_logo[2:]).exists():
             continue
 
-        candidates = []
+        candidates = list(force_sources)
         inline_svg = None
         if name in DISCOVER_ON_OFFICIAL_SITE:
             found, inline_svg = discover_official_logo(org)
@@ -196,6 +195,25 @@ def main():
                 if not got:
                     continue
                 final_url, ext, body = got
+                # Normalize known special cases for the monochrome site.
+                if name == "Finnish Startup Community" and ext == "svg":
+                    txt = body.decode("utf-8", "ignore")
+                    txt = re.sub(r"#fff(?:fff)?\b", "#111111", txt, flags=re.I)
+                    txt = re.sub(r"white\b", "#111111", txt, flags=re.I)
+                    body = txt.encode("utf-8")
+                if name == "PULSE - Luxembourg Startup Association" and ext in {"png","jpg","webp"}:
+                    try:
+                        im = Image.open(BytesIO(body)).convert("RGBA")
+                        w,h = im.size
+                        # Current source is a 512x512 press image: the clean PULSE logo sits in the lower white section.
+                        crop = (int(w*0.16), int(h*0.60), int(w*0.84), int(h*0.88))
+                        im = im.crop(crop)
+                        out = BytesIO()
+                        im.save(out, format="PNG", optimize=True)
+                        body = out.getvalue()
+                        ext = "png"
+                    except Exception:
+                        pass
                 filename = slugify(name) + "." + ext
                 (OUT_DIR / filename).write_bytes(body)
                 saved = "./public/org-logos/" + filename
@@ -203,7 +221,7 @@ def main():
                 break
 
         if saved:
-            org["logoOriginal"] = old_logo or source
+            org["logoOriginal"] = org.get("logoOriginal") or (old_logo if old_logo and old_logo.startswith("http") else source)
             org["logo"] = saved
             org["logoSource"] = source
             changed += 1
