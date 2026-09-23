@@ -57,6 +57,7 @@ SPECIAL_CROPS = {
 DISCOVER_ON_OFFICIAL_SITE = {
     "Startup Cyprus",
 }
+FORCE_REFRESH = {"Startup Cyprus"}
 
 def slugify(s):
     s = s.lower()
@@ -125,6 +126,7 @@ def image_score(tag, abs_url, org_name):
             break
         parent = parent.parent
     if any(x in attrs for x in ["partner","member-logo","sponsor","avatar","person","team","event"]): score -= 50
+    if "sg-logo" in attrs or "startupgrind" in attrs or "startup-grind" in attrs: score -= 160
     if any(x in abs_url.lower() for x in [".svg",".png",".webp",".jpg",".jpeg"]): score += 8
     return score
 
@@ -171,13 +173,15 @@ def main():
         old_logo = org.get("logo")
         force_sources = FORCE_SOURCES.get(name, [])
         # Already local and present: keep it unless this organisation has a forced better source.
-        if not force_sources and old_logo and old_logo.startswith("./public/org-logos/") and (ROOT / "site" / old_logo[2:]).exists():
+        if name not in FORCE_REFRESH and not force_sources and old_logo and old_logo.startswith("./public/org-logos/") and (ROOT / "site" / old_logo[2:]).exists():
             continue
 
         candidates = list(force_sources)
         inline_svg = None
         if name in DISCOVER_ON_OFFICIAL_SITE:
             found, inline_svg = discover_official_logo(org)
+            if name in FORCE_REFRESH:
+                print("DISCOVER", name, *found[:8], sep="\n  ")
             candidates.extend(found)
         candidates.extend(FALLBACK_OVERRIDES.get(name, []))
         if old_logo and old_logo.startswith("http"):
