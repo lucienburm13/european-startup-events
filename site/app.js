@@ -273,9 +273,23 @@
     if(!state.organizations.length){ section.hidden=true; return; }
 
     const country=$('#filter-country').value;
-    const visible=(country==='All'
-      ? state.organizations
-      : state.organizations.filter(o=>String(o.country||'').trim()===country)
+    const city=$('#filter-city').value;
+    let orgCountries=country==='All' ? [] : [country];
+
+    if(city!=='All'){
+      const cityCountries=[...new Set(
+        state.events
+          .filter(e=>String(e.city||'').trim()===city)
+          .flatMap(e=>countryTokens(e.country))
+          .filter(c=>c && !/^european union$/i.test(c))
+      )];
+      if(country==='All') orgCountries=cityCountries;
+      else orgCountries=cityCountries.includes(country)?[country]:orgCountries;
+    }
+
+    const visible=(orgCountries.length
+      ? state.organizations.filter(o=>orgCountries.includes(String(o.country||'').trim()))
+      : state.organizations
     ).slice().sort((a,b)=>
       String(a.country||'').localeCompare(String(b.country||'')) ||
       String(a.name||'').localeCompare(String(b.name||''))
@@ -283,15 +297,17 @@
 
     if(!visible.length){ section.hidden=true; return; }
     section.hidden=false;
-    copy.textContent=country==='All'
-      ? 'Please support your startup organisation:'
-      : `Please support your startup organisation in ${country}:`;
+    const scopeLabel=orgCountries.length===1?orgCountries[0]:'';
+    copy.textContent=scopeLabel
+      ? `Please support your startup organisation in ${scopeLabel}:`
+      : 'Please support your startup organisation:';
 
     grid.innerHTML=visible.map(o=>{
       const name=esc(o.name||'Startup organisation');
       const countryLabel=esc(o.country||'');
       const href=esc(o.url||'#');
-      const logo=o.logo ? `<img class="org-logo" src="${esc(o.logo)}" alt="${name} logo" loading="lazy">` : '';
+      const logoScale=Number(o.logoScale)||1;
+      const logo=o.logo ? `<img class="org-logo" style="--org-logo-scale:${logoScale}" src="${esc(o.logo)}" alt="${name} logo" loading="lazy">` : '';
       return `<a class="org-card" href="${href}" target="_blank" rel="noopener">
         <span class="org-logo-wrap">${logo || `<span class="org-wordmark">${name}</span>`}</span>
         <span class="org-meta"><strong>${name}</strong><small>${countryLabel}</small></span>
