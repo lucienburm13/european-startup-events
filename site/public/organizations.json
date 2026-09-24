@@ -53,7 +53,7 @@
       "country": "Czechia",
       "memberType": "Full",
       "url": "https://czechfounders.org/",
-      "logo": "./public/org-logos/czech-founders.jpg",
+      "logo": "./public/org-logos/czech-founders.png",
       "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/Czech-Founders.jpeg",
       "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/Czech-Founders.jpeg"
     },
@@ -189,7 +189,7 @@
       "country": "Italy",
       "memberType": "Full",
       "url": "https://romastartup.org/",
-      "logo": "./public/org-logos/roma-startup.jpg",
+      "logo": "./public/org-logos/roma-startup.png",
       "logoOriginal": "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=90,width=1000,height=1000/event-covers/99/ac747dfb-8c66-45ac-aadd-c22379c9ed11",
       "logoSource": "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=90,width=1000,height=1000/event-covers/99/ac747dfb-8c66-45ac-aadd-c22379c9ed11"
     },
