@@ -173,6 +173,26 @@ def write_inline_svg(org, svg):
     path.write_text(svg, encoding="utf-8")
     return "./public/org-logos/" + name, "inline SVG from official site"
 
+def raster_stats(path):
+    try:
+        im = Image.open(path).convert("RGBA")
+        w,h = im.size
+        px = im.load()
+        corners = [px[0,0],px[w-1,0],px[0,h-1],px[w-1,h-1]]
+        bg = tuple(sum(p[i] for p in corners)//4 for i in range(4))
+        xs=[]; ys=[]
+        step=max(1,min(w,h)//500)
+        for y in range(0,h,step):
+            for x in range(0,w,step):
+                p=px[x,y]
+                d=sum(abs(p[i]-bg[i]) for i in range(3)) + abs(p[3]-bg[3])
+                if d>70:
+                    xs.append(x); ys.append(y)
+        bbox=(min(xs),min(ys),max(xs)+1,max(ys)+1) if xs else None
+        return {"size":[w,h],"corner":bg,"content_bbox":bbox}
+    except Exception as e:
+        return {"error":str(e)}
+
 def main():
     data = json.loads(ORG_FILE.read_text(encoding="utf-8"))
     failed = []
@@ -262,6 +282,9 @@ def main():
             failed.append(name)
             print(f"MISS {name}")
 
+    for check in ["czech-founders.jpg","roma-startup.jpg","dutch-startup-association.png","351-portuguese-startup-association.png","pulse-luxembourg-startup-association.png"]:
+        p=OUT_DIR/check
+        if p.exists(): print("ASSETSTAT", check, raster_stats(p))
     data["count"] = len(data["organizations"])
     data["logoCacheUpdatedAt"] = "2026-09-23"
     ORG_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
