@@ -127,7 +127,10 @@
     if([...sel.options].some(o=>o.value===current)) sel.value=current;
   }
 
-  const HUB_PRIORITY=['Amsterdam','Berlin','Paris','London','Lisbon','Barcelona','Stockholm','Dublin','Helsinki','Munich','Brussels','Copenhagen','Vienna','Warsaw','Madrid','Milan','Rome','Tallinn','Vilnius','Riga','Prague','Athens'];
+  // Curated European startup/tech hubs, displayed alphabetically so chip order
+  // does not imply a ranking. Includes the established Dealroom hub set plus
+  // relevant regional hubs and Brussels as the policy-hub exception.
+  const HUB_PRIORITY=['Amsterdam','Athens','Barcelona','Berlin','Brussels','Cambridge','Copenhagen','Dublin','Helsinki','Istanbul','Lisbon','London','Madrid','Milan','Munich','Oslo','Oxford','Paris','Prague','Riga','Rome','Stockholm','Tallinn','Vienna','Vilnius','Warsaw','Zurich'];
 
   function cityBaseEvents(){
     const period=$('#filter-period').value;
