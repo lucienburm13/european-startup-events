@@ -191,8 +191,10 @@
   function periodMatch(e,period){
     const start=parseYmd(e.start), end=parseYmd(e.end||e.start); if(!start||!end) return false;
     const today=new Date(); today.setHours(0,0,0,0);
-    if(period==='upcoming') return end>=today;
-    if(period==='thisYear'){ const to=new Date(today.getFullYear(),11,31); return end>=today && start<=to; }
+    // Forward-looking views start with events whose START date is today or later.
+    // Do not keep multi-day events that began before today in the default/upcoming lists.
+    if(period==='upcoming') return start>=today;
+    if(period==='thisYear'){ const to=new Date(today.getFullYear(),11,31); return start>=today && start<=to; }
     if(period==='nextYear'){ const y=today.getFullYear()+1, from=new Date(y,0,1), to=new Date(y,11,31); return end>=from && start<=to; }
     if(period==='past90'){ const from=addDays(today,-90), to=addDays(today,-1); return end>=from && start<=to; }
     if(period==='custom'){
@@ -203,7 +205,7 @@
       return Boolean(from||to);
     }
     const max=addDays(today,Number(period));
-    return end>=today && start<=max;
+    return start>=today && start<=max;
   }
 
   function toggleCustomDates(){
