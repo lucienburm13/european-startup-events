@@ -24,6 +24,9 @@ FORCE_SOURCES = {
     "Czech Founders": [
         "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/Czech-Founders.jpeg"
     ],
+    "Roma Startup": [
+        "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=90,width=1000,height=1000/event-covers/99/ac747dfb-8c66-45ac-aadd-c22379c9ed11"
+    ],
     "Dutch Startup Association": [
         "https://d21buns5ku92am.cloudfront.net/69190/logo/retina-1606397307.png"
     ],
@@ -101,6 +104,51 @@ def validate_image(ext, body):
         return w >= 80 and h >= 40
     except Exception:
         return False
+
+def normalize_selected_raster(name, ext, body):
+    if ext not in {"png","jpg","webp"}:
+        return ext, body
+    try:
+        im = Image.open(BytesIO(body)).convert("RGBA")
+        w,h = im.size
+
+        if name == "Dutch Startup Association":
+            # Newsroom PNG is a white mark on transparency; make it black.
+            im.putdata([(0,0,0,a) if a else (0,0,0,0) for r,g,b,a in im.getdata()])
+
+        if name == "PULSE - Luxembourg Startup Association":
+            # Remove the neutral light background from the cropped press wordmark.
+            cleaned=[]
+            for r,g,b,a in im.getdata():
+                if a and (max(r,g,b)-min(r,g,b)) < 14 and min(r,g,b) > 150:
+                    cleaned.append((255,255,255,0))
+                else:
+                    cleaned.append((r,g,b,a))
+            im.putdata(cleaned)
+
+        if name in {"Czech Founders","Roma Startup","351 Portuguese Startup Association","Dutch Startup Association","PULSE - Luxembourg Startup Association"}:
+            # Tight visual bounds, retaining 4% breathing room.
+            if name in {"Dutch Startup Association","PULSE - Luxembourg Startup Association"}:
+                mask=im.getchannel("A")
+            else:
+                mask=Image.new("L", im.size, 0)
+                mp=mask.load(); ip=im.load()
+                for y in range(im.height):
+                    for x in range(im.width):
+                        r,g,b,a=ip[x,y]
+                        if a > 20 and min(r,g,b) < 242:
+                            mp[x,y]=255
+            bbox=mask.getbbox()
+            if bbox:
+                l,t,r,b=bbox
+                pad=max(4, int(max(r-l,b-t)*0.04))
+                im=im.crop((max(0,l-pad),max(0,t-pad),min(im.width,r+pad),min(im.height,b+pad)))
+
+        out=BytesIO()
+        im.save(out, format="PNG", optimize=True)
+        return "png", out.getvalue()
+    except Exception:
+        return ext, body
 
 def fetch_image(url):
     try:
@@ -240,19 +288,6 @@ def main():
                     txt = re.sub(r"#fff(?:fff)?\b", "#111111", txt, flags=re.I)
                     txt = re.sub(r"white\b", "#111111", txt, flags=re.I)
                     body = txt.encode("utf-8")
-                if name == "PULSE - Luxembourg Startup Association" and ext in {"png","jpg","webp"}:
-                    try:
-                        im = Image.open(BytesIO(body)).convert("RGBA")
-                        w,h = im.size
-                        # Current source is a 512x512 press image: the clean PULSE logo sits in the lower white section.
-                        crop = (int(w*0.16), int(h*0.60), int(w*0.84), int(h*0.88))
-                        im = im.crop(crop)
-                        out = BytesIO()
-                        im.save(out, format="PNG", optimize=True)
-                        body = out.getvalue()
-                        ext = "png"
-                    except Exception:
-                        pass
                 filename = slugify(name) + "." + ext
                 if name in SPECIAL_CROPS and ext != "svg":
                     try:
@@ -267,6 +302,8 @@ def main():
                         filename=slugify(name)+".png"
                     except Exception:
                         pass
+                ext, body = normalize_selected_raster(name, ext, body)
+                filename = slugify(name) + "." + ext
                 (OUT_DIR / filename).write_bytes(body)
                 saved = "./public/org-logos/" + filename
                 source = final_url
