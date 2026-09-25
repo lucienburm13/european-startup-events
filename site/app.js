@@ -580,7 +580,7 @@
   }
 
   function setup(){
-    $('[data-scroll-strip]').forEach(button=>button.addEventListener('click',()=>{
+    $$('[data-scroll-strip]').forEach(button=>button.addEventListener('click',()=>{
       const track=document.getElementById(button.dataset.scrollStrip);
       if(!track || track.hidden) return;
       track.scrollBy({left:Number(button.dataset.direction||1)*Math.max(180,track.clientWidth*.72),behavior:'smooth'});
