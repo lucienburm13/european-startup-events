@@ -398,7 +398,7 @@
     mappable.forEach(e=>{ const lat=Number(e.lat), lng=Number(e.lng), key=`${lat.toFixed(5)}|${lng.toFixed(5)}`; if(!groups.has(key)) groups.set(key,{lat,lng,events:[]}); groups.get(key).events.push(e); });
     const missing=state.filtered.length-mappable.length;
     el.innerHTML=`<div class="map-meta"><span><strong>${mappable.length}</strong> mapped event${mappable.length===1?'':'s'} at <strong>${groups.size}</strong> location${groups.size===1?'':'s'}.</span>${missing?`<span>${missing} event${missing===1?' is':'s are'} not mapped yet.</span>`:''}</div><div class="event-map-wrap"><div id="event-map" class="event-map" aria-label="Map of filtered events"></div><aside id="map-popup-panel" class="map-popup-panel" hidden aria-live="polite"></aside></div>`;
-    state.map=new maplibregl.Map({container:'event-map',style:cfg.mapStyleUrl||'https://tiles.openfreemap.org/styles/liberty',center:[10,50],zoom:3,scrollZoom:false,cooperativeGestures:true,dragRotate:false,touchPitch:false});
+    state.map=new maplibregl.Map({container:'event-map',style:cfg.mapStyleUrl||'https://tiles.openfreemap.org/styles/liberty',center:[10,50],zoom:3,scrollZoom:false,cooperativeGestures:true,dragRotate:false,touchPitch:false,touchZoomRotate:!window.matchMedia('(pointer: coarse)').matches});
     state.map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-right');
     const bounds=new maplibregl.LngLatBounds();
     groups.forEach(group=>{
@@ -580,6 +580,11 @@
   }
 
   function setup(){
+    $('[data-scroll-strip]').forEach(button=>button.addEventListener('click',()=>{
+      const track=document.getElementById(button.dataset.scrollStrip);
+      if(!track || track.hidden) return;
+      track.scrollBy({left:Number(button.dataset.direction||1)*Math.max(180,track.clientWidth*.72),behavior:'smooth'});
+    }));
     ['#filter-calendar','#filter-format','#filter-country','#filter-city'].forEach(s=>$(s).addEventListener('change',()=>{ state.listPage=1; applyFilters(); }));
     $('#filter-period').addEventListener('change',()=>{ state.listPage=1; toggleCustomDates(); applyFilters(); });
     ['#filter-from','#filter-to'].forEach(s=>$(s).addEventListener('change',()=>{ state.listPage=1; applyFilters(); }));
