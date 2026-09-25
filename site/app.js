@@ -393,7 +393,7 @@
     el.hidden=false;
     const mappable=state.filtered.filter(e=>Number.isFinite(Number(e.lat))&&Number.isFinite(Number(e.lng)));
     if(!mappable.length){ el.innerHTML=`<div class="map-shell"><div><h2>No mapped locations in this selection.</h2><p>${state.filtered.length} events match the current filters.</p></div></div>`; return; }
-    if(!window.maplibregl || !maplibregl.supported()){ el.innerHTML='<div class="map-shell"><div><h2>Map unavailable in this browser.</h2><p>Use the list or calendar to explore the events.</p></div></div>'; return; }
+    if(!window.maplibregl){ el.innerHTML='<div class="map-shell"><div><h2>Map library unavailable.</h2><p>The list and calendar remain available.</p></div></div>'; return; }
     const groups=new Map();
     mappable.forEach(e=>{ const lat=Number(e.lat), lng=Number(e.lng), key=`${lat.toFixed(5)}|${lng.toFixed(5)}`; if(!groups.has(key)) groups.set(key,{lat,lng,events:[]}); groups.get(key).events.push(e); });
     const missing=state.filtered.length-mappable.length;
