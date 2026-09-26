@@ -104,7 +104,7 @@ function loadDesiredEvents_() {
   required.forEach(h => { if (idx[h] === undefined) throw new Error('Missing required header: ' + h); });
   const tz = ss.getSpreadsheetTimeZone() || Session.getScriptTimeZone();
   const seenIds = new Set();
-  const desired = {Main: [], Additional: [], Policy: []};
+  const desired = Object.fromEntries(Object.keys(CONFIG.calendars).map(name => [name, []]));
   const canonical = [];
   for (let r=1; r<values.length; r++) {
     const row = values[r];
@@ -138,7 +138,7 @@ function loadDesiredEvents_() {
 }
 
 function loadManagedEvents_() {
-  const result = {Main: [], Additional: [], Policy: []};
+  const result = Object.fromEntries(Object.keys(CONFIG.calendars).map(name => [name, []]));
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth(), now.getDate()-CONFIG.scanPastDays);
   const end = new Date(now.getFullYear(), now.getMonth(), now.getDate()+CONFIG.scanFutureDays);
@@ -258,6 +258,8 @@ function buildLocation_(row,idx) {
 
 function buildDescription_(row,idx,masterId) {
   const lines=['European Startup Events',`Master ID: ${masterId}`,`Status: ${String(row[idx['Status']]||'').trim()}`,`Official source: ${String(row[idx['Official source']]||'').trim()}`,`Last verified: ${displayDate_(row[idx['Last verified']])}`];
+  const hostedBy=idx['Hosted by'] === undefined ? '' : String(row[idx['Hosted by']]||'').trim();
+  if (hostedBy) lines.push(`Hosted by: ${hostedBy}`);
   const notes=String(row[idx['Notes / issue']]||'').trim(); if (notes) lines.push(`Notes: ${notes}`);
   return lines.join('\n');
 }
