@@ -8,7 +8,7 @@ Dependency-light public frontend for the European Startup Events master calendar
 - `public/events.json` is a generated snapshot used until the read-only Apps Script web API is deployed.
 - `config.js` can switch the frontend to the live API without changing the UI.
 - Event submissions go to a separate `Submissions` queue and never publish directly.
-- Existing Main / Additional / Policy Google Calendars remain the subscription layer.
+- Main / Additional / Policy / Ecosystem Google Calendars are the subscription layer.
 
 ## Frontend
 
