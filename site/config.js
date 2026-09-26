@@ -5,7 +5,8 @@ window.EUSE_CONFIG = {
   calendars: {
     Main: { id: 'c_18d218cb371b633929609184a8b57308cb51dd4b664f3bd5b5a282388328583d@group.calendar.google.com' },
     Additional: { id: 'c_3d54144f81b5b17d5552e6efa3ea606aca5b435081337122bcb1000dc57d9f04@group.calendar.google.com' },
-    Policy: { id: 'c_fe229d185c2798b6db19a30d8e60366ea24bd4fda9dbe1b8b9c6182ba9f84885@group.calendar.google.com' }
+    Policy: { id: 'c_fe229d185c2798b6db19a30d8e60366ea24bd4fda9dbe1b8b9c6182ba9f84885@group.calendar.google.com' },
+    Ecosystem: { id: 'c_31fd74e3ad9f6cc74c771e1ed4a5276d9e07f31a2d35e1f7ac585e4ebfc91eb0@group.calendar.google.com' }
   },
   stack: {
     version: '0.4',
