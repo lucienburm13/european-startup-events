@@ -6,7 +6,7 @@
   <meta name="description" content="European tech, business and policy calendar.">
   <title>European Startup Events</title>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
-  <link rel="stylesheet" href="./styles.css?v=20260925-strips1">
+  <link rel="stylesheet" href="./styles.css?v=20260926-strips2">
 </head>
 <body>
   <header class="site-header">
@@ -34,7 +34,7 @@
 
     <section class="filters" aria-label="Event filters">
       <div class="strip-row filter-strip-row">
-        <button class="strip-arrow strip-arrow-left" type="button" data-scroll-strip="filter-track" data-direction="-1" aria-label="Previous filters">‹</button>
+        <button class="strip-arrow strip-arrow-left" type="button" data-scroll-strip="filter-track" data-direction="-1" aria-label="Previous filters" hidden>‹</button>
         <div class="filter-track" id="filter-track">
           <label><span>Period</span><select id="filter-period"><option value="30" selected>Next 30 days</option><option value="90">Next 90 days</option><option value="thisYear">Rest of year</option><option value="nextYear">Next year</option><option value="past90">Past 90 days</option><option value="upcoming">All upcoming</option><option value="custom">Custom dates…</option></select></label>
           <label><span>Type</span><select id="filter-calendar"><option value="All">All events</option></select></label>
@@ -43,12 +43,12 @@
           <label><span>City</span><select id="filter-city"><option value="All">All cities</option></select></label>
           <label class="search-label"><span>Search</span><input id="filter-search" placeholder="AI, fintech, investor…"></label>
         </div>
-        <button class="strip-arrow strip-arrow-right" type="button" data-scroll-strip="filter-track" data-direction="1" aria-label="Next filters">›</button>
+        <button class="strip-arrow strip-arrow-right" type="button" data-scroll-strip="filter-track" data-direction="1" aria-label="Next filters" hidden>›</button>
       </div>
       <div class="strip-row hub-strip-row">
-        <button class="strip-arrow strip-arrow-left" type="button" data-scroll-strip="hub-cities" data-direction="-1" aria-label="Previous hubs">‹</button>
+        <button class="strip-arrow strip-arrow-left" type="button" data-scroll-strip="hub-cities" data-direction="-1" aria-label="Previous hubs" hidden>‹</button>
         <div class="hub-cities" id="hub-cities" hidden></div>
-        <button class="strip-arrow strip-arrow-right" type="button" data-scroll-strip="hub-cities" data-direction="1" aria-label="Next hubs">›</button>
+        <button class="strip-arrow strip-arrow-right" type="button" data-scroll-strip="hub-cities" data-direction="1" aria-label="Next hubs" hidden>›</button>
       </div>
       <div class="custom-dates" id="custom-dates" hidden>
         <label><span>From</span><input id="filter-from" type="date"></label>
@@ -141,6 +141,6 @@
 
   <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
   <script src="./config.js?v=20260923-3"></script>
-  <script src="./app.js?v=20260926-restore4"></script>
+  <script src="./app.js?v=20260926-strips2"></script>
 </body>
 </html>
