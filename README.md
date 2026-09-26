@@ -10,6 +10,7 @@ Public calendar infrastructure for a curated European startup / tech / policy ev
 - weekly Policy sweep
 - weekly Main + Additional delta sweep
 - monthly deep sweep: country/hub + sector + ecosystem/VC + omission audit
+- submission feedback: [source aliases and recurring discovery leads](docs/discovery-feedback-loop.md)
 
 **Publishing path:**
 1. sweeps update the master Sheet only;
