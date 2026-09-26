@@ -5,7 +5,8 @@ const CONFIG = {
   calendars: {
     Main: 'c_18d218cb371b633929609184a8b57308cb51dd4b664f3bd5b5a282388328583d@group.calendar.google.com',
     Additional: 'c_3d54144f81b5b17d5552e6efa3ea606aca5b435081337122bcb1000dc57d9f04@group.calendar.google.com',
-    Policy: 'c_fe229d185c2798b6db19a30d8e60366ea24bd4fda9dbe1b8b9c6182ba9f84885@group.calendar.google.com'
+    Policy: 'c_fe229d185c2798b6db19a30d8e60366ea24bd4fda9dbe1b8b9c6182ba9f84885@group.calendar.google.com',
+    Ecosystem: 'c_31fd74e3ad9f6cc74c771e1ed4a5276d9e07f31a2d35e1f7ac585e4ebfc91eb0@group.calendar.google.com'
   },
   managedBy: 'euse-v2',
   scanPastDays: 365,
@@ -258,8 +259,8 @@ function buildLocation_(row,idx) {
 
 function buildDescription_(row,idx,masterId) {
   const lines=['European Startup Events',`Master ID: ${masterId}`,`Status: ${String(row[idx['Status']]||'').trim()}`,`Official source: ${String(row[idx['Official source']]||'').trim()}`,`Last verified: ${displayDate_(row[idx['Last verified']])}`];
-  const hostedBy=idx['Hosted by'] === undefined ? '' : String(row[idx['Hosted by']]||'').trim();
-  if (hostedBy) lines.push(`Hosted by: ${hostedBy}`);
+  const organisedBy=idx['Organised by'] === undefined ? '' : String(row[idx['Organised by']]||'').trim();
+  if (organisedBy) lines.push(`Organised by: ${organisedBy}`);
   const notes=String(row[idx['Notes / issue']]||'').trim(); if (notes) lines.push(`Notes: ${notes}`);
   return lines.join('\n');
 }
