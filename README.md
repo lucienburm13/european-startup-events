@@ -10,10 +10,11 @@ Public calendar infrastructure for a curated European startup / tech / policy ev
 - weekly Policy sweep
 - weekly Main + Additional delta sweep
 - monthly deep sweep: country/hub + sector + ecosystem/VC + omission audit
+- submission feedback: [source aliases and recurring discovery leads](docs/discovery-feedback-loop.md)
 
 **Publishing path:**
 1. sweeps update the master Sheet only;
-2. a daily Google Apps Script reconciles the Sheet with three native Google Calendars;
+2. a daily Google Apps Script reconciles the Sheet with the native Google Calendars;
 3. those Google Calendars are the primary public subscription layer;
 4. Google users subscribe directly to the calendars; Apple / Outlook users subscribe to the Google calendars' public iCal URLs;
 5. GitHub ICS files remain an open fallback/export, not the primary sync path.
@@ -23,6 +24,13 @@ Public calendar infrastructure for a curated European startup / tech / policy ev
 - European Startup Events - Main
 - European Startup Events - Additional
 - European Startup Events - Policy
+- European Startup Events - Ecosystem
+
+### Ecosystem events
+
+`Ecosystem` is the fourth editorial calendar for substantive European startup ecosystem events run by a startup/scaleup, investor, corporate or ecosystem organisation. `Organised by` records the organiser type (`Startup`, `Scaleup`, `Investor`, `Corporate`, `Ecosystem`); it is not a sponsorship or paid-placement flag. An event belongs in one calendar only. Main, Additional and Policy keep their existing meaning until individual events are reviewed for a move.
+
+The submission review queue and master `Events` sheet have `Organised by`. The website and export pipeline carry `organisedBy`. The new calendar ID is configured in `apps-script/Code.gs` and `site/config.js`. Before publishing Ecosystem events, confirm the new calendar's public access, deploy the matching Apps Script files to the live script project, run `previewSync()` and inspect the plan. The public site shows Ecosystem in its type filter only after a verified Ecosystem event enters the feed.
 
 All normal entries are transparent and all-day. `CONFIRMED` titles are clean; `TBC`, `CONFLICT`, `POSTPONED`, and `CANCELLED` may carry explicit prefixes according to the master rules.
 

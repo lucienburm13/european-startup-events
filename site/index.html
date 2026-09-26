@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="European tech, business and policy calendar.">
+  <title>European Startup Events</title>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="./styles.css?v=20260926-ribbons2">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top">European Startup Events</a>
+    <div class="header-actions">
+      <button class="outline-button" data-open="calendar-help">Subscribe to calendars</button>
+      <button class="solid-button" id="submit-top">Submit an event</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <p class="eyebrow">ALL THE GO-TO STARTUP EVENTS IN EUROPE</p>
+      <h1>European Tech,<br>Business &amp; Policy Calendar.</h1>
+      <p class="hero-copy">One curated source for founders, investors, ecosystem builders and policymakers. Verified links, visible uncertainty, no pay-to-play rankings.</p>
+    </section>
+
+    <section class="map-panel" id="map-panel">
+      <div class="map-panel-head">
+        <div><p class="eyebrow">EXPLORE EUROPE</p><h2>Where it’s happening.</h2></div>
+        <button class="outline-button compact-button" id="toggle-map" aria-expanded="true">Hide map</button>
+      </div>
+      <div id="view-map"></div>
+    </section>
+
+    <section class="filters" aria-label="Event filters">
+      <div class="strip-row filter-strip-row">
+        <div class="filter-track" id="filter-track">
+          <label><span>Period</span><select id="filter-period"><option value="30" selected>Next 30 days</option><option value="90">Next 90 days</option><option value="thisYear">Rest of year</option><option value="nextYear">Next year</option><option value="past90">Past 90 days</option><option value="upcoming">All upcoming</option><option value="custom">Custom dates…</option></select></label>
+          <label><span>Type</span><select id="filter-calendar"><option value="All">All events</option></select></label>
+          <label><span>Format</span><select id="filter-format"><option value="All">All formats</option><option value="In-person">In-person</option><option value="Online">Online</option><option value="Hybrid">Hybrid</option></select></label>
+          <label><span>Country</span><select id="filter-country"><option value="All">All countries</option></select></label>
+          <label><span>City</span><select id="filter-city"><option value="All">All cities</option></select></label>
+          <label class="search-label"><span>Search</span><input id="filter-search" placeholder="AI, fintech, investor…"></label>
+        </div>
+        <div class="strip-progress" role="scrollbar" tabindex="-1" aria-controls="filter-track" aria-label="Scroll event filters" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden><span></span></div>
+      </div>
+      <div class="strip-row hub-strip-row">
+        <div class="hub-cities" id="hub-cities" hidden></div>
+        <div class="strip-progress" role="scrollbar" tabindex="-1" aria-controls="hub-cities" aria-label="Scroll cities" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden><span></span></div>
+      </div>
+      <div class="custom-dates" id="custom-dates" hidden>
+        <label><span>From</span><input id="filter-from" type="date"></label>
+        <label><span>To</span><input id="filter-to" type="date"></label>
+      </div>
+    </section>
+
+    <section class="results-head">
+      <div><strong id="result-count">Loading…</strong><button class="source-note source-date-button" id="source-note" type="button" title="Change date range"></button></div>
+      <div class="results-actions">
+        <button class="outline-button compact-button" id="add-selection">Add events to calendar</button>
+        <div class="view-tabs" role="tablist" aria-label="View"><button class="active" data-view="list">List</button><button data-view="calendar">Calendar</button></div>
+      </div>
+    </section>
+
+    <section id="view-list"></section>
+    <section id="view-calendar" hidden></section>
+
+    <section class="submission" id="submit">
+      <div><p class="eyebrow">MISSING SOMETHING?</p><h2>Submit an event.</h2><p>Start with the official event page. We check for duplicates, relevance and fit before anything enters the public calendar.</p></div>
+      <div class="submission-card">
+        <label><span>Official event or programme URL</span><input id="submission-url" type="url" placeholder="https://…"></label>
+        <button class="solid-button" id="submit-card">Check &amp; submit</button>
+        <small>An official public URL is required. Submission does not guarantee publication.</small>
+      </div>
+    </section>\n\n    <section class="support-orgs" id="support-orgs" hidden>
+      <p class="eyebrow">STARTUP ORGANISATIONS</p>
+      <h2 id="org-copy">Please support your startup organisation:</h2>
+      <div class="org-grid" id="org-grid"></div>
+    </section>
+
+
+  </main>
+
+  <footer>
+    <div><strong>European Startup Events</strong><p>Built to make the European ecosystem easier to navigate.</p></div>
+    <button class="stack-badge" data-open="stack" aria-label="Open European Stack Index">
+      <span class="stack-badge-title">🇪🇺 EU stack</span>
+      <span class="stack-badge-metrics"><strong id="stack-eu-footer">—</strong><span>EU</span><strong id="stack-open-footer">—</strong><span>Open Source</span></span>
+    </button>
+  </footer>
+
+  <div class="modal-backdrop" id="modal-calendar-help" hidden>
+    <div class="modal">
+      <div class="modal-head"><h2>Add to your calendar</h2><button data-close>×</button></div>
+      <p>Your current filters can be downloaded as a one-time calendar file. Live subscriptions keep updating automatically.</p>
+      <div id="calendar-selection"></div>
+      <h3 class="modal-subhead">Live subscriptions</h3>
+      <div id="calendar-options"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-stack" hidden>
+    <div class="modal">
+      <div class="modal-head"><h2 id="stack-title">European Stack Index</h2><button data-close>×</button></div>
+      <p>A simple view of how European and open the website stack is. Production and maintenance tools are shown separately.</p>
+      <div id="stack-table"></div>
+      <small>EuroStack-inspired, not an official EuroStack score. This looks at the application layer, not chips or underlying physical infrastructure.</small>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-event-calendar" hidden>
+    <div class="modal event-detail-modal">
+      <div class="modal-head"><h2 id="event-calendar-title">Event details</h2><button data-close>×</button></div>
+      <p class="event-detail-meta" id="event-calendar-meta"></p>
+      <div class="event-detail-badges" id="event-calendar-badges"></div>
+      <p class="event-detail-notes" id="event-calendar-notes" hidden></p>
+      <div class="event-detail-links">
+        <a id="event-source-link" target="_blank" rel="noopener">Official source ↗</a>
+        <span id="event-verified"></span>
+      </div>
+      <div class="event-calendar-actions"><a class="solid-button" id="event-google-link" target="_blank" rel="noopener">Add to Google Calendar</a><button class="outline-button" id="event-ics-download">Download .ics</button></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-submit" hidden>
+    <div class="modal">
+      <div class="modal-head"><h2>Submit an event</h2><button data-close>×</button></div>
+      <p id="submit-intro">Paste the official public event page. We check for duplicates first; every submission is then reviewed for relevance and fit.</p>
+      <form id="submit-form" class="submit-form">
+        <label>Official event or programme URL<input id="submit-url-full" name="url" type="url" required placeholder="https://…"></label>
+        <button class="solid-button" type="submit">Check &amp; submit</button>
+        <div class="submit-status" id="submit-status"></div>
+      </form>
+      <div id="tally-submit-wrap" class="tally-submit-wrap" hidden>
+        <iframe id="tally-submit-frame" class="tally-submit-frame" title="Submit event for review" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+  <script src="./config.js?v=20260926-ecosystem"></script>
+  <script src="./app.js?v=20260926-feedback"></script>
+</body>
+</html>

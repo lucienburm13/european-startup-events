@@ -1,0 +1,71 @@
+name: Sync website snapshot
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
+  push:
+    branches: [site-v0.1, main]
+    paths:
+      - 'scripts/sync_events.py'
+      - '.github/workflows/sync-events.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: website-snapshot-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'schedule' && github.event.repository.default_branch || github.ref_name }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Fetch and validate master snapshot
+        env:
+          EVENTS_FEED_URL: https://script.google.com/macros/s/AKfycbzPSI7JSCMb2V9-bVpcvQHMUWTZ4ePLMuDf6VJDvk5TKiTvutHRczC24-C5PmG2SHFSRw/exec
+        run: python scripts/sync_events.py
+
+      - name: Refresh derived map locations
+        run: python scripts/geocode_locations.py
+
+      - name: Validate generated data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          events = json.loads(Path('site/public/events.json').read_text())
+          rows = events.get('events', [])
+          ids = [str(e.get('id','')) for e in rows]
+          assert rows, 'events snapshot is empty'
+          assert len(ids) == len(set(ids)), 'duplicate event IDs in snapshot'
+          assert all(e.get('start') for e in rows), 'published event without start date'
+
+          locations = json.loads(Path('site/public/locations.json').read_text())
+          assert isinstance(locations.get('locations', {}), dict), 'locations cache malformed'
+          print(f"events={len(rows)} locations={len(locations.get('locations', {}))}")
+          PY
+
+      - name: Commit snapshot if changed
+        run: |
+          git add site/public/events.json site/public/locations.json
+          if git diff --cached --quiet; then
+            echo "Master already matches website snapshot"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Sync website snapshot from master"
+          TARGET_BRANCH="${{ github.event_name == 'schedule' && github.event.repository.default_branch || github.ref_name }}"
+          git fetch origin "$TARGET_BRANCH"
+          git rebase "origin/$TARGET_BRANCH"
+          git push origin "HEAD:$TARGET_BRANCH"
