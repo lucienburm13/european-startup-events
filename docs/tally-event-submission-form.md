@@ -61,6 +61,8 @@ Recommended internal columns:
 - `Suggested country`
 - `Suggested organiser`
 - `Duplicate / series match`
+- `Matched Master ID` — required for a human `DUPLICATE` decision
+- `Sweep cue` — a related series, organiser, topic or comparable event to research later
 - `Human decision`
 - `Master ID`
 
@@ -77,6 +79,7 @@ The human reviewer then sets `Decision` to:
 - `APPROVE` — publish the reviewed proposal to `Events`
 - `REJECT` — do not publish
 - `HOLD` — keep pending
+- `DUPLICATE` — link an alternative URL to an existing Master ID; do not add another event
 
 Additional proposed-publication fields:
 - `Proposed start date`
@@ -88,4 +91,6 @@ Additional proposed-publication fields:
 - `Proposed official source`
 - `Proposed full address`
 
-An installable Apps Script on-edit trigger handles only a human edit of `Decision` to `APPROVE`. It validates required fields, blocks likely duplicates, assigns the next numeric Master ID, appends the event to `Events`, and writes the new Master ID back to the submission. It never auto-approves or changes the human decision.
+An installable Apps Script on-edit trigger handles a human edit of `Decision` to `APPROVE` or `DUPLICATE`. For `APPROVE`, it validates required fields, blocks likely duplicates, assigns the next numeric Master ID, appends the event to `Events`, and writes the new Master ID back to the submission. It never auto-approves or changes the human decision.
+
+A human `DUPLICATE` decision with `Matched Master ID` records the alternative URL in `Event Sources` and an ongoing search cue in `Discovery Leads`. `APPROVE` also adds discovery cues after the event is published. See [the feedback loop](discovery-feedback-loop.md). The live Apps Script project must contain the current `SubmissionApproval.gs` for these actions; editing the GitHub source alone does not install it.
