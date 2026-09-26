@@ -179,9 +179,9 @@
     const selected=$('#filter-city').value;
     el.hidden=false;
     el.parentElement.hidden=false;
-    el.innerHTML=available.map(({city,count})=>`<button type="button" class="hub-chip ${selected===city?'active':''}" data-hub-city="${esc(city)}">${esc(city)} <small>${count}</small></button>`).join('');
+    el.innerHTML=available.map(({city,count})=>`<button type="button" class="hub-chip ${selected===city?'active':''}" data-hub-city="${esc(city)}" aria-pressed="${selected===city}">${esc(city)} <small>${count}</small></button>`).join('');
     $$('[data-hub-city]').forEach(b=>b.onclick=()=>{
-      $('#filter-city').value=b.dataset.hubCity;
+      $('#filter-city').value=$('#filter-city').value===b.dataset.hubCity?'All':b.dataset.hubCity;
       state.listPage=1;
       applyFilters();
     });
