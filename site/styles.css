@@ -72,3 +72,29 @@
 .event-detail-links{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:12px 0 18px;font-size:12px;border-top:1px solid var(--line)}
 .event-detail-links span{color:var(--muted)}
 @media(max-width:650px){.list-pagination{justify-content:space-between;gap:8px}.list-pagination span{font-size:11px}.event-detail-links{align-items:flex-start;flex-direction:column}}
+
+/* Filters sit in a measured grid on wide screens. Narrow screens reveal the rest by swiping. */
+.strip-row{position:relative;display:block}
+.strip-arrow[hidden]{display:none!important}
+.filter-track{display:grid;grid-template-columns:1fr 1fr .95fr 1.1fr 1.1fr 1.55fr;gap:10px;overflow:visible;padding:0;scroll-snap-type:none}
+.filter-track label:nth-child(n),.filter-track .search-label{width:auto;min-width:0}
+.filter-track label{font-size:12px}
+.filter-track select,.filter-track input{min-height:40px}
+.hub-cities{flex-wrap:wrap;overflow:visible;gap:7px;padding:2px 0;scroll-snap-type:none}
+.hub-strip-row{margin-top:12px}
+.strip-arrow{display:none}
+.custom-dates{margin-left:0}
+@media(max-width:800px){
+  .filter-track,.hub-cities{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+  .filter-track{gap:8px;padding:0 1px 5px}
+  .filter-track label:nth-child(1){flex:0 0 138px}.filter-track label:nth-child(2){flex:0 0 138px}.filter-track label:nth-child(3){flex:0 0 128px}.filter-track label:nth-child(4),.filter-track label:nth-child(5){flex:0 0 148px}.filter-track .search-label{flex:0 0 210px}
+  .hub-cities{gap:7px;padding:3px 1px 5px}
+  .hub-strip-row{margin-top:7px}
+  .strip-row.can-scroll-right .filter-track,.strip-row.can-scroll-right .hub-cities{mask-image:linear-gradient(to right,#000 0%,#000 calc(100% - 45px),transparent 100%)}
+  .strip-row.can-scroll-left .filter-track,.strip-row.can-scroll-left .hub-cities{mask-image:linear-gradient(to right,transparent 0%,#000 45px,#000 100%)}
+  .strip-row.can-scroll-left.can-scroll-right .filter-track,.strip-row.can-scroll-left.can-scroll-right .hub-cities{mask-image:linear-gradient(to right,transparent 0%,#000 45px,#000 calc(100% - 45px),transparent 100%)}
+  .strip-arrow:not([hidden]){position:absolute;z-index:2;top:50%;transform:translateY(-50%);display:grid;width:30px;height:30px;border-color:#d4d4d4;background:rgba(255,255,255,.96);box-shadow:0 1px 5px rgba(0,0,0,.1);font-size:21px}
+  .strip-arrow-left{left:0}.strip-arrow-right{right:0}
+  .filter-strip-row .strip-arrow{top:calc(50% + 8px)}
+  .custom-dates{margin:9px 0 0}
+}
