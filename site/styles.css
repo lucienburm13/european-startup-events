@@ -79,14 +79,22 @@
 .filter-track label:nth-child(n),.filter-track .search-label{width:auto;min-width:0}
 .filter-track label{font-size:12px}
 .filter-track select,.filter-track input{min-height:40px}
-.hub-strip-row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;margin-top:12px;padding:9px 12px;background:var(--soft);border-radius:10px}
+.hub-strip-row{display:block;margin-top:12px;padding:9px 12px 4px;background:var(--soft);border-radius:10px}
 .hub-strip-row[hidden]{display:none}
-.hub-label{color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
-.hub-cities{flex-wrap:wrap;overflow:visible;gap:7px;padding:0;scroll-snap-type:none}
+.hub-cities{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;gap:7px;min-width:0;padding:3px 1px 5px;scroll-snap-type:x proximity}
 .strip-arrow{display:none!important}
-.strip-progress{position:relative;height:3px;overflow:hidden;border-radius:999px;background:#e2e2e2}
+.strip-progress{position:relative;height:16px;cursor:grab;touch-action:none}
 .strip-progress[hidden]{display:none}
-.strip-progress span{position:absolute;top:0;bottom:0;border-radius:999px;background:#777;transition:left .08s linear}
+.strip-progress::before{content:"";position:absolute;top:6px;left:0;right:0;height:4px;border-radius:999px;background:#dedede}
+.strip-progress span{position:absolute;top:6px;height:4px;border-radius:999px;background:#777;transition:left .08s linear,top .12s,height .12s,background .12s}
+.strip-progress:hover span,.strip-progress:focus-visible span,.strip-progress.dragging span{top:3px;height:10px;background:#333}
+.strip-progress.dragging{cursor:grabbing}
+.strip-progress.dragging span{transition:none}
+.strip-progress:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:5px}
+.hub-strip-row .strip-progress{margin-top:2px}
+.strip-row.can-scroll-right .hub-cities{mask-image:linear-gradient(to right,#000 0%,#000 calc(100% - 28px),transparent 100%)}
+.strip-row.can-scroll-left .hub-cities{mask-image:linear-gradient(to right,transparent 0%,#000 28px,#000 100%)}
+.strip-row.can-scroll-left.can-scroll-right .hub-cities{mask-image:linear-gradient(to right,transparent 0%,#000 28px,#000 calc(100% - 28px),transparent 100%)}
 .custom-dates{margin-left:0}
 @media(max-width:1080px){
   .filter-track,.hub-cities{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
@@ -98,6 +106,6 @@
   .strip-row.can-scroll-left.can-scroll-right .filter-track,.strip-row.can-scroll-left.can-scroll-right .hub-cities{mask-image:linear-gradient(to right,transparent 0%,#000 28px,#000 calc(100% - 28px),transparent 100%)}
   .filter-strip-row .strip-progress{margin-top:2px}
   .hub-strip-row{margin-top:9px}
-  .hub-strip-row .strip-progress{grid-column:2;margin-top:-6px}
+  .hub-strip-row .strip-progress{margin-top:0}
   .custom-dates{margin:9px 0 0}
 }
