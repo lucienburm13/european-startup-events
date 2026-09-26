@@ -7,6 +7,8 @@ on:
       - 'site/**'
       - 'scripts/**'
       - 'apps-script/WebApi.gs'
+      - 'apps-script/Code.gs'
+      - 'apps-script/SubmissionApproval.gs'
       - '.github/workflows/validate-site.yml'
 
 jobs:
@@ -25,6 +27,9 @@ jobs:
         run: |
           node --check site/app.js
           node --check site/config.js
+          node --check < apps-script/Code.gs
+          node --check < apps-script/WebApi.gs
+          node --check < apps-script/SubmissionApproval.gs
 
       - name: Check Python syntax
         run: python -m py_compile scripts/geocode_locations.py
