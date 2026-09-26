@@ -16,7 +16,7 @@ DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 FIELDS = [
     "id", "start", "end", "name", "city", "country", "venue",
     "calendar", "status", "title", "notes", "source",
-    "lastVerified", "address", "hostedBy"
+    "lastVerified", "address", "organisedBy"
 ]
 REQUIRED = ["id", "start", "name", "calendar", "status"]
 
