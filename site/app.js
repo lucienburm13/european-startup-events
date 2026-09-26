@@ -184,6 +184,21 @@
       state.listPage=1;
       applyFilters();
     });
+    requestAnimationFrame(updateStripCues);
+  }
+
+  function updateStripCues(){
+    $$('.strip-row').forEach(row=>{
+      const track=row.querySelector('.filter-track, .hub-cities');
+      if(!track) return;
+      const scrollable=!track.hidden && track.scrollWidth>track.clientWidth+2;
+      const left=scrollable && track.scrollLeft>2;
+      const right=scrollable && track.scrollLeft+track.clientWidth<track.scrollWidth-2;
+      row.classList.toggle('can-scroll-left',left);
+      row.classList.toggle('can-scroll-right',right);
+      row.querySelector('.strip-arrow-left').hidden=!left;
+      row.querySelector('.strip-arrow-right').hidden=!right;
+    });
   }
 
   function cityMatch(e,city){ return city==='All' || String(e.city||'').trim()===city; }
@@ -580,6 +595,12 @@
   }
 
   function setup(){
+    $$('.filter-track, .hub-cities').forEach(track=>track.addEventListener('scroll',updateStripCues,{passive:true}));
+    window.addEventListener('resize',updateStripCues);
+    if(window.ResizeObserver){
+      const observer=new ResizeObserver(updateStripCues);
+      $$('.filter-track, .hub-cities').forEach(track=>observer.observe(track));
+    }
     $$('[data-scroll-strip]').forEach(button=>button.addEventListener('click',()=>{
       const track=document.getElementById(button.dataset.scrollStrip);
       if(!track || track.hidden) return;
@@ -601,6 +622,7 @@
     $('#submission-url').addEventListener('keydown',e=>{if(e.key==='Enter')openSubmit();});
     $('#submit-form').addEventListener('submit',submitEvent);
     setupModals(); calendarLinks(); renderStack(); loadEvents();
+    requestAnimationFrame(updateStripCues);
   }
 
   document.addEventListener('DOMContentLoaded',setup);
