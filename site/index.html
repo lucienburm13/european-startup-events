@@ -6,7 +6,7 @@
   <meta name="description" content="European tech, business and policy calendar.">
   <title>European Startup Events</title>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
-  <link rel="stylesheet" href="./styles.css?v=20260926-ribbons1">
+  <link rel="stylesheet" href="./styles.css?v=20260926-ribbons2">
 </head>
 <body>
   <header class="site-header">
@@ -42,12 +42,11 @@
           <label><span>City</span><select id="filter-city"><option value="All">All cities</option></select></label>
           <label class="search-label"><span>Search</span><input id="filter-search" placeholder="AI, fintech, investor…"></label>
         </div>
-        <div class="strip-progress" aria-hidden="true" hidden><span></span></div>
+        <div class="strip-progress" role="scrollbar" tabindex="-1" aria-controls="filter-track" aria-label="Scroll event filters" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden><span></span></div>
       </div>
       <div class="strip-row hub-strip-row">
-        <span class="hub-label">Hubs</span>
         <div class="hub-cities" id="hub-cities" hidden></div>
-        <div class="strip-progress" aria-hidden="true" hidden><span></span></div>
+        <div class="strip-progress" role="scrollbar" tabindex="-1" aria-controls="hub-cities" aria-label="Scroll cities" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden><span></span></div>
       </div>
       <div class="custom-dates" id="custom-dates" hidden>
         <label><span>From</span><input id="filter-from" type="date"></label>
@@ -140,6 +139,6 @@
 
   <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
   <script src="./config.js?v=20260923-3"></script>
-  <script src="./app.js?v=20260926-ribbons1"></script>
+  <script src="./app.js?v=20260926-ribbons2"></script>
 </body>
 </html>
