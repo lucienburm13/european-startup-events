@@ -175,10 +175,11 @@
     const available=HUB_PRIORITY
       .filter(city=>counts.has(city))
       .map(city=>({city,count:counts.get(city)}));
-    if(!available.length){ el.hidden=true; el.innerHTML=''; return; }
+    if(!available.length){ el.hidden=true; el.parentElement.hidden=true; el.innerHTML=''; return; }
     const selected=$('#filter-city').value;
     el.hidden=false;
-    el.innerHTML=`<span>Hubs</span>${available.map(({city,count})=>`<button type="button" class="hub-chip ${selected===city?'active':''}" data-hub-city="${esc(city)}">${esc(city)} <small>${count}</small></button>`).join('')}`;
+    el.parentElement.hidden=false;
+    el.innerHTML=available.map(({city,count})=>`<button type="button" class="hub-chip ${selected===city?'active':''}" data-hub-city="${esc(city)}">${esc(city)} <small>${count}</small></button>`).join('');
     $$('[data-hub-city]').forEach(b=>b.onclick=()=>{
       $('#filter-city').value=b.dataset.hubCity;
       state.listPage=1;
@@ -196,8 +197,15 @@
       const right=scrollable && track.scrollLeft+track.clientWidth<track.scrollWidth-2;
       row.classList.toggle('can-scroll-left',left);
       row.classList.toggle('can-scroll-right',right);
-      row.querySelector('.strip-arrow-left').hidden=!left;
-      row.querySelector('.strip-arrow-right').hidden=!right;
+      const progress=row.querySelector('.strip-progress');
+      progress.hidden=!scrollable;
+      if(scrollable){
+        const size=Math.max(8,100*track.clientWidth/track.scrollWidth);
+        const position=(100-size)*track.scrollLeft/(track.scrollWidth-track.clientWidth);
+        const thumb=progress.firstElementChild;
+        thumb.style.width=`${size}%`;
+        thumb.style.left=`${position}%`;
+      }
     });
   }
 
@@ -601,11 +609,6 @@
       const observer=new ResizeObserver(updateStripCues);
       $$('.filter-track, .hub-cities').forEach(track=>observer.observe(track));
     }
-    $$('[data-scroll-strip]').forEach(button=>button.addEventListener('click',()=>{
-      const track=document.getElementById(button.dataset.scrollStrip);
-      if(!track || track.hidden) return;
-      track.scrollBy({left:Number(button.dataset.direction||1)*Math.max(180,track.clientWidth*.72),behavior:'smooth'});
-    }));
     ['#filter-calendar','#filter-format','#filter-country','#filter-city'].forEach(s=>$(s).addEventListener('change',()=>{ state.listPage=1; applyFilters(); }));
     $('#filter-period').addEventListener('change',()=>{ state.listPage=1; toggleCustomDates(); applyFilters(); });
     ['#filter-from','#filter-to'].forEach(s=>$(s).addEventListener('change',()=>{ state.listPage=1; applyFilters(); }));
