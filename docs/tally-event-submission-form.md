@@ -51,8 +51,8 @@ The submitted URL is written to the queue in real time. Internal review columns 
 Recommended internal columns:
 - `Status` — NEW / REVIEWED / DECIDED
 - `Suggested decision` — ACCEPT / REVIEW / REJECT
-- `Suggested calendar` — Main / Additional / Policy / Hosted
-- `Hosted by` — Startup / Scaleup / Investor / Corporate / Ecosystem
+- `Suggested calendar` — Main / Additional / Policy / Ecosystem
+- `Organised by` — Startup / Scaleup / Investor / Corporate / Ecosystem
 - `Confidence` — High / Medium / Low
 - `AI review reason`
 - `Suggested event name`
