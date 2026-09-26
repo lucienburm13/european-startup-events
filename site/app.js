@@ -109,7 +109,7 @@
 
   function populateTypes(){
     const sel=$('#filter-calendar'), current=sel.value;
-    const order=['Main','Additional','Policy','Commercial'];
+    const order=['Main','Additional','Policy','Hosted'];
     const found=[...new Set(state.events.map(e=>e.calendar).filter(Boolean))].sort((a,b)=>{
       const ai=order.indexOf(a), bi=order.indexOf(b);
       return (ai<0?99:ai)-(bi<0?99:bi) || a.localeCompare(b);
@@ -394,7 +394,7 @@
 
     const rows=pageEvents.map(e=>`<article class="event-row" id="event-${esc(e.id)}">
       <div class="event-date">${esc(fmtDate(e.start,e.end))}<small>${esc(parseYmd(e.start)?.getFullYear()||'')}</small></div>
-      <div class="event-main"><h3>${esc(e.title||e.name)}</h3><p class="event-meta">${esc([e.venue,e.city,e.country].filter(Boolean).join(' · '))}</p>${e.notes?`<p class="event-notes">${esc(e.notes)}</p>`:''}<div class="event-links">${e.source?`<a href="${esc(e.source)}" target="_blank" rel="noopener">Official source ↗</a>`:''}<button class="inline-action" data-add-event="${esc(e.id)}">Add to calendar</button><span>Verified ${esc(e.lastVerified||'—')}</span></div></div>
+      <div class="event-main"><h3>${esc(e.title||e.name)}</h3><p class="event-meta">${esc([e.venue,e.city,e.country].filter(Boolean).join(' · '))}</p>${e.calendar==='Hosted' && e.hostedBy?`<p class="event-meta">Hosted by: ${esc(e.hostedBy)}</p>`:''}${e.notes?`<p class="event-notes">${esc(e.notes)}</p>`:''}<div class="event-links">${e.source?`<a href="${esc(e.source)}" target="_blank" rel="noopener">Official source ↗</a>`:''}<button class="inline-action" data-add-event="${esc(e.id)}">Add to calendar</button><span>Verified ${esc(e.lastVerified||'—')}</span></div></div>
       <div class="event-type"><span class="pill status-${esc(e.status)}">${esc(e.status)}</span><div class="event-calendar-name">${esc(e.calendar)} · ${esc(eventFormat(e))}</div></div>
     </article>`).join('');
 
@@ -555,7 +555,7 @@
 
     const title=$('#event-calendar-title'); if(title) title.textContent=e.title||e.name;
     const meta=$('#event-calendar-meta'); if(meta) meta.textContent=`${fmtDate(e.start,e.end)} · ${[e.venue,e.city,e.country].filter(Boolean).join(' · ')}`;
-    const badges=$('#event-calendar-badges'); if(badges) badges.innerHTML=`<span class="pill status-${esc(e.status)}">${esc(e.status)}</span><span class="detail-chip">${esc(e.calendar)}</span><span class="detail-chip">${esc(eventFormat(e))}</span>`;
+    const badges=$('#event-calendar-badges'); if(badges) badges.innerHTML=`<span class="pill status-${esc(e.status)}">${esc(e.status)}</span><span class="detail-chip">${esc(e.calendar)}</span>${e.calendar==='Hosted' && e.hostedBy?`<span class="detail-chip">${esc(e.hostedBy)}</span>`:''}<span class="detail-chip">${esc(eventFormat(e))}</span>`;
     const notes=$('#event-calendar-notes'); if(notes){ notes.textContent=e.notes||''; notes.hidden=!e.notes; }
     const source=$('#event-source-link'); if(source){ source.hidden=!e.source; if(e.source) source.href=e.source; }
     const verified=$('#event-verified'); if(verified) verified.textContent=e.lastVerified?`Verified ${e.lastVerified}`:'';
