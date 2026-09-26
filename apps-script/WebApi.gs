@@ -50,6 +50,7 @@ function websiteEvents_() {
       country: r[ix['Country']],
       venue: r[ix['Venue']],
       calendar: r[ix['Calendar']],
+      hostedBy: ix['Hosted by'] == null ? '' : r[ix['Hosted by']],
       status: r[ix['Status']],
       title: r[ix['Calendar title']] || r[ix['Event']],
       notes: r[ix['Notes / issue']],
