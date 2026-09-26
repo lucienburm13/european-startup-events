@@ -13,7 +13,16 @@
   function fmtDate(start,end){ const s=parseYmd(start), e=parseYmd(end||start); if(!s) return ''; const same=ymd(s)===ymd(e); const opt={day:'numeric',month:'short'}; if(same) return s.toLocaleDateString('en-GB',opt).toUpperCase(); if(s.getMonth()===e.getMonth()) return `${s.getDate()}–${e.getDate()} ${s.toLocaleDateString('en-GB',{month:'short'}).toUpperCase()}`; return `${s.toLocaleDateString('en-GB',opt).toUpperCase()} – ${e.toLocaleDateString('en-GB',opt).toUpperCase()}`; }
   function monthLabel(d){ return d.toLocaleDateString('en-GB',{month:'long',year:'numeric'}); }
   function countryTokens(value){ return String(value||'').split(/\s*\/\s*|\s*;\s*/).map(x=>x.trim()).filter(x=>x && !/^(online|hybrid)$/i.test(x)); }
-  function normalizeUrl(value){ try{ const u=new URL(String(value||'').trim()); return (u.hostname.replace(/^www\./,'')+u.pathname.replace(/\/+$/,'')).toLowerCase(); }catch(_){ return String(value||'').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/[?#].*$/,'').replace(/\/+$/,''); } }
+  function normalizeUrl(value){
+    try {
+      const u=new URL(String(value||'').trim());
+      const query=[...u.searchParams.entries()]
+        .filter(([key])=>!/^(utm_.*|fbclid|gclid|mc_cid|mc_eid)$/i.test(key))
+        .sort(([a,av],[b,bv])=>a.localeCompare(b)||av.localeCompare(bv));
+      const params=new URLSearchParams(query).toString();
+      return (u.hostname.replace(/^www\./,'')+u.pathname.replace(/\/+$/,'')+(params?'?'+params:'')).toLowerCase();
+    } catch(_) { return String(value||'').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/#.*$/,'').replace(/\/+$/,''); }
+  }
 
   function eventFormat(e){
     const city=String(e.city||'').toLowerCase();
