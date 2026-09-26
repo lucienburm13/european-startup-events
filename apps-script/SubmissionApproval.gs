@@ -8,7 +8,8 @@
  * Safety rules:
  * - Only reacts to a human edit in the Decision column.
  * - Never publishes rows with missing required proposed publication fields.
- * - Blocks exact-source and same-name/date duplicates.
+ * - Blocks known source aliases and likely same-occurrence duplicates.
+ * - A human DUPLICATE decision records an alternative URL and a sweep lead.
  * - Never changes the human Decision value.
  */
 const SUBMISSION_APPROVAL = {
@@ -41,9 +42,8 @@ function handleSubmissionDecisionEdit(e) {
   if (!decisionCol || e.range.getColumn() !== decisionCol) return;
 
   const decision = String(e.value || '').trim().toUpperCase();
-  if (decision !== 'APPROVE') return;
-
-  publishApprovedSubmission_(sh, e.range.getRow(), headers);
+  if (decision === 'APPROVE') publishApprovedSubmission_(sh, e.range.getRow(), headers);
+  if (decision === 'DUPLICATE') recordDuplicateSubmission_(sh, e.range.getRow(), headers);
 }
 
 function publishApprovedSubmission_(submissionsSheet, rowNumber, subHeaders) {
@@ -55,6 +55,11 @@ function publishApprovedSubmission_(submissionsSheet, rowNumber, subHeaders) {
     const row = rowObject_(subHeaders, values);
 
     if (String(row['Master ID'] || '').trim()) return;
+    if (String(row['Matched Master ID'] || '').trim()) {
+      appendReviewNote_(submissionsSheet, rowNumber, subHeaders,
+        'Publication blocked: a Matched Master ID is set; review this as a duplicate.');
+      return;
+    }
 
     const required = {
       'Suggested event name': row['Suggested event name'],
@@ -98,17 +103,33 @@ function publishApprovedSubmission_(submissionsSheet, rowNumber, subHeaders) {
     }
     const eventData = eventsSheet.getDataRange().getValues();
     const source = normalizeUrl_(row['Proposed official source']);
-    const name = String(row['Suggested event name'] || '').trim().toLowerCase();
+    const submittedSource = normalizeUrl_(row['url']);
+    const name = normalizeEventName_(row['Suggested event name']);
     const start = dateKey_(row['Proposed start date']);
+    const candidateCity = String(row['Suggested city'] || '').trim().toLowerCase();
+
+    const sourceSheet = ss.getSheetByName('Event Sources');
+    if (sourceSheet) {
+      const aliases = sourceSheet.getDataRange().getValues();
+      for (let i = 1; i < aliases.length; i++) {
+        if ((source && source === String(aliases[i][0] || '')) ||
+            (submittedSource && submittedSource === String(aliases[i][0] || ''))) {
+          appendReviewNote_(submissionsSheet, rowNumber, subHeaders,
+            'Publication blocked: URL is an alternative source for Master ID ' + aliases[i][2] + '.');
+          return;
+        }
+      }
+    }
 
     for (let i = 1; i < eventData.length; i++) {
       const existing = rowObject_(eventHeaders, eventData[i]);
       const existingSource = normalizeUrl_(existing['Official source']);
-      const sameSource = source && existingSource && source === existingSource;
+      const sameSource = existingSource && (source === existingSource || submittedSource === existingSource);
       const sameNameDate =
         name &&
-        String(existing['Event'] || '').trim().toLowerCase() === name &&
-        dateKey_(existing['Start date']) === start;
+        normalizeEventName_(existing['Event']) === name &&
+        dateKey_(existing['Start date']) === start &&
+        String(existing['City'] || '').trim().toLowerCase() === candidateCity;
 
       if (sameSource || sameNameDate) {
         appendReviewNote_(submissionsSheet, rowNumber, subHeaders,
@@ -161,9 +182,100 @@ function publishApprovedSubmission_(submissionsSheet, rowNumber, subHeaders) {
 
     appendReviewNote_(submissionsSheet, rowNumber, subHeaders,
       'Published to Events as Master ID ' + nextId + '.');
+    try {
+      recordEventAlias_(ss, row['url'], row['Proposed official source'], nextId, row['Submission ID']);
+      recordDiscoveryLeads_(ss, row, nextId, 'Submission ' + row['Submission ID']);
+    } catch (err) {
+      appendReviewNote_(submissionsSheet, rowNumber, subHeaders,
+        'Event published; discovery lead needs review: ' + String(err));
+    }
   } finally {
     lock.releaseLock();
   }
+}
+
+function recordDuplicateSubmission_(submissionsSheet, rowNumber, subHeaders) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const row = rowObject_(subHeaders, submissionsSheet.getRange(rowNumber, 1, 1, submissionsSheet.getLastColumn()).getValues()[0]);
+    const masterId = String(row['Matched Master ID'] || '').trim();
+    if (!masterId) {
+      appendReviewNote_(submissionsSheet, rowNumber, subHeaders,
+        'Duplicate not recorded: fill Matched Master ID first.');
+      return;
+    }
+    const ss = SpreadsheetApp.openById(SUBMISSION_APPROVAL.spreadsheetId);
+    const eventsSheet = ss.getSheetByName(SUBMISSION_APPROVAL.eventsSheet);
+    const headers = headerMap_(eventsSheet);
+    const values = eventsSheet.getDataRange().getValues();
+    const matching = values.slice(1).find(values => String(values[headers['ID'] - 1]).trim() === masterId);
+    if (!matching) {
+      appendReviewNote_(submissionsSheet, rowNumber, subHeaders,
+        'Duplicate not recorded: Master ID ' + masterId + ' does not exist.');
+      return;
+    }
+    const event = rowObject_(headers, matching);
+    const reportedUrl = String(row['url'] || '').trim();
+    try {
+      recordEventAlias_(ss, reportedUrl, event['Official source'], masterId, row['Submission ID']);
+    } catch (err) {
+      appendReviewNote_(submissionsSheet, rowNumber, subHeaders,
+        'Duplicate source not recorded: ' + String(err));
+      return;
+    }
+    recordDiscoveryLeads_(ss, {...row,
+      'Suggested event name': row['Suggested event name'] || event['Event'],
+      'Suggested country': row['Suggested country'] || event['Country'],
+      'Suggested city': row['Suggested city'] || event['City'],
+      'Proposed official source': reportedUrl || event['Official source']
+    }, masterId, 'Duplicate submission ' + row['Submission ID']);
+    appendReviewNote_(submissionsSheet, rowNumber, subHeaders,
+      'Duplicate linked to Master ID ' + masterId + '; source and sweep cue recorded.');
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function recordEventAlias_(ss, reportedUrl, primaryUrl, masterId, submissionId) {
+  const alias = normalizeUrl_(reportedUrl);
+  if (!alias || alias === normalizeUrl_(primaryUrl)) return;
+  const sources = ss.getSheetByName('Event Sources');
+  if (!sources) throw new Error('Event Sources sheet is missing.');
+  const existing = sources.getDataRange().getValues().slice(1)
+    .find(values => String(values[0]) === alias);
+  if (existing && String(existing[2]) !== String(masterId)) {
+    throw new Error('URL already belongs to Master ID ' + existing[2]);
+  }
+  if (!existing) sources.appendRow([alias, String(reportedUrl).trim(), String(masterId),
+    String(submissionId || ''), new Date(), 'Reviewed alternative event URL']);
+}
+
+function recordDiscoveryLeads_(ss, row, masterId, origin) {
+  const sheet = ss.getSheetByName('Discovery Leads');
+  if (!sheet) throw new Error('Discovery Leads sheet is missing.');
+  const geography = [row['Suggested country'], row['Suggested city']].map(x => String(x || '').trim()).filter(Boolean).join(' / ');
+  const source = String(row['Proposed official source'] || row['url'] || '').trim();
+  const cues = [
+    ['Similar event', String(row['Suggested event name'] || '').replace(/\b20\d{2}\b/g, '').trim()],
+    ['Organiser', String(row['Suggested organiser'] || '').trim()],
+    ['Topic', String(row['Sweep cue'] || '').trim()]
+  ].filter(([, cue]) => cue);
+  const known = sheet.getDataRange().getValues().slice(1);
+  cues.forEach(([type, cue]) => {
+    const duplicate = known.some(values =>
+      String(values[1]) === type && String(values[2]).trim().toLowerCase() === cue.toLowerCase() &&
+      String(values[4]).trim().toLowerCase() === geography.toLowerCase());
+    if (!duplicate) {
+      const leadId = 'SUB-' + String(row['Submission ID'] || masterId) + '-' + type.toUpperCase().replace(/[^A-Z]/g, '');
+      sheet.appendRow([leadId, type, cue, source, geography, origin, 'WATCH', '', '', '',
+        'Search official sources for the next edition and similar events in other European hubs; check Events and Event Sources before proposing a new master row.']);
+    }
+  });
+}
+
+function normalizeEventName_(value) {
+  return String(value || '').toLowerCase().replace(/\b20\d{2}\b/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
 function headerMap_(sheet) {
@@ -217,6 +329,9 @@ function dateKey_(value) {
 function normalizeUrl_(value) {
   let s = String(value || '').trim().toLowerCase();
   if (!s) return '';
-  s = s.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/[?#].*$/, '');
-  return s.replace(/\/$/, '');
+  s = s.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/#.*$/, '');
+  const parts = s.split('?');
+  const query = (parts[1] || '').split('&').filter(param => param &&
+    !/^(utm_[^=]*|fbclid|gclid|mc_cid|mc_eid)=/.test(param)).sort().join('&');
+  return parts[0].replace(/\/+$/, '') + (query ? '?' + query : '');
 }
