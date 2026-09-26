@@ -199,13 +199,51 @@
       row.classList.toggle('can-scroll-right',right);
       const progress=row.querySelector('.strip-progress');
       progress.hidden=!scrollable;
+      progress.tabIndex=scrollable?0:-1;
       if(scrollable){
         const size=Math.max(8,100*track.clientWidth/track.scrollWidth);
         const position=(100-size)*track.scrollLeft/(track.scrollWidth-track.clientWidth);
         const thumb=progress.firstElementChild;
         thumb.style.width=`${size}%`;
         thumb.style.left=`${position}%`;
+        progress.setAttribute('aria-valuenow',String(Math.round(100*track.scrollLeft/(track.scrollWidth-track.clientWidth))));
       }
+    });
+  }
+
+  function setupStripProgress(){
+    $$('.strip-progress').forEach(progress=>{
+      const track=document.getElementById(progress.getAttribute('aria-controls'));
+      let dragOffset=0;
+      function moveThumb(clientX){
+        const rect=progress.getBoundingClientRect();
+        const thumbWidth=progress.firstElementChild.getBoundingClientRect().width;
+        const travel=rect.width-thumbWidth;
+        if(travel<=0) return;
+        const position=Math.max(0,Math.min(travel,clientX-rect.left-dragOffset));
+        track.scrollLeft=position/travel*(track.scrollWidth-track.clientWidth);
+      }
+      progress.addEventListener('pointerdown',event=>{
+        if(progress.hidden) return;
+        const thumb=progress.firstElementChild;
+        dragOffset=event.target===thumb?event.clientX-thumb.getBoundingClientRect().left:thumb.getBoundingClientRect().width/2;
+        progress.setPointerCapture(event.pointerId);
+        progress.classList.add('dragging');
+        moveThumb(event.clientX);
+        event.preventDefault();
+      });
+      progress.addEventListener('pointermove',event=>{
+        if(progress.hasPointerCapture(event.pointerId)) moveThumb(event.clientX);
+      });
+      const end=()=>progress.classList.remove('dragging');
+      progress.addEventListener('pointerup',end);
+      progress.addEventListener('pointercancel',end);
+      progress.addEventListener('keydown',event=>{
+        const direction=event.key==='ArrowRight'?1:event.key==='ArrowLeft'?-1:0;
+        if(!direction) return;
+        event.preventDefault();
+        track.scrollBy({left:direction*Math.max(90,track.clientWidth*.25),behavior:'smooth'});
+      });
     });
   }
 
@@ -603,6 +641,7 @@
   }
 
   function setup(){
+    setupStripProgress();
     $$('.filter-track, .hub-cities').forEach(track=>track.addEventListener('scroll',updateStripCues,{passive:true}));
     window.addEventListener('resize',updateStripCues);
     if(window.ResizeObserver){
