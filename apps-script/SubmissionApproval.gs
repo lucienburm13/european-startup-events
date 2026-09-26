@@ -75,9 +75,27 @@ function publishApprovedSubmission_(submissionsSheet, rowNumber, subHeaders) {
       return;
     }
 
+    const calendarName = String(row['Suggested calendar']).trim();
+    if (!CONFIG.calendars[calendarName]) {
+      appendReviewNote_(submissionsSheet, rowNumber, subHeaders,
+        'Publication blocked: calendar ' + calendarName + ' is not configured.');
+      return;
+    }
+    const hostedBy = String(row['Hosted by'] || '').trim();
+    if (calendarName === 'Hosted' && !['Startup','Scaleup','Investor','Corporate','Ecosystem'].includes(hostedBy)) {
+      appendReviewNote_(submissionsSheet, rowNumber, subHeaders,
+        'Publication blocked: Hosted by must identify the organiser type.');
+      return;
+    }
+
     const ss = SpreadsheetApp.openById(SUBMISSION_APPROVAL.spreadsheetId);
     const eventsSheet = ss.getSheetByName(SUBMISSION_APPROVAL.eventsSheet);
     const eventHeaders = headerMap_(eventsSheet);
+    if (calendarName === 'Hosted' && !eventHeaders['Hosted by']) {
+      appendReviewNote_(submissionsSheet, rowNumber, subHeaders,
+        'Publication blocked: Events sheet needs a Hosted by column.');
+      return;
+    }
     const eventData = eventsSheet.getDataRange().getValues();
     const source = normalizeUrl_(row['Proposed official source']);
     const name = String(row['Suggested event name'] || '').trim().toLowerCase();
@@ -116,7 +134,8 @@ function publishApprovedSubmission_(submissionsSheet, rowNumber, subHeaders) {
       'City': city,
       'Country': String(row['Suggested country']).trim(),
       'Venue': String(row['Proposed venue'] || '').trim(),
-      'Calendar': String(row['Suggested calendar']).trim(),
+      'Calendar': calendarName,
+      'Hosted by': calendarName === 'Hosted' ? hostedBy : '',
       'Status': String(row['Proposed status']).trim().toUpperCase(),
       'Calendar title': calendarTitle,
       'Include in calendar': 'Yes',
