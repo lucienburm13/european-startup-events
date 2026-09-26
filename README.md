@@ -24,6 +24,12 @@ Public calendar infrastructure for a curated European startup / tech / policy ev
 - European Startup Events - Additional
 - European Startup Events - Policy
 
+### Planned: Hosted
+
+`Hosted` is a fourth editorial calendar for substantive European startup ecosystem events run by a startup/scaleup, investor, corporate or ecosystem organisation. `Hosted by` records the organiser type (`Startup`, `Scaleup`, `Investor`, `Corporate`, `Ecosystem`); it is not a sponsorship or paid-placement flag. An event belongs in one calendar only. Main, Additional and Policy keep their existing meaning until individual events are reviewed for a move.
+
+The submission review queue and master `Events` sheet now have `Hosted by`. The website and export pipeline can carry `hostedBy`, while the calendar sync derives its calendar names from its configured IDs. **Activation requires a real fourth public Google Calendar ID** and deployment of the matching Apps Script sources. Add the new ID to `CONFIG.calendars` in `apps-script/Code.gs` and `site/config.js` together. Then run `previewSync()` and inspect the plan before allowing any Hosted row to publish. The public site shows Hosted in its type filter only after a verified Hosted event enters the feed.
+
 All normal entries are transparent and all-day. `CONFIRMED` titles are clean; `TBC`, `CONFLICT`, `POSTPONED`, and `CANCELLED` may carry explicit prefixes according to the master rules.
 
 ## Robustness principles
