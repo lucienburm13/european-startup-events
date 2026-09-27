@@ -625,11 +625,11 @@
   function handleTallySubmission(e){
     const frame=$('#tally-submit-frame');
     if(e.origin!=='https://tally.so' || e.source!==frame.contentWindow || $('#tally-submit-wrap').hidden) return;
-    if(typeof e.data!=='string' || !e.data.includes('Tally.FormSubmitted')) return;
-    try{
-      const message=JSON.parse(e.data);
-      if(!JSON.stringify(message).includes('Tally.FormSubmitted')) return;
-    }catch(_){ return; }
+    let message=e.data;
+    if(typeof message==='string'){
+      try{ message=JSON.parse(message); }catch(_){ return; }
+    }
+    if(!message || !JSON.stringify(message).includes('Tally.FormSubmitted')) return;
     $('#tally-submit-wrap').hidden=true;
     frame.removeAttribute('src');
     $('#submit-success').hidden=false;
