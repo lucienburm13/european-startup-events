@@ -76,6 +76,13 @@
 /* Compact stack indicator in the header, and a clean submitted state. */
 .site-header{gap:18px}
 .site-header .brand{white-space:nowrap}
+.site-header .brand{display:flex;flex-direction:column;gap:2px;line-height:1.05}
+.site-header .brand strong{font-size:23px;letter-spacing:-.055em;font-weight:850}
+.site-header .brand-wordmark{display:flex;align-items:baseline}
+.site-header .brand-sun{width:.99em;height:1em;flex:none;align-self:center;margin:0 -.035em 0 -.025em}
+.site-header .brand-wordmark-end{white-space:pre}
+.site-header .brand small{font-size:10px;font-weight:600;letter-spacing:.045em;color:var(--muted)}
+.hero h1{font-weight:850;letter-spacing:-.065em}
 .site-header .stack-badge{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:0;width:auto;padding:6px 10px;border-color:var(--line);border-radius:999px;white-space:nowrap;line-height:1}
 .site-header .stack-badge:hover,.site-header .stack-badge:focus-visible{border-color:var(--ink);background:var(--soft)}
 .site-header .stack-badge-title{font-size:11px}
@@ -92,7 +99,8 @@
   .site-header .header-actions{grid-column:2;grid-row:1}
 }
 @media(max-width:520px){
-  .site-header .brand{font-size:14px}
+  .site-header .brand strong{font-size:20px}
+  .site-header .brand small{font-size:9px}
   .site-header .header-actions .solid-button{padding:8px 10px;font-size:12px;white-space:nowrap}
 }
 
