@@ -1,4 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-  <rect width="48" height="48" rx="9" fill="#fff"/>
-  <path d="M3 39h42M11 39a13 13 0 0 1 26 0M24 5v7M9 15l5 5M39 15l-5 5M4 29l6 2M44 29l-6 2" fill="none" stroke="#111" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <style>
+    path, circle { stroke: #111111; }
+    @media (prefers-color-scheme: dark) {
+      path, circle { stroke: #ffffff; }
+    }
+  </style>
+  <defs>
+    <clipPath id="fav-clip">
+      <rect x="0" y="0" width="32" height="30.5" />
+    </clipPath>
+  </defs>
+  <g clip-path="url(#fav-clip)">
+    <g stroke-width="2.6" stroke-linecap="round">
+      <path d="M16 13v3" />
+      <path d="M7.5 17l2.4 2.4" />
+      <path d="M24.5 17l-2.4 2.4" />
+      <path d="M2.5 25.8h3.2" />
+      <path d="M29.5 25.8h-3.2" />
+    </g>
+    <circle cx="16" cy="25.8" r="6.5" stroke-width="2.8" fill="none" />
+  </g>
+  <path d="M1.5 30.5h29" stroke-width="3" stroke-linecap="round" />
 </svg>
