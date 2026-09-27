@@ -4,6 +4,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.request
 from datetime import datetime
 from pathlib import Path
@@ -23,6 +24,16 @@ REQUIRED = ["id", "start", "name", "calendar", "status"]
 def clean(value):
     return str(value or "").strip()
 
+def normalize_date(value):
+    value = clean(value)
+    # Sheets display values can differ between rows even within one date column.
+    for fmt in ("%d-%m-%Y", "%d/%m/%Y"):
+        try:
+            return datetime.strptime(value, fmt).strftime("%Y-%m-%d")
+        except ValueError:
+            pass
+    return value
+
 def fetch_feed():
     if not FEED_URL:
         raise RuntimeError("EVENTS_FEED_URL is not set")
@@ -30,8 +41,15 @@ def fetch_feed():
         FEED_URL,
         headers={"User-Agent": "EuropeanStartupEvents-SnapshotSync/1.0"},
     )
-    with urllib.request.urlopen(req, timeout=30) as response:
-        raw = response.read().decode("utf-8")
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as response:
+                raw = response.read().decode("utf-8")
+            break
+        except OSError:
+            if attempt == 2:
+                raise
+            time.sleep(2 * (attempt + 1))
     try:
         data = json.loads(raw)
     except json.JSONDecodeError as exc:
@@ -46,6 +64,9 @@ def fetch_feed():
 
 def normalize_event(row):
     event = {field: clean(row.get(field)) for field in FIELDS}
+    event["start"] = normalize_date(event["start"])
+    event["end"] = normalize_date(event["end"])
+    event["lastVerified"] = normalize_date(event["lastVerified"])
     # Preserve coordinates only when the source sheet actually supplies them.
     lat, lng = clean(row.get("lat")), clean(row.get("lng"))
     if lat and lng:
