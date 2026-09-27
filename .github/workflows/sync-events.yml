@@ -2,8 +2,6 @@ name: Sync website snapshot
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '17 * * * *'
   push:
     branches: [site-v0.1, main]
     paths:
