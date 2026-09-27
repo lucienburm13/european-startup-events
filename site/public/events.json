@@ -1,7 +1,7 @@
 {
   "generatedFrom": "European Startup & Tech Events — Master 2026–2027",
-  "generatedAt": "2026-09-26T10:42:27.771Z",
-  "count": 157,
+  "generatedAt": "2026-09-27T11:49:33.106Z",
+  "count": 158,
   "events": [
     {
       "id": "19",
@@ -748,6 +748,23 @@
       "notes": "",
       "source": "https://www.shiftai.events/",
       "lastVerified": "2026-09-11",
+      "address": "",
+      "organisedBy": ""
+    },
+    {
+      "id": "171",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "name": "FundFest XI",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "",
+      "calendar": "Ecosystem",
+      "status": "CONFIRMED",
+      "title": "FundFest XI · Amsterdam",
+      "notes": "Quarterly FundFest event for recently funded Dutch startups and investors. Presented by FundFest in collaboration with Dutch Startup Association. Registration requires approval; exact venue address is not public. Date and collaboration verified on the official Luma page and Startup Village.",
+      "source": "https://luma.com/p7usx8l2",
+      "lastVerified": "2026-09-27",
       "address": "",
       "organisedBy": ""
     },
