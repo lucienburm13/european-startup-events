@@ -6,11 +6,15 @@
   <meta name="description" content="European tech, business and policy calendar.">
   <title>European Startup Events</title>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
-  <link rel="stylesheet" href="./styles.css?v=20260926-ribbons2">
+  <link rel="stylesheet" href="./styles.css?v=20260927-submit-stack">
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="#top">European Startup Events</a>
+    <button class="stack-badge" data-open="stack" aria-label="Open European Stack Index">
+      <span class="stack-badge-title">🇪🇺 EU stack</span>
+      <span class="stack-badge-metrics"><strong id="stack-eu-footer">—</strong><span>EU</span><strong id="stack-open-footer">—</strong><span>open source</span></span>
+    </button>
     <div class="header-actions">
       <button class="outline-button" data-open="calendar-help">Subscribe to calendars</button>
       <button class="solid-button" id="submit-top">Submit an event</button>
@@ -83,10 +87,6 @@
 
   <footer>
     <div><strong>European Startup Events</strong><p>Built to make the European ecosystem easier to navigate.</p></div>
-    <button class="stack-badge" data-open="stack" aria-label="Open European Stack Index">
-      <span class="stack-badge-title">🇪🇺 EU stack</span>
-      <span class="stack-badge-metrics"><strong id="stack-eu-footer">—</strong><span>EU</span><strong id="stack-open-footer">—</strong><span>Open Source</span></span>
-    </button>
   </footer>
 
   <div class="modal-backdrop" id="modal-calendar-help" hidden>
@@ -134,11 +134,15 @@
       <div id="tally-submit-wrap" class="tally-submit-wrap" hidden>
         <iframe id="tally-submit-frame" class="tally-submit-frame" title="Submit event for review" loading="lazy"></iframe>
       </div>
+      <div id="submit-success" class="submit-success" role="status" hidden>
+        <p>Thanks for submitting the event. We’ll check the source, relevance and possible duplicates before adding anything to the calendar.</p>
+        <button class="outline-button" id="submit-another" type="button">Submit another event</button>
+      </div>
     </div>
   </div>
 
   <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
   <script src="./config.js?v=20260926-ecosystem"></script>
-  <script src="./app.js?v=20260926-feedback"></script>
+  <script src="./app.js?v=20260927-submit-stack"></script>
 </body>
 </html>

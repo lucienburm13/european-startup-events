@@ -611,14 +611,30 @@
     $('#submit-intro').hidden=false;
     $('#submit-form').hidden=false;
     $('#tally-submit-wrap').hidden=true;
+    $('#submit-success').hidden=true;
     $('#tally-submit-frame').removeAttribute('src');
   }
 
   function openSubmit(){
     resetSubmitModal();
     $('#modal-submit').hidden=false;
-    const u=$('#submission-url').value.trim(); if(u) $('#submit-url-full').value=u;
+    const u=$('#submission-url').value.trim(); $('#submit-url-full').value=u;
     $('#submit-status').textContent='';
+  }
+
+  function handleTallySubmission(e){
+    const frame=$('#tally-submit-frame');
+    if(e.origin!=='https://tally.so' || e.source!==frame.contentWindow || $('#tally-submit-wrap').hidden) return;
+    if(typeof e.data!=='string' || !e.data.includes('Tally.FormSubmitted')) return;
+    try{
+      const message=JSON.parse(e.data);
+      if(!JSON.stringify(message).includes('Tally.FormSubmitted')) return;
+    }catch(_){ return; }
+    $('#tally-submit-wrap').hidden=true;
+    frame.removeAttribute('src');
+    $('#submit-success').hidden=false;
+    $('#submission-url').value='';
+    $('#submit-url-full').value='';
   }
 
   function findDuplicate(url){
@@ -672,6 +688,11 @@
     $('#submit-top').onclick=openSubmit; $('#submit-card').onclick=openSubmit;
     $('#submission-url').addEventListener('keydown',e=>{if(e.key==='Enter')openSubmit();});
     $('#submit-form').addEventListener('submit',submitEvent);
+    $('#submit-another').addEventListener('click',()=>{
+      resetSubmitModal();
+      $('#submit-url-full').focus();
+    });
+    window.addEventListener('message',handleTallySubmission);
     setupModals(); calendarLinks(); renderStack(); loadEvents();
     requestAnimationFrame(updateStripCues);
   }

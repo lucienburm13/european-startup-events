@@ -73,6 +73,29 @@
 .event-detail-links span{color:var(--muted)}
 @media(max-width:650px){.list-pagination{justify-content:space-between;gap:8px}.list-pagination span{font-size:11px}.event-detail-links{align-items:flex-start;flex-direction:column}}
 
+/* Compact stack indicator in the header, and a clean submitted state. */
+.site-header{gap:18px}
+.site-header .brand{white-space:nowrap}
+.site-header .stack-badge{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:0;width:auto;padding:6px 10px;border-color:var(--line);border-radius:999px;white-space:nowrap;line-height:1}
+.site-header .stack-badge:hover,.site-header .stack-badge:focus-visible{border-color:var(--ink);background:var(--soft)}
+.site-header .stack-badge-title{font-size:11px}
+.site-header .stack-badge-metrics{display:inline-flex;align-items:center;gap:4px}
+.site-header .stack-badge-metrics strong{font-size:12px}
+.site-header .stack-badge-metrics span{font-size:11px}
+.site-header .stack-badge-metrics span:first-of-type::after{content:" ·";color:var(--muted);margin-left:4px}
+.submit-form[hidden],.submit-success[hidden]{display:none}
+.submit-success{padding:16px 0 2px}
+.submit-success p{font-size:16px;line-height:1.5;margin:0 0 18px}
+@media(max-width:960px){
+  .site-header{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:8px}
+  .site-header .stack-badge{grid-column:1/-1;grid-row:2;justify-self:start}
+  .site-header .header-actions{grid-column:2;grid-row:1}
+}
+@media(max-width:520px){
+  .site-header .brand{font-size:14px}
+  .site-header .header-actions .solid-button{padding:8px 10px;font-size:12px;white-space:nowrap}
+}
+
 /* Full controls on wide screens, touch-friendly ribbons when they no longer fit. */
 .strip-row{position:relative;display:block}
 .filter-track{display:grid;grid-template-columns:1fr 1fr .95fr 1.1fr 1.1fr 1.55fr;gap:10px;overflow:visible;padding:0;scroll-snap-type:none}
