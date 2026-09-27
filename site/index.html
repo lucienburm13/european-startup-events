@@ -3,14 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="European tech, business and policy calendar.">
-  <title>European Startup Events</title>
+  <meta name="description" content="Euro Events — the European startup events calendar.">
+  <title>Euro Events — European Startup Events</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
-  <link rel="stylesheet" href="./styles.css?v=20260927-submit-stack">
+  <link rel="stylesheet" href="./styles.css?v=20260927-euro-events">
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="#top">European Startup Events</a>
+    <a class="brand" href="#top" aria-label="Euro Events — European Startup Events">
+      <strong class="brand-wordmark" aria-hidden="true"><span>Eur</span><svg class="brand-sun" viewBox="0 0 40 40" focusable="false" aria-hidden="true"><path d="M2 34h36M8 34a12 12 0 0 1 24 0M20 4v6M7 13l4 4M33 13l-4 4M2 25l5 2M38 25l-5 2" fill="none" stroke="currentColor" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="brand-wordmark-end"> Events</span></strong>
+      <small>European Startup Events</small>
+    </a>
     <button class="stack-badge" data-open="stack" aria-label="Open European Stack Index">
       <span class="stack-badge-title">🇪🇺 EU stack</span>
       <span class="stack-badge-metrics"><strong id="stack-eu-footer">—</strong><span>EU</span><strong id="stack-open-footer">—</strong><span>open source</span></span>
@@ -86,7 +90,7 @@
   </main>
 
   <footer>
-    <div><strong>European Startup Events</strong><p>Built to make the European ecosystem easier to navigate.</p></div>
+    <div><strong>Euro Events</strong><p>Built to make the European ecosystem easier to navigate.</p></div>
   </footer>
 
   <div class="modal-backdrop" id="modal-calendar-help" hidden>
