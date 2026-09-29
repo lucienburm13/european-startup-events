@@ -296,7 +296,7 @@ const SUBMISSION_REVIEW_CONFIG = {
   discoveryLeadsSheet: 'Discovery Leads',
   maxRowsPerRun: 3,
   deferredMs: 30000,
-  model: 'gpt-5.5'
+  model: 'gpt-5.6-luna'
 };
 
 /**
