@@ -287,3 +287,367 @@ function ensureSyncLogSheet_() {
 function beginAudit_(opts) { const sheet=ensureSyncLogSheet_(), row=sheet.getLastRow()+1; sheet.getRange(row,1,1,5).setValues([[new Date(),opts.dryRun?'DRY_RUN':(opts.force?'FORCE':'NORMAL'),'RUNNING','','']]); return row; }
 function finishAudit_(row,status,details) { ensureSyncLogSheet_().getRange(row,3,1,3).setValues([[status,String(details||'').slice(0,45000),new Date()]]); }
 function removeSyncTriggers_() { ScriptApp.getProjectTriggers().forEach(t=>{if(t.getHandlerFunction()==='syncAllCalendars') ScriptApp.deleteTrigger(t);}); }
+
+// -----------------------------------------------------------------------------
+// Submission review webhook (Tally -> Apps Script -> OpenAI -> Submissions)
+// -----------------------------------------------------------------------------
+
+const SUBMISSION_REVIEW_CONFIG = {
+  submissionsSheet: 'Submissions',
+  eventsSheet: 'Events',
+  eventSourcesSheet: 'Event Sources',
+  discoveryLeadsSheet: 'Discovery Leads',
+  maxRowsPerRun: 3,
+  deferredMs: 30000,
+  model: 'gpt-5.6-luna'
+};
+
+/**
+ * Web-app endpoint for Tally webhooks.
+ *
+ * Deploy this Apps Script project as a web app and configure Tally to POST to:
+ *   <WEB_APP_URL>?token=<TALLY_WEBHOOK_TOKEN>
+ *
+ * Required Script Properties:
+ *   OPENAI_API_KEY
+ *   TALLY_WEBHOOK_TOKEN
+ *
+ * The endpoint only schedules review work and returns quickly. It never publishes.
+ */
+function doPost(e) {
+  const props = PropertiesService.getScriptProperties();
+  const expectedToken = String(props.getProperty('TALLY_WEBHOOK_TOKEN') || '');
+  const suppliedToken = String(e && e.parameter ? (e.parameter.token || '') : '');
+
+  if (!expectedToken) throw new Error('TALLY_WEBHOOK_TOKEN is not configured.');
+  if (!safeEqual_(suppliedToken, expectedToken)) throw new Error('Invalid webhook token.');
+
+  let payload = {};
+  try {
+    payload = JSON.parse((e && e.postData && e.postData.contents) || '{}');
+  } catch (err) {
+    throw new Error('Invalid JSON payload.');
+  }
+
+  if (String(payload.eventType || '') !== 'FORM_RESPONSE') {
+    return jsonResponse_({ok: true, ignored: true});
+  }
+
+  scheduleSubmissionReview_();
+  return jsonResponse_({ok: true, queued: true});
+}
+
+/**
+ * Queue a near-immediate one-off review run. Multiple simultaneous submissions are
+ * coalesced into one pending trigger.
+ */
+function scheduleSubmissionReview_() {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(5000)) return;
+  try {
+    const alreadyQueued = ScriptApp.getProjectTriggers().some(t =>
+      t.getHandlerFunction() === 'processPendingSubmissions' &&
+      t.getEventType() === ScriptApp.EventType.CLOCK
+    );
+    if (alreadyQueued) return;
+    ScriptApp.newTrigger('processPendingSubmissions')
+      .timeBased()
+      .after(SUBMISSION_REVIEW_CONFIG.deferredMs)
+      .create();
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/**
+ * Review pending submissions. Human gate remains absolute:
+ * - never touches Master ID
+ * - never touches Matched Master ID
+ * - never touches Decision
+ * - never writes Events
+ * - never publishes to Calendar / GitHub / website
+ */
+function processPendingSubmissions() {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(30000)) return;
+
+  try {
+    const ss = SpreadsheetApp.openById(CONFIG.spreadsheetId);
+    const sheet = ss.getSheetByName(SUBMISSION_REVIEW_CONFIG.submissionsSheet);
+    if (!sheet) throw new Error('Submissions sheet not found.');
+
+    const values = sheet.getDataRange().getValues();
+    if (values.length < 2) return;
+
+    const headers = values[0].map(String);
+    const idx = indexHeaders_(headers);
+    const required = [
+      'url','AI suggestion','Suggested calendar','Organised by','Confidence',
+      'AI review reason','Suggested event name','Suggested dates','Suggested city',
+      'Suggested country','Suggested organiser','Duplicate / series match',
+      'AI reviewed at','Proposed start date','Proposed end date','Proposed venue',
+      'Proposed status','Proposed calendar title','Proposed notes',
+      'Proposed official source','Proposed full address','Sweep cue','Decision',
+      'Master ID','Matched Master ID'
+    ];
+    required.forEach(h => {
+      if (idx[h] === undefined) throw new Error('Missing Submissions header: ' + h);
+    });
+
+    const pendingRows = [];
+    for (let r = 1; r < values.length; r++) {
+      const url = String(values[r][idx['url']] || '').trim();
+      const reviewedAt = values[r][idx['AI reviewed at']];
+      if (url && !reviewedAt) pendingRows.push(r);
+    }
+
+    if (!pendingRows.length) return;
+
+    const context = buildSubmissionReviewContext_(ss);
+
+    pendingRows.slice(0, SUBMISSION_REVIEW_CONFIG.maxRowsPerRun).forEach(r => {
+      const row = values[r];
+      const url = String(row[idx['url']] || '').trim();
+      const review = callOpenAIForSubmissionReview_(url, row, idx, context);
+      writeSubmissionReview_(sheet, r + 1, review);
+    });
+
+    if (pendingRows.length > SUBMISSION_REVIEW_CONFIG.maxRowsPerRun) {
+      scheduleSubmissionReview_();
+    }
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function buildSubmissionReviewContext_(ss) {
+  const events = ss.getSheetByName(SUBMISSION_REVIEW_CONFIG.eventsSheet);
+  const eventSources = ss.getSheetByName(SUBMISSION_REVIEW_CONFIG.eventSourcesSheet);
+  const discovery = ss.getSheetByName(SUBMISSION_REVIEW_CONFIG.discoveryLeadsSheet);
+
+  const eventLines = [];
+  if (events) {
+    const v = events.getDataRange().getValues();
+    if (v.length > 1) {
+      const h = indexHeaders_(v[0].map(String));
+      const wanted = ['ID','Start date','End date','Event','City','Country','Calendar','Status','Official source'];
+      if (wanted.every(x => h[x] !== undefined)) {
+        for (let r = 1; r < v.length; r++) {
+          if (v[r][h['ID']] === '' || v[r][h['ID']] === null) continue;
+          eventLines.push(wanted.map(x => {
+            const val = v[r][h[x]];
+            if ((x === 'Start date' || x === 'End date') && val instanceof Date && !isNaN(val)) {
+              return Utilities.formatDate(val, ss.getSpreadsheetTimeZone() || 'Europe/Amsterdam', 'yyyy-MM-dd');
+            }
+            return String(val || '').trim();
+          }).join(' | '));
+        }
+      }
+    }
+  }
+
+  const sourceLines = compactSheetRows_(eventSources, 200);
+  const discoveryLines = compactSheetRows_(discovery, 200);
+
+  return [
+    'CURRENT EVENTS INDEX (ID | start | end | event | city | country | calendar | status | official source):',
+    eventLines.join('\n'),
+    '',
+    'EVENT SOURCES:',
+    sourceLines.join('\n'),
+    '',
+    'DISCOVERY LEADS:',
+    discoveryLines.join('\n')
+  ].join('\n');
+}
+
+function compactSheetRows_(sheet, maxRows) {
+  if (!sheet) return [];
+  const v = sheet.getDataRange().getDisplayValues();
+  if (!v.length) return [];
+  const out = [v[0].join(' | ')];
+  for (let r = 1; r < Math.min(v.length, maxRows + 1); r++) {
+    if (v[r].some(Boolean)) out.push(v[r].join(' | '));
+  }
+  return out;
+}
+
+function callOpenAIForSubmissionReview_(url, row, idx, context) {
+  const apiKey = String(PropertiesService.getScriptProperties().getProperty('OPENAI_API_KEY') || '');
+  if (!apiKey) throw new Error('OPENAI_API_KEY is not configured.');
+
+  const submitterNotes = idx['Submitter notes'] !== undefined
+    ? String(row[idx['Submitter notes']] || '').trim() : '';
+  const suppliedDates = idx['Dates'] !== undefined
+    ? String(row[idx['Dates']] || '').trim() : '';
+  const suppliedLocation = idx['Location'] !== undefined
+    ? String(row[idx['Location']] || '').trim() : '';
+
+  const payload = {
+    model: SUBMISSION_REVIEW_CONFIG.model,
+    reasoning: {effort: 'low'},
+    tools: [{type: 'web_search'}],
+    tool_choice: 'required',
+    input: [
+      {
+        role: 'system',
+        content: [
+          'You review candidate events for a curated European startup, tech, investor, ecosystem and policy calendar.',
+          'Use live web search and inspect the submitted URL and primary organiser sources.',
+          'Return only data matching the supplied JSON schema.',
+          'Never invent dates, locations, organisers, venue addresses or sources.',
+          'Use ACCEPT only for a verifiable and relevant event; REVIEW when material facts remain ambiguous; REJECT for non-events, unverifiable pages, generic sales/recruitment/promotional listings or clearly irrelevant items.',
+          'Suggested calendar must be Main, Additional, Policy or Ecosystem.',
+          'Organised by must be Startup, Scaleup, Investor, Corporate or Ecosystem.',
+          'Compare against the supplied master index for same-occurrence duplicates and recurring-series matches.',
+          'If a date is only strongly implied but not explicitly confirmed by a primary source, use REVIEW rather than inventing it.',
+          'Proposed start/end dates must be YYYY-MM-DD or empty strings.',
+          'For a one-day event, start_date and end_date are identical.',
+          'The human will make the final decision. You are only preparing the row.'
+        ].join('\n')
+      },
+      {
+        role: 'user',
+        content: [
+          'Submitted URL: ' + url,
+          'Submitted Dates: ' + suppliedDates,
+          'Submitted Location: ' + suppliedLocation,
+          'Submitter notes: ' + submitterNotes,
+          '',
+          context
+        ].join('\n')
+      }
+    ],
+    text: {
+      format: {
+        type: 'json_schema',
+        name: 'submission_review',
+        strict: true,
+        schema: submissionReviewSchema_()
+      }
+    }
+  };
+
+  const res = UrlFetchApp.fetch('https://api.openai.com/v1/responses', {
+    method: 'post',
+    contentType: 'application/json',
+    headers: {Authorization: 'Bearer ' + apiKey},
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  });
+
+  const code = res.getResponseCode();
+  const raw = res.getContentText();
+  if (code < 200 || code >= 300) {
+    throw new Error('OpenAI review failed (' + code + '): ' + raw.slice(0, 1000));
+  }
+
+  const body = JSON.parse(raw);
+  const output = extractResponseText_(body);
+  if (!output) throw new Error('OpenAI review returned no output text.');
+  return JSON.parse(output);
+}
+
+function submissionReviewSchema_() {
+  return {
+    type: 'object',
+    properties: {
+      suggestion: {type: 'string', enum: ['ACCEPT','REVIEW','REJECT']},
+      calendar: {type: 'string', enum: ['Main','Additional','Policy','Ecosystem']},
+      organised_by: {type: 'string', enum: ['Startup','Scaleup','Investor','Corporate','Ecosystem']},
+      confidence: {type: 'string', enum: ['High','Medium','Low']},
+      review_reason: {type: 'string'},
+      event_name: {type: 'string'},
+      suggested_dates: {type: 'string'},
+      city: {type: 'string'},
+      country: {type: 'string'},
+      organiser: {type: 'string'},
+      duplicate_series_match: {type: 'string'},
+      start_date: {type: 'string'},
+      end_date: {type: 'string'},
+      venue: {type: 'string'},
+      status: {type: 'string', enum: ['CONFIRMED','TBC','CONFLICT','WATCH','POSTPONED','CANCELLED']},
+      calendar_title: {type: 'string'},
+      notes: {type: 'string'},
+      official_source: {type: 'string'},
+      full_address: {type: 'string'},
+      sweep_cue: {type: 'string'}
+    },
+    required: [
+      'suggestion','calendar','organised_by','confidence','review_reason',
+      'event_name','suggested_dates','city','country','organiser',
+      'duplicate_series_match','start_date','end_date','venue','status',
+      'calendar_title','notes','official_source','full_address','sweep_cue'
+    ],
+    additionalProperties: false
+  };
+}
+
+function extractResponseText_(body) {
+  if (body && typeof body.output_text === 'string' && body.output_text) return body.output_text;
+  const chunks = [];
+  (body && body.output || []).forEach(item => {
+    if (item.type !== 'message') return;
+    (item.content || []).forEach(part => {
+      if (part.type === 'output_text' && part.text) chunks.push(part.text);
+    });
+  });
+  return chunks.join('');
+}
+
+function writeSubmissionReview_(sheet, rowNumber, review) {
+  const start = review.start_date ? parseYmd_(review.start_date) : '';
+  const end = review.end_date ? parseYmd_(review.end_date) : '';
+
+  // L:AE only. K (Master ID), AF (Matched Master ID) and AI (Decision) are untouched.
+  sheet.getRange(rowNumber, 12, 1, 20).setValues([[
+    review.suggestion,
+    review.calendar,
+    review.organised_by,
+    review.confidence,
+    review.review_reason,
+    review.event_name,
+    review.suggested_dates,
+    review.city,
+    review.country,
+    review.organiser,
+    review.duplicate_series_match,
+    new Date(),
+    start,
+    end,
+    review.venue,
+    review.status,
+    review.calendar_title,
+    review.notes,
+    review.official_source,
+    review.full_address
+  ]]);
+
+  // AG Sweep cue. AF remains untouched.
+  sheet.getRange(rowNumber, 33).setValue(review.sweep_cue || '');
+}
+
+function submissionReviewStatus() {
+  const props = PropertiesService.getScriptProperties();
+  return {
+    webAppUrl: ScriptApp.getService().getUrl(),
+    openAiKeyConfigured: Boolean(props.getProperty('OPENAI_API_KEY')),
+    tallyWebhookTokenConfigured: Boolean(props.getProperty('TALLY_WEBHOOK_TOKEN')),
+    queued: ScriptApp.getProjectTriggers().some(t => t.getHandlerFunction() === 'processPendingSubmissions')
+  };
+}
+
+function jsonResponse_(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function safeEqual_(a, b) {
+  a = String(a || '');
+  b = String(b || '');
+  if (!a || !b || a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
