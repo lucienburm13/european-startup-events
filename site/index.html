@@ -10,15 +10,24 @@
   <link rel="stylesheet" href="./styles.css?v=20260927-exact-sun">
 </head>
 <body>
+  <div class="es-topbar">
+    <div class="es-container">
+      <nav class="es-nav" aria-label="Startup apps">
+        <a href="/" class="es-tab es-active" aria-current="page">Startup Events</a>
+        <a href="https://eurosunday.lovable.app" class="es-tab">Startup News</a>
+      </nav>
+      <button type="button" class="es-euro-btn" data-open="stack" aria-label="Open European Stack Index">
+        <span aria-hidden="true">🇪🇺</span>
+        <span>Euro stack</span>
+        <span class="es-muted"><strong id="stack-eu-footer">—</strong> Euro · <strong id="stack-open-footer">—</strong> open</span>
+      </button>
+    </div>
+  </div>
   <header class="site-header">
     <a class="brand" href="#top" aria-label="Euro Events — European Startup Events">
       <strong class="brand-wordmark" aria-hidden="true"><span>Eur</span><svg class="brand-sun" viewBox="0 0 32 32" fill="none" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="sun-horizon-clip"><rect x="0" y="0" width="32" height="30.5"/></clipPath></defs><g clip-path="url(#sun-horizon-clip)"><g stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M16 13v3"/><path d="M7.5 17l2.4 2.4"/><path d="M24.5 17l-2.4 2.4"/><path d="M2.5 25.8h3.2"/><path d="M29.5 25.8h-3.2"/></g><circle cx="16" cy="25.8" r="6.5" stroke="currentColor" stroke-width="2.6" fill="none"/></g><path d="M1.5 30.5h29" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg><span class="brand-wordmark-end"> Events</span></strong>
       <small>European Startup Events</small>
     </a>
-    <button class="stack-badge" data-open="stack" aria-label="Open European Stack Index">
-      <span class="stack-badge-title">🇪🇺 EU stack</span>
-      <span class="stack-badge-metrics"><strong id="stack-eu-footer">—</strong><span>EU</span><strong id="stack-open-footer">—</strong><span>open source</span></span>
-    </button>
     <div class="header-actions">
       <button class="outline-button" data-open="calendar-help">Subscribe to calendars</button>
       <button class="solid-button" id="submit-top">Submit an event</button>
