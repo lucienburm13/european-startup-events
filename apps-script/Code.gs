@@ -595,9 +595,16 @@ function extractResponseText_(body) {
   return chunks.join('');
 }
 
+function ymdToSheetSerial_(ymd) {
+  const m = String(ymd || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) throw new Error('Invalid YYYY-MM-DD date: ' + ymd);
+  const utcMs = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  return Math.floor(utcMs / 86400000) + 25569;
+}
+
 function writeSubmissionReview_(sheet, rowNumber, review) {
-  const start = review.start_date ? parseYmd_(review.start_date) : '';
-  const end = review.end_date ? parseYmd_(review.end_date) : '';
+  const start = review.start_date ? ymdToSheetSerial_(review.start_date) : '';
+  const end = review.end_date ? ymdToSheetSerial_(review.end_date) : '';
 
   // L:AE only. K (Master ID), AF (Matched Master ID) and AI (Decision) are untouched.
   sheet.getRange(rowNumber, 12, 1, 20).setValues([[
