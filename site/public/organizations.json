@@ -1,0 +1,346 @@
+{
+  "generatedFrom": "Startups For Europe Member list - Aug. 20.2026",
+  "generatedAt": "2026-09-23",
+  "count": 37,
+  "organizations": [
+    {
+      "name": "Austrian Startups",
+      "country": "Austria",
+      "memberType": "Full",
+      "url": "https://austrianstartups.com/",
+      "logo": "./public/org-logos/austrian-startups.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/austrian.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/austrian.png"
+    },
+    {
+      "name": "Scale-Ups.eu and Startups.be",
+      "country": "Belgium",
+      "memberType": "Full",
+      "url": "https://www.scaleups.eu/",
+      "logo": "./public/org-logos/scale-ups-eu-and-startups-be.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/scale-ups-eu-startups-be.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/scale-ups-eu-startups-be.png"
+    },
+    {
+      "name": "BESCO - The Bulgarian Entrepreneurial Association",
+      "country": "Bulgaria",
+      "memberType": "Full",
+      "url": "https://www.besco.bg/en",
+      "logo": "./public/org-logos/besco-the-bulgarian-entrepreneurial-association.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/besco.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/besco.png"
+    },
+    {
+      "name": "Cro Startup",
+      "country": "Croatia",
+      "memberType": "Full",
+      "url": "https://crostartup.org/",
+      "logo": "./public/org-logos/cro-startup.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/cro-startup-removebg-preview.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/cro-startup-removebg-preview.png"
+    },
+    {
+      "name": "Startup Cyprus",
+      "country": "Cyprus",
+      "memberType": "Full",
+      "url": "https://www.startup-cyprus.com/",
+      "logo": "./public/org-logos/startup-cyprus.png",
+      "logoOriginal": "http://www.startup-cyprus.com/sites/default/files/styles/thumbnail/public/sg-logo.png?itok=f9vP0W4Y",
+      "logoSource": "http://www.startup-cyprus.com/sites/all/themes/vossen/images/assets/logo-startup-cyprus.png"
+    },
+    {
+      "name": "Czech Founders",
+      "country": "Czechia",
+      "memberType": "Full",
+      "url": "https://czechfounders.org/",
+      "logo": "./public/org-logos/czech-founders.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/Czech-Founders.jpeg",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/Czech-Founders.jpeg"
+    },
+    {
+      "name": "Czech Startup Association",
+      "country": "Czechia",
+      "memberType": "Full",
+      "url": "https://startupczechia.cz/",
+      "logo": "./public/org-logos/czech-startup-association.png",
+      "logoSource": "https://alliedforstartups.org/wp-content/uploads/CSA-Logo-RGB-EN-Blue_Black-scaled-e1751967242805.png",
+      "logoOriginal": "https://alliedforstartups.org/wp-content/uploads/CSA-Logo-RGB-EN-Blue_Black-scaled-e1751967242805.png"
+    },
+    {
+      "name": "Startup Disrupt",
+      "country": "Czechia",
+      "memberType": "Full",
+      "url": "https://startupdisrupt.com/",
+      "logo": "./public/org-logos/startup-disrupt.png",
+      "logoSource": "https://alliedforstartups.org/wp-content/uploads/sd_transparent_1.png",
+      "logoOriginal": "https://alliedforstartups.org/wp-content/uploads/sd_transparent_1.png"
+    },
+    {
+      "name": "Danish Tech Startups (DTS)",
+      "country": "Denmark",
+      "memberType": "Full",
+      "url": "https://techstartup.dk/",
+      "logo": "./public/org-logos/danish-tech-startups-dts.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/danish-tech-startups.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/danish-tech-startups.png"
+    },
+    {
+      "name": "Danske Iværksættere (Danish Entrepreneurs)",
+      "country": "Denmark",
+      "memberType": "Full",
+      "url": "https://dkiv.dk/",
+      "logo": "./public/org-logos/danske-iv-rks-ttere-danish-entrepreneurs.png",
+      "logoSource": "https://alliedforstartups.org/wp-content/uploads/danish-entrepreneurs-logo-1.png",
+      "logoOriginal": "https://alliedforstartups.org/wp-content/uploads/danish-entrepreneurs-logo-1.png"
+    },
+    {
+      "name": "Estonian Founders Society",
+      "country": "Estonia",
+      "memberType": "Full",
+      "url": "https://www.estonianfounders.ee/",
+      "logo": "./public/org-logos/estonian-founders-society.svg",
+      "logoOriginal": "inline SVG from official site",
+      "logoSource": "inline SVG from official site"
+    },
+    {
+      "name": "Latitude59 NGO",
+      "country": "Estonia",
+      "memberType": "Full",
+      "url": "https://latitude59.ee/",
+      "logo": "./public/org-logos/latitude59-ngo.png",
+      "logoSource": "https://alliedforstartups.org/wp-content/uploads/Latitude59.png",
+      "logoOriginal": "https://alliedforstartups.org/wp-content/uploads/Latitude59.png"
+    },
+    {
+      "name": "Finnish Startup Community",
+      "country": "Finland",
+      "memberType": "Full",
+      "url": "https://startupyhteiso.com/",
+      "logo": "./public/org-logos/finnish-startup-community.svg",
+      "logoOriginal": "https://startupyhteiso.com/wp-content/uploads/fsc-logo-w.svg",
+      "logoSource": "https://startupyhteiso.com/wp-content/uploads/fsc-logo-w.svg"
+    },
+    {
+      "name": "France Digitale",
+      "country": "France",
+      "memberType": "Full",
+      "url": "https://francedigitale.org/",
+      "logo": "./public/org-logos/france-digitale.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/france-digitale.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/france-digitale.png"
+    },
+    {
+      "name": "The German Startup Association",
+      "country": "Germany",
+      "memberType": "Full",
+      "url": "https://startupverband.de/",
+      "logo": "./public/org-logos/the-german-startup-association.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/startup-verband.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/startup-verband.png"
+    },
+    {
+      "name": "Startup Greece",
+      "country": "Greece",
+      "memberType": "Full",
+      "url": "https://startup-greece.org/",
+      "logo": "./public/org-logos/startup-greece.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2026/04/Startup-Greece-logo-scaled.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2026/04/Startup-Greece-logo-scaled.png"
+    },
+    {
+      "name": "Startup Hungary",
+      "country": "Hungary",
+      "memberType": "Full",
+      "url": "https://www.startuphungary.io/",
+      "logo": "./public/org-logos/startup-hungary.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/startup-hungary.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/startup-hungary.png"
+    },
+    {
+      "name": "Scale Ireland",
+      "country": "Ireland",
+      "memberType": "Full",
+      "url": "https://www.scaleireland.com/",
+      "logo": "./public/org-logos/scale-ireland.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/scale-ireland.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/scale-ireland.png"
+    },
+    {
+      "name": "InnovUp",
+      "country": "Italy",
+      "memberType": "Full",
+      "url": "https://innovup.net/",
+      "logo": "./public/org-logos/innovup.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/innovup.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/innovup.png"
+    },
+    {
+      "name": "Italian Tech Alliance",
+      "country": "Italy",
+      "memberType": "Full",
+      "url": "https://www.italiantechalliance.com/",
+      "logo": "./public/org-logos/italian-tech-alliance.png",
+      "logoSource": "https://static.wixstatic.com/media/ffd03c_ab2150e8783c47d7b3ca561974169370~mv2.png",
+      "logoScale": 1.25,
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/italian-tech-alliance.jpeg"
+    },
+    {
+      "name": "Roma Startup",
+      "country": "Italy",
+      "memberType": "Full",
+      "url": "https://romastartup.org/",
+      "logo": "./public/org-logos/roma-startup.png",
+      "logoOriginal": "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=90,width=1000,height=1000/event-covers/99/ac747dfb-8c66-45ac-aadd-c22379c9ed11",
+      "logoSource": "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=90,width=1000,height=1000/event-covers/99/ac747dfb-8c66-45ac-aadd-c22379c9ed11"
+    },
+    {
+      "name": "Startin.LV",
+      "country": "Latvia",
+      "memberType": "Full",
+      "url": "https://startin.lv/",
+      "logo": "./public/org-logos/startin-lv.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/latvian-startup-assocation.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/latvian-startup-assocation.png"
+    },
+    {
+      "name": "Unicorns Lithuania",
+      "country": "Lithuania",
+      "memberType": "Full",
+      "url": "https://www.unicorns.lt/en",
+      "logo": "./public/org-logos/unicorns-lithuania.png",
+      "logoSource": "https://alliedforstartups.org/wp-content/uploads/Unicorns_LT_Logo.png",
+      "logoOriginal": "https://alliedforstartups.org/wp-content/uploads/Unicorns_LT_Logo.png"
+    },
+    {
+      "name": "PULSE - Luxembourg Startup Association",
+      "country": "Luxembourg",
+      "memberType": "Full",
+      "url": "https://www.pulse.lu/",
+      "logo": "./public/org-logos/pulse-luxembourg-startup-association.png",
+      "logoOriginal": "https://www.pulse.lu/web/image/18797-a64091c9/chamber-of-commerce-luxembourg-logo.png",
+      "logoSource": "https://cdn.prod.website-files.com/66f2760c285e839111b37ed0/68acdae6d9b9320e0b28a9f6_News%2041.png",
+      "logoScale": 1
+    },
+    {
+      "name": "Dutch Startup Association",
+      "country": "Netherlands",
+      "memberType": "Full",
+      "url": "https://www.dutchstartupassociation.nl/",
+      "logo": "./public/org-logos/dutch-startup-association.png",
+      "logoSource": "https://d21buns5ku92am.cloudfront.net/69190/logo/retina-1606397307.png",
+      "logoScale": 1.22,
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/04/Dutch-ass-logo.jpg"
+    },
+    {
+      "name": "Foundation Supporting #OMGKRK",
+      "country": "Poland",
+      "memberType": "Full",
+      "url": "https://www.omgkrk.com/",
+      "logo": "./public/org-logos/foundation-supporting-omgkrk.png",
+      "logoSource": "https://alliedforstartups.org/wp-content/uploads/OMGKRK-Logo-Tagline-Monoblack-1.png",
+      "logoOriginal": "https://alliedforstartups.org/wp-content/uploads/OMGKRK-Logo-Tagline-Monoblack-1.png"
+    },
+    {
+      "name": "351 Portuguese Startup Association",
+      "country": "Portugal",
+      "memberType": "Full",
+      "url": "https://351startups.com/",
+      "logo": "./public/org-logos/351-portuguese-startup-association.png",
+      "logoSource": "https://res.cloudinary.com/startup-grind/image/upload/c_fill,dpr_2,f_auto,g_center,q_auto:good/v1/gcs/platform-data-startupgrind/events/351_UB1mbWa.png",
+      "logoScale": 1.35,
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/351-Portuguese-Startup-Association-1.png"
+    },
+    {
+      "name": "Startup Portugal",
+      "country": "Portugal",
+      "memberType": "Full",
+      "url": "https://startupportugal.com/",
+      "logo": "./public/org-logos/startup-portugal.svg",
+      "logoOriginal": "https://startupportugal.com/wp-content/themes/start-up-portugal/dist/assets/logo.svg",
+      "logoSource": "https://startupportugal.com/wp-content/themes/start-up-portugal/dist/assets/logo.svg"
+    },
+    {
+      "name": "Romanian Tech Startup Association (ROTSA)",
+      "country": "Romania",
+      "memberType": "Full",
+      "url": "http://rotsa.ro/",
+      "logo": "./public/org-logos/romanian-tech-startup-association-rotsa.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/rotsa.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/rotsa.png"
+    },
+    {
+      "name": "Adigital / EsTech",
+      "country": "Spain",
+      "memberType": "Full",
+      "url": "https://www.adigital.org/",
+      "logo": "./public/org-logos/adigital-estech.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/adigital.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/adigital.png"
+    },
+    {
+      "name": "Startup Valencia",
+      "country": "Spain",
+      "memberType": "Full",
+      "url": "https://startupvalencia.org/",
+      "logo": "./public/org-logos/startup-valencia.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/startup-valencia.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/startup-valencia.png"
+    },
+    {
+      "name": "SISP - Swedish Incubators and Science Parks",
+      "country": "Sweden",
+      "memberType": "Full",
+      "url": "https://www.sisp.se/en/",
+      "logo": "./public/org-logos/sisp-swedish-incubators-and-science-parks.png",
+      "logoSource": "https://alliedforstartups.org/wp-content/uploads/sisp.png",
+      "logoOriginal": "https://alliedforstartups.org/wp-content/uploads/sisp.png"
+    },
+    {
+      "name": "The Swiss Startup Association",
+      "country": "Switzerland",
+      "memberType": "Full",
+      "url": "https://swissstartupassociation.ch/",
+      "logo": "./public/org-logos/the-swiss-startup-association.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/swiss-startup-association.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2024/12/swiss-startup-association.png"
+    },
+    {
+      "name": "Startup Coalition",
+      "country": "United Kingdom",
+      "memberType": "Full",
+      "url": "https://startupcoalition.io/",
+      "logo": "./public/org-logos/startup-coalition.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/04/Startup-coalition.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/04/Startup-coalition.png"
+    },
+    {
+      "name": "Techosystem",
+      "country": "Ukraine",
+      "memberType": "Full",
+      "url": "https://techosystem.org/en",
+      "logo": "./public/org-logos/techosystem.png",
+      "logoSource": "https://europeanstartupnetwork.eu/wp-content/uploads/2026/04/Screenshot-2026-04-24-at-11.09.54.png",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2026/04/Screenshot-2026-04-24-at-11.09.54.png"
+    },
+    {
+      "name": "SAPIE - Slovak Alliance for Innovation Economy",
+      "country": "Slovakia",
+      "memberType": "Associate",
+      "url": "https://sapie.sk/",
+      "logo": "./public/org-logos/sapie-slovak-alliance-for-innovation-economy.png",
+      "logoSource": "https://alliedforstartups.org/wp-content/uploads/SAPIE_logo_cierne-1.png",
+      "logoOriginal": "https://alliedforstartups.org/wp-content/uploads/SAPIE_logo_cierne-1.png"
+    },
+    {
+      "name": "Start2 Group GmbH",
+      "country": "Germany",
+      "memberType": "Associate",
+      "url": "https://www.start2.group/",
+      "logo": "./public/org-logos/start2-group-gmbh.svg",
+      "logoSource": "https://cdn.prod.website-files.com/67e16029dde90e88d267d976/67ffb3f8284df2718c43f723_start2group-logo-black.svg",
+      "logoOriginal": "https://europeanstartupnetwork.eu/wp-content/uploads/2025/01/Start2-Logo.jpg"
+    }
+  ],
+  "updatedAt": "2026-09-23",
+  "logoCacheUpdatedAt": "2026-09-23"
+}
