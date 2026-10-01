@@ -1,7 +1,7 @@
 {
   "source": "Open-Meteo Geocoding API (location data based on GeoNames)",
   "generatedFor": "European Startup Events",
-  "count": 62,
+  "count": 75,
   "locations": {
     "Amsterdam|Netherlands": {
       "city": "Amsterdam",
@@ -11,6 +11,33 @@
       "resolvedName": "Amsterdam",
       "resolvedCountry": "The Netherlands",
       "timezone": "Europe/Amsterdam"
+    },
+    "Antwerp|Belgium": {
+      "city": "Antwerp",
+      "country": "Belgium",
+      "lat": 51.22047,
+      "lng": 4.40026,
+      "resolvedName": "Antwerp",
+      "resolvedCountry": "Belgium",
+      "timezone": "Europe/Brussels"
+    },
+    "Athens|Greece": {
+      "city": "Athens",
+      "country": "Greece",
+      "lat": 37.98376,
+      "lng": 23.72784,
+      "resolvedName": "Athens",
+      "resolvedCountry": "Greece",
+      "timezone": "Europe/Athens"
+    },
+    "Aveiro|Portugal": {
+      "city": "Aveiro",
+      "country": "Portugal",
+      "lat": 40.64575,
+      "lng": -8.64643,
+      "resolvedName": "Aveiro",
+      "resolvedCountry": "Portugal",
+      "timezone": "Europe/Lisbon"
     },
     "Barcelona|Spain": {
       "city": "Barcelona",
@@ -30,6 +57,15 @@
       "resolvedCountry": "Switzerland",
       "timezone": "Europe/Zurich"
     },
+    "Belgrade|Serbia": {
+      "city": "Belgrade",
+      "country": "Serbia",
+      "lat": 44.80401,
+      "lng": 20.46513,
+      "resolvedName": "Belgrade",
+      "resolvedCountry": "Serbia",
+      "timezone": "Europe/Belgrade"
+    },
     "Berlin|Germany": {
       "city": "Berlin",
       "country": "Germany",
@@ -38,6 +74,15 @@
       "resolvedName": "Berlin",
       "resolvedCountry": "Germany",
       "timezone": "Europe/Berlin"
+    },
+    "Bern|Switzerland": {
+      "city": "Bern",
+      "country": "Switzerland",
+      "lat": 46.94809,
+      "lng": 7.44744,
+      "resolvedName": "Bern",
+      "resolvedCountry": "Switzerland",
+      "timezone": "Europe/Zurich"
     },
     "Bilbao|Spain": {
       "city": "Bilbao",
@@ -138,6 +183,15 @@
       "resolvedCountry": "Ireland",
       "timezone": "Europe/Dublin"
     },
+    "Düsseldorf|Germany": {
+      "city": "Düsseldorf",
+      "country": "Germany",
+      "lat": 51.22319,
+      "lng": 6.77927,
+      "resolvedName": "Düsseldorf",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
+    },
     "Espoo|Finland": {
       "city": "Espoo",
       "country": "Finland",
@@ -164,6 +218,15 @@
       "resolvedName": "Gdansk",
       "resolvedCountry": "Poland",
       "timezone": "Europe/Warsaw"
+    },
+    "Geneva|Switzerland": {
+      "city": "Geneva",
+      "country": "Switzerland",
+      "lat": 46.20222,
+      "lng": 6.14569,
+      "resolvedName": "Geneva",
+      "resolvedCountry": "Switzerland",
+      "timezone": "Europe/Zurich"
     },
     "Ghent|Belgium": {
       "city": "Ghent",
@@ -218,6 +281,15 @@
       "resolvedName": "Leeds",
       "resolvedCountry": "United Kingdom",
       "timezone": "Europe/London"
+    },
+    "Lillestrøm|Norway": {
+      "city": "Lillestrøm",
+      "country": "Norway",
+      "lat": 59.95597,
+      "lng": 11.04918,
+      "resolvedName": "Lillestrøm",
+      "resolvedCountry": "Norway",
+      "timezone": "Europe/Oslo"
     },
     "Lisbon|Portugal": {
       "city": "Lisbon",
@@ -381,6 +453,15 @@
       "resolvedCountry": "Latvia",
       "timezone": "Europe/Riga"
     },
+    "Rome|Italy": {
+      "city": "Rome",
+      "country": "Italy",
+      "lat": 41.89193,
+      "lng": 12.51133,
+      "resolvedName": "Rome",
+      "resolvedCountry": "Italy",
+      "timezone": "Europe/Rome"
+    },
     "Rotterdam|Netherlands": {
       "city": "Rotterdam",
       "country": "Netherlands",
@@ -408,6 +489,24 @@
       "resolvedCountry": "Bulgaria",
       "timezone": "Europe/Sofia"
     },
+    "St. Gallen|Switzerland": {
+      "city": "St. Gallen",
+      "country": "Switzerland",
+      "lat": 47.42391,
+      "lng": 9.37477,
+      "resolvedName": "St. Gallen",
+      "resolvedCountry": "Switzerland",
+      "timezone": "Europe/Zurich"
+    },
+    "Stockholm|Sweden": {
+      "city": "Stockholm",
+      "country": "Sweden",
+      "lat": 59.32938,
+      "lng": 18.06871,
+      "resolvedName": "Stockholm",
+      "resolvedCountry": "Sweden",
+      "timezone": "Europe/Stockholm"
+    },
     "Stuttgart|Germany": {
       "city": "Stuttgart",
       "country": "Germany",
@@ -434,6 +533,15 @@
       "resolvedName": "Tartu",
       "resolvedCountry": "Estonia",
       "timezone": "Europe/Tallinn"
+    },
+    "Tirana|Albania": {
+      "city": "Tirana",
+      "country": "Albania",
+      "lat": 41.32744,
+      "lng": 19.81866,
+      "resolvedName": "Tirana",
+      "resolvedCountry": "Albania",
+      "timezone": "Europe/Tirane"
     },
     "Turin|Italy": {
       "city": "Turin",
@@ -543,6 +651,15 @@
       "resolvedCountry": "Croatia",
       "timezone": "Europe/Zagreb"
     },
+    "Zagreb|Croatia": {
+      "city": "Zagreb",
+      "country": "Croatia",
+      "lat": 45.81444,
+      "lng": 15.97798,
+      "resolvedName": "Zagreb",
+      "resolvedCountry": "Croatia",
+      "timezone": "Europe/Zagreb"
+    },
     "Zurich|Switzerland": {
       "city": "Zurich",
       "country": "Switzerland",
@@ -562,5 +679,10 @@
       "timezone": "Europe/Zurich"
     }
   },
-  "unresolved": []
+  "unresolved": [
+    {
+      "key": "Luxembourg City|Luxembourg",
+      "error": "no result"
+    }
+  ]
 }
