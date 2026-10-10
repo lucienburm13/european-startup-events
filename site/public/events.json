@@ -1,7 +1,7 @@
 {
   "generatedFrom": "European Startup & Tech Events — Master 2026–2027",
-  "generatedAt": "2026-10-01T07:31:00.821Z",
-  "count": 182,
+  "generatedAt": "2026-10-10T18:30:44.638Z",
+  "count": 186,
   "events": [
     {
       "id": "19",
@@ -565,6 +565,23 @@
       "organisedBy": ""
     },
     {
+      "id": "198",
+      "start": "2026-10-01",
+      "end": "2026-10-01",
+      "name": "Built by Startups. For Europe.",
+      "city": "Brussels",
+      "country": "Belgium",
+      "venue": "Vanhaerents Art Collection",
+      "calendar": "Ecosystem",
+      "status": "CONFIRMED",
+      "title": "Built by Startups. For Europe. · Brussels",
+      "notes": "Private, approval-required launch event unveiling the new association created by the merger of Allied For Startups and European Startup Network.",
+      "source": "https://luma.com/1tzi5679",
+      "lastVerified": "2026-10-10",
+      "address": "Rue Anneessens 29, 1000 Bruxelles, Belgium",
+      "organisedBy": ""
+    },
+    {
       "id": "159",
       "start": "2026-10-05",
       "end": "2026-10-05",
@@ -867,6 +884,23 @@
       "notes": "European Commission funding info days for Horizon Europe Cluster 4: Digital, Industry and Space.",
       "source": "https://research-and-innovation.ec.europa.eu/events/horizon-europe-info-days_en",
       "lastVerified": "2026-09-14",
+      "address": "",
+      "organisedBy": ""
+    },
+    {
+      "id": "196",
+      "start": "2026-10-14",
+      "end": "2026-10-16",
+      "name": "AI Builders Global Conference 2026",
+      "city": "Online",
+      "country": "Online",
+      "venue": "Virtual",
+      "calendar": "Additional",
+      "status": "CONFIRMED",
+      "title": "AI Builders Global Conference 2026",
+      "notes": "100% virtual event featuring 200+ sessions across eight tracks, workshops, a startup pitch competition and investor networking. The event overlaps with several indexed October 14–15 events but is not a duplicate occurrence.",
+      "source": "https://aibuildersnetwork.org/conference/",
+      "lastVerified": "2026-10-10",
       "address": "",
       "organisedBy": ""
     },
@@ -1429,6 +1463,23 @@
       "source": "https://www.gotech.world/",
       "lastVerified": "2026-09-11",
       "address": "",
+      "organisedBy": ""
+    },
+    {
+      "id": "197",
+      "start": "2026-11-12",
+      "end": "2026-11-12",
+      "name": "NVP Seminar 2026",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "De Rode Hoed",
+      "calendar": "Additional",
+      "status": "CONFIRMED",
+      "title": "NVP Seminar 2026",
+      "notes": "Event time: 14:00–19:00.",
+      "source": "https://leden.nvp.nl/events/nvp-seminar-2026",
+      "lastVerified": "2026-10-10",
+      "address": "Keizersgracht 102, 1015 CV Amsterdam, Netherlands",
       "organisedBy": ""
     },
     {
@@ -2857,6 +2908,23 @@
       "source": "https://techfestival.nl/",
       "lastVerified": "2026-09-12",
       "address": "Expo Houten, Meidoornkade 24, 3992 AE Houten, Netherlands",
+      "organisedBy": ""
+    },
+    {
+      "id": "195",
+      "start": "2027-06-10",
+      "end": "2027-06-12",
+      "name": "WMF - We Make Future 2027",
+      "city": "Bologna",
+      "country": "Italy",
+      "venue": "BolognaFiere",
+      "calendar": "Main",
+      "status": "CONFIRMED",
+      "title": "WMF - We Make Future 2027",
+      "notes": "International B2B event focused on AI, technology, digital innovation, startups, scaleups, investors and institutions. The official page also identifies the 2027 edition and opens ticketing, expo and speaker calls.",
+      "source": "https://www.wemakefuture.it/",
+      "lastVerified": "2026-10-10",
+      "address": "",
       "organisedBy": ""
     },
     {

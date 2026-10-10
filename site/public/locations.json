@@ -1,7 +1,7 @@
 {
   "source": "Open-Meteo Geocoding API (location data based on GeoNames)",
   "generatedFor": "European Startup Events",
-  "count": 75,
+  "count": 76,
   "locations": {
     "Amsterdam|Netherlands": {
       "city": "Amsterdam",
@@ -101,6 +101,15 @@
       "resolvedName": "Birmingham",
       "resolvedCountry": "United Kingdom",
       "timezone": "Europe/London"
+    },
+    "Bologna|Italy": {
+      "city": "Bologna",
+      "country": "Italy",
+      "lat": 44.49381,
+      "lng": 11.33875,
+      "resolvedName": "Bologna",
+      "resolvedCountry": "Italy",
+      "timezone": "Europe/Rome"
     },
     "Bremen|Germany": {
       "city": "Bremen",
