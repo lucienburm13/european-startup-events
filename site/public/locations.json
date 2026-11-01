@@ -1,7 +1,7 @@
 {
   "source": "Open-Meteo Geocoding API (location data based on GeoNames)",
   "generatedFor": "European Startup Events",
-  "count": 76,
+  "count": 85,
   "locations": {
     "Amsterdam|Netherlands": {
       "city": "Amsterdam",
@@ -102,6 +102,15 @@
       "resolvedCountry": "United Kingdom",
       "timezone": "Europe/London"
     },
+    "Bochum|Germany": {
+      "city": "Bochum",
+      "country": "Germany",
+      "lat": 51.48165,
+      "lng": 7.21648,
+      "resolvedName": "Bochum",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
+    },
     "Bologna|Italy": {
       "city": "Bologna",
       "country": "Italy",
@@ -129,6 +138,15 @@
       "resolvedCountry": "United Kingdom",
       "timezone": "Europe/London"
     },
+    "Bruges|Belgium": {
+      "city": "Bruges",
+      "country": "Belgium",
+      "lat": 51.20892,
+      "lng": 3.22424,
+      "resolvedName": "Bruges",
+      "resolvedCountry": "Belgium",
+      "timezone": "Europe/Brussels"
+    },
     "Brussels|Belgium": {
       "city": "Brussels",
       "country": "Belgium",
@@ -155,6 +173,15 @@
       "resolvedName": "Cambridge",
       "resolvedCountry": "United Kingdom",
       "timezone": "Europe/London"
+    },
+    "Chișinău|Moldova": {
+      "city": "Chișinău",
+      "country": "Moldova",
+      "lat": 47.00902,
+      "lng": 28.85938,
+      "resolvedName": "Chișinău",
+      "resolvedCountry": "Moldova",
+      "timezone": "Europe/Chisinau"
     },
     "Cologne|Germany": {
       "city": "Cologne",
@@ -246,6 +273,15 @@
       "resolvedCountry": "Belgium",
       "timezone": "Europe/Brussels"
     },
+    "Glasgow|United Kingdom": {
+      "city": "Glasgow",
+      "country": "United Kingdom",
+      "lat": 55.86515,
+      "lng": -4.25763,
+      "resolvedName": "Glasgow",
+      "resolvedCountry": "United Kingdom",
+      "timezone": "Europe/London"
+    },
     "Groningen|Netherlands": {
       "city": "Groningen",
       "country": "Netherlands",
@@ -282,6 +318,15 @@
       "resolvedCountry": "The Netherlands",
       "timezone": "Europe/Amsterdam"
     },
+    "Kristiansand|Norway": {
+      "city": "Kristiansand",
+      "country": "Norway",
+      "lat": 58.14671,
+      "lng": 7.9956,
+      "resolvedName": "Kristiansand",
+      "resolvedCountry": "Norway",
+      "timezone": "Europe/Oslo"
+    },
     "Leeds|United Kingdom": {
       "city": "Leeds",
       "country": "United Kingdom",
@@ -299,6 +344,15 @@
       "resolvedName": "Lillestrøm",
       "resolvedCountry": "Norway",
       "timezone": "Europe/Oslo"
+    },
+    "Limassol|Cyprus": {
+      "city": "Limassol",
+      "country": "Cyprus",
+      "lat": 34.68406,
+      "lng": 33.03794,
+      "resolvedName": "Limassol",
+      "resolvedCountry": "Cyprus",
+      "timezone": "Asia/Nicosia"
     },
     "Lisbon|Portugal": {
       "city": "Lisbon",
@@ -390,6 +444,15 @@
       "resolvedCountry": "Italy",
       "timezone": "Europe/Rome"
     },
+    "Monheim am Rhein|Germany": {
+      "city": "Monheim am Rhein",
+      "country": "Germany",
+      "lat": 51.09162,
+      "lng": 6.89217,
+      "resolvedName": "Monheim am Rhein",
+      "resolvedCountry": "Germany",
+      "timezone": "Europe/Berlin"
+    },
     "Munich|Germany": {
       "city": "Munich",
       "country": "Germany",
@@ -398,6 +461,15 @@
       "resolvedName": "Munich",
       "resolvedCountry": "Germany",
       "timezone": "Europe/Berlin"
+    },
+    "Málaga|Spain": {
+      "city": "Málaga",
+      "country": "Spain",
+      "lat": 36.72016,
+      "lng": -4.42034,
+      "resolvedName": "Málaga",
+      "resolvedCountry": "Spain",
+      "timezone": "Europe/Madrid"
     },
     "Nuremberg|Germany": {
       "city": "Nuremberg",
@@ -488,6 +560,15 @@
       "resolvedName": "Salamanca",
       "resolvedCountry": "Spain",
       "timezone": "Europe/Madrid"
+    },
+    "Sarajevo|Bosnia and Herzegovina": {
+      "city": "Sarajevo",
+      "country": "Bosnia and Herzegovina",
+      "lat": 43.84864,
+      "lng": 18.35644,
+      "resolvedName": "Sarajevo",
+      "resolvedCountry": "Bosnia and Herzegovina",
+      "timezone": "Europe/Sarajevo"
     },
     "Sofia|Bulgaria": {
       "city": "Sofia",
