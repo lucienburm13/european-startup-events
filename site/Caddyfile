@@ -1,0 +1,9 @@
+:8000 {
+  root * /srv
+  encode zstd gzip
+  file_server
+
+  @static path *.css *.js *.json
+  header @static Cache-Control "public, max-age=300"
+  header /index.html Cache-Control "no-cache"
+}
